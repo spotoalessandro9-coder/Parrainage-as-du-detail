@@ -2,15 +2,14 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>L'As Du Détail — Gestion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'As du Détail — Gestion</title>
 
 <style>
 :root{
   --bg:#f5f5f5;
   --card:#fff;
   --dark:#202124;
-  --dark2:#2d2d2d;
   --gold:#b9972f;
   --gold-light:#fff8df;
   --green:#16803c;
@@ -33,31 +32,30 @@
 body{
   background:var(--bg);
   color:var(--text);
-  max-width:700px;
+  max-width:650px;
   margin:auto;
   min-height:100vh;
   padding:15px;
-  padding-bottom:100px;
+  padding-bottom:95px;
 }
 
 header{
   text-align:center;
-  padding:5px 0 20px;
+  padding:12px 0 20px;
 }
 
-.logo{
-  width:190px;
-  max-width:75%;
-  height:auto;
-  display:block;
-  margin:0 auto 7px;
+header h1{
+  font-size:1.55rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
 }
 
 header p{
   color:var(--gold);
-  font-size:.75rem;
+  font-size:.78rem;
   font-style:italic;
-  font-weight:700;
+  font-weight:600;
+  margin-top:4px;
 }
 
 .view-section{display:none}
@@ -69,12 +67,12 @@ header p{
   left:50%;
   transform:translateX(-50%);
   width:100%;
-  max-width:700px;
+  max-width:650px;
   background:white;
   border-top:1px solid var(--grey-light);
   display:flex;
   justify-content:space-around;
-  padding:8px 0;
+  padding:9px 0;
   z-index:100;
 }
 
@@ -82,8 +80,8 @@ header p{
   border:0;
   background:none;
   color:#777;
-  font-size:.65rem;
-  font-weight:800;
+  font-size:.68rem;
+  font-weight:700;
   cursor:pointer;
   display:flex;
   flex-direction:column;
@@ -94,8 +92,8 @@ header p{
 .nav-item.active{color:var(--gold)}
 
 .nav-item svg{
-  width:21px;
-  height:21px;
+  width:22px;
+  height:22px;
   fill:currentColor;
 }
 
@@ -110,7 +108,7 @@ header p{
 
 .section-title{
   color:#777;
-  font-size:.76rem;
+  font-size:.78rem;
   text-transform:uppercase;
   letter-spacing:.7px;
   font-weight:800;
@@ -120,8 +118,8 @@ header p{
 label{
   display:block;
   color:#707070;
-  font-size:.73rem;
-  font-weight:800;
+  font-size:.75rem;
+  font-weight:700;
   text-transform:uppercase;
   margin-bottom:6px;
 }
@@ -159,8 +157,6 @@ textarea{
 .btn-gold{background:var(--gold);color:white}
 .btn-green{background:var(--green);color:white}
 .btn-red{background:var(--red-light);color:var(--red)}
-.btn-grey{background:#eee;color:#444}
-
 .full{width:100%}
 
 .radio-group{
@@ -198,10 +194,9 @@ textarea{
 .summary-row{
   display:flex;
   justify-content:space-between;
-  gap:10px;
   margin-bottom:8px;
   color:#777;
-  font-size:.88rem;
+  font-size:.9rem;
 }
 
 .summary-total{
@@ -224,34 +219,20 @@ textarea{
 .badge-green{background:var(--green-light);color:var(--green)}
 .badge-red{background:var(--red-light);color:var(--red)}
 .badge-grey{background:#e5e7eb;color:#555}
-.badge-gold{background:var(--gold-light);color:var(--gold)}
 
-.notice{
-  background:var(--gold-light);
-  border:1px solid #ead88e;
-  border-radius:11px;
-  padding:11px;
-  font-size:.8rem;
-  margin-bottom:13px;
+.client-card,.service-card,.booking-card{
+  background:white;
+  border:1px solid #e2e2e2;
+  border-radius:16px;
+  padding:17px;
+  margin-bottom:12px;
 }
-
-.hidden{display:none!important}
 
 .row{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:10px;
-}
-
-.client-card,
-.service-card,
-.booking-card{
-  background:white;
-  border:1px solid #e2e2e2;
-  border-radius:16px;
-  padding:17px;
-  margin-bottom:12px;
 }
 
 .client-name{
@@ -267,7 +248,7 @@ textarea{
 
 .address{
   color:#666;
-  font-size:.8rem;
+  font-size:.82rem;
   margin-top:5px;
 }
 
@@ -289,7 +270,6 @@ textarea{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:8px;
   font-size:.82rem;
 }
 
@@ -297,8 +277,9 @@ textarea{
   border:1px solid #ddd;
   background:white;
   border-radius:7px;
-  padding:5px 9px;
+  padding:6px 9px;
   font-weight:700;
+  cursor:pointer;
 }
 
 .actions{
@@ -316,33 +297,6 @@ textarea{
   cursor:pointer;
   text-decoration:none;
   text-align:center;
-  display:block;
-}
-
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-top:13px;
-}
-
-.stat{
-  background:#f5f5f5;
-  border-radius:11px;
-  padding:10px 7px;
-  text-align:center;
-}
-
-.stat span{
-  display:block;
-  color:#777;
-  font-size:.65rem;
-  margin-bottom:4px;
-}
-
-.stat strong{
-  display:block;
-  font-size:.9rem;
 }
 
 .calendar-header{
@@ -430,7 +384,8 @@ textarea{
 
 .dot-green{background:#20a84b}
 .dot-red{background:#d62828}
-.dot-grey{background:white}
+.dot-grey{background:#777}
+.dot-white{background:white;border:1px solid #aaa}
 
 .legend{
   display:flex;
@@ -557,77 +512,77 @@ textarea{
   margin-top:3px;
 }
 
-.booking-header{
-  margin-bottom:10px;
-}
-
-.booking-date{
-  font-size:1rem;
-  font-weight:900;
-}
-
-.booking-client{
-  font-weight:800;
-  margin-top:5px;
-}
-
-.booking-details{
-  color:#666;
-  font-size:.8rem;
-  line-height:1.6;
-  margin-top:10px;
-}
-
-.booking-total{
-  color:var(--gold);
-  font-weight:900;
-  font-size:1.1rem;
-}
-
-.review-box{
+.notice{
   background:var(--gold-light);
   border:1px solid #ead88e;
-  padding:12px;
-  border-radius:12px;
+  border-radius:11px;
+  padding:11px;
+  font-size:.8rem;
+  margin-bottom:13px;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
   margin-top:12px;
 }
 
-.review-btn{
-  display:block;
-  width:100%;
-  text-align:center;
-  background:var(--gold);
-  color:white;
-  text-decoration:none;
+.info-box{
+  background:#f5f5f5;
   border-radius:10px;
   padding:11px;
-  font-weight:800;
-  margin-top:8px;
 }
 
-.empty{
+.info-box small{
+  display:block;
+  color:#777;
+  font-size:.68rem;
+  text-transform:uppercase;
+  font-weight:700;
+}
+
+.info-box strong{
+  display:block;
+  margin-top:4px;
+}
+
+.booking-status{
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:.68rem;
+  font-weight:800;
+  background:var(--green-light);
+  color:var(--green);
+}
+
+.booking-detail{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid #eee;
+  font-size:.84rem;
+  line-height:1.65;
+  color:#555;
+}
+
+.booking-detail strong{
+  color:#222;
+}
+
+.no-results{
+  background:white;
+  border:1px dashed #ccc;
+  border-radius:14px;
+  padding:18px;
   text-align:center;
-  padding:25px 15px;
   color:#777;
 }
 
-.divider{
-  border:0;
-  border-top:1px solid #eee;
-  margin:15px 0;
-}
-
-.history-item{
-  padding:11px;
-  background:#f6f6f6;
-  border-radius:10px;
-  margin-bottom:7px;
-  font-size:.8rem;
-}
+.hidden{display:none!important}
 
 @media(max-width:390px){
   .slots{grid-template-columns:repeat(2,1fr)}
-  .stats-grid{grid-template-columns:1fr 1fr}
+  .info-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -635,18 +590,14 @@ textarea{
 <body>
 
 <header>
-  <img
-    class="logo"
-    src="https://i.ibb.co/YBrr6ZyX/NETTOYAGE-POLISSAGE-C-RAMIQUE.png"
-    alt="L'As Du Détail"
-  >
-  <p>Plus qu’un nettoyage, une signature.</p>
+  <h1>L'As du Détail</h1>
+  <p>Plus qu’un nettoyage, une signature</p>
 </header>
 
 
-<!-- =========================================================
-     PLANNING
-========================================================= -->
+<!-- ============================================================
+     PLANNING / NOUVEAU RDV
+============================================================ -->
 
 <section id="viewBooking" class="view-section active">
 
@@ -665,7 +616,7 @@ textarea{
     <div class="legend">
       <span><i class="legend-dot dot-green"></i> Disponible</span>
       <span><i class="legend-dot dot-red"></i> Réservé</span>
-      <span><i class="legend-dot dot-grey"></i> Ne travaille pas</span>
+      <span><i class="legend-dot dot-white"></i> Ne travaille pas</span>
     </div>
 
     <div style="margin-top:15px">
@@ -692,8 +643,6 @@ textarea{
   </div>
 
 
-  <!-- CLIENT -->
-
   <div class="card">
 
     <div class="section-title">1. Client</div>
@@ -705,7 +654,7 @@ textarea{
       <input
         type="text"
         id="clientSearch"
-        placeholder="Nom, prénom ou téléphone..."
+        placeholder="Nom, prénom, téléphone ou code..."
         autocomplete="off"
         oninput="searchBookingClients()"
       >
@@ -724,20 +673,10 @@ textarea{
 
     </div>
 
-    <button
-      id="createClientFromBooking"
-      class="btn btn-gold full hidden"
-      onclick="openAddModalFromBooking()"
-    >
-      + Créer ce client
-    </button>
-
     <div id="bookingClientInfo" class="notice hidden"></div>
 
   </div>
 
-
-  <!-- PRESTATION -->
 
   <div class="card">
 
@@ -747,10 +686,7 @@ textarea{
 
       <label>Prestation</label>
 
-      <select
-        id="bookingServiceSelect"
-        onchange="updateVehiclePrices()"
-      >
+      <select id="bookingServiceSelect" onchange="updateVehiclePrices()">
         <option value="">-- Sélectionner une prestation --</option>
       </select>
 
@@ -767,26 +703,17 @@ textarea{
   </div>
 
 
-  <!-- DATE -->
-
   <div class="card">
 
     <div class="section-title">3. Date & Heure</div>
 
     <div class="notice">
-
       <strong>Rendez-vous sélectionné :</strong>
-
-      <span id="chosenDateTime">
-        Aucun créneau sélectionné
-      </span>
-
+      <span id="chosenDateTime">Aucun créneau sélectionné</span>
     </div>
 
   </div>
 
-
-  <!-- LIEU -->
 
   <div class="card">
 
@@ -841,16 +768,14 @@ textarea{
         placeholder="Adresse du client"
       >
 
-      <small style="color:#777">
-        L'adresse enregistrée du client sera automatiquement proposée.
+      <small style="display:block;color:#777;margin-top:5px">
+        L'adresse du client sera automatiquement proposée ici.
       </small>
 
     </div>
 
   </div>
 
-
-  <!-- ABONNEMENT -->
 
   <div class="card">
 
@@ -861,19 +786,19 @@ textarea{
       <label>Formule</label>
 
       <select id="aboSelect" onchange="updateCalculation()">
+
         <option value="0">Ponctuel — 0%</option>
         <option value="5">1x / mois — -5%</option>
         <option value="10">2x / mois — -10%</option>
         <option value="15">3x / mois — -15%</option>
         <option value="20">4x / mois — -20%</option>
+
       </select>
 
     </div>
 
   </div>
 
-
-  <!-- PARRAINAGE -->
 
   <div class="card">
 
@@ -898,14 +823,8 @@ textarea{
 
     </div>
 
-    <small style="color:#777">
-      Exemple : le client possède 30% et utilise 20% → son solde passe automatiquement à 10%.
-    </small>
-
   </div>
 
-
-  <!-- SUPPLEMENT -->
 
   <div class="card">
 
@@ -942,8 +861,6 @@ textarea{
   </div>
 
 
-  <!-- TOTAL -->
-
   <div class="summary">
 
     <div class="summary-row">
@@ -979,10 +896,7 @@ textarea{
   </div>
 
 
-  <button
-    class="btn btn-gold full"
-    onclick="saveBooking()"
-  >
+  <button class="btn btn-gold full" onclick="saveBooking()">
     Enregistrer le rendez-vous
   </button>
 
@@ -994,7 +908,7 @@ textarea{
       class="action-btn"
       style="background:#16803c;color:white"
     >
-      Envoyer SMS de confirmation
+      Envoyer le SMS de confirmation
     </a>
 
   </div>
@@ -1002,48 +916,36 @@ textarea{
 </section>
 
 
-<!-- =========================================================
+<!-- ============================================================
      RENDEZ-VOUS
-========================================================= -->
+============================================================ -->
 
 <section id="viewAppointments" class="view-section">
 
   <div class="card">
 
-    <div class="section-title">
-      Rendez-vous
-    </div>
+    <div class="section-title">Rendez-vous</div>
 
-    <div class="form-group">
-
-      <label>Rechercher</label>
+    <div class="search-row">
 
       <input
+        type="text"
         id="appointmentSearch"
-        placeholder="Client, téléphone, prestation..."
+        placeholder="Client, téléphone, date..."
         oninput="renderAppointments()"
       >
 
     </div>
 
-    <div class="form-group">
-
-      <label>Date</label>
-
-      <input
-        type="date"
-        id="appointmentDateSearch"
-        onchange="renderAppointments()"
-      >
-
-    </div>
-
-    <button
-      class="btn btn-grey full"
-      onclick="clearAppointmentSearch()"
+    <select
+      id="appointmentFilter"
+      onchange="renderAppointments()"
+      style="margin-bottom:10px"
     >
-      Effacer les filtres
-    </button>
+      <option value="all">Tous les rendez-vous</option>
+      <option value="future">À venir</option>
+      <option value="past">Passés</option>
+    </select>
 
   </div>
 
@@ -1052,9 +954,9 @@ textarea{
 </section>
 
 
-<!-- =========================================================
+<!-- ============================================================
      SERVICES
-========================================================= -->
+============================================================ -->
 
 <section id="viewServices" class="view-section">
 
@@ -1066,14 +968,10 @@ textarea{
         <div class="section-title" style="margin-bottom:2px">
           Prestations
         </div>
-
         <strong>Catalogue</strong>
       </div>
 
-      <button
-        class="btn btn-dark"
-        onclick="openServiceModal()"
-      >
+      <button class="btn btn-dark" onclick="openServiceModal()">
         + Créer
       </button>
 
@@ -1086,9 +984,9 @@ textarea{
 </section>
 
 
-<!-- =========================================================
+<!-- ============================================================
      CLIENTS
-========================================================= -->
+============================================================ -->
 
 <section id="viewClients" class="view-section">
 
@@ -1101,10 +999,7 @@ textarea{
       oninput="renderClients()"
     >
 
-    <button
-      class="btn btn-dark"
-      onclick="openAddModal()"
-    >
+    <button class="btn btn-dark" onclick="openAddModal()">
       + Client
     </button>
 
@@ -1115,9 +1010,9 @@ textarea{
 </section>
 
 
-<!-- =========================================================
+<!-- ============================================================
      NAVIGATION
-========================================================= -->
+============================================================ -->
 
 <nav class="bottom-nav">
 
@@ -1126,13 +1021,10 @@ textarea{
     id="navBooking"
     onclick="switchTab('booking')"
   >
-
     <svg viewBox="0 0 24 24">
       <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
     </svg>
-
     Planning
-
   </button>
 
 
@@ -1141,13 +1033,10 @@ textarea{
     id="navAppointments"
     onclick="switchTab('appointments')"
   >
-
     <svg viewBox="0 0 24 24">
-      <path d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 17H5V8h14v12z"/>
+      <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
     </svg>
-
     Rendez-vous
-
   </button>
 
 
@@ -1156,13 +1045,10 @@ textarea{
     id="navServices"
     onclick="switchTab('services')"
   >
-
     <svg viewBox="0 0 24 24">
-      <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1-1v-8l-2.08-5.99z"/>
+      <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/>
     </svg>
-
     Services
-
   </button>
 
 
@@ -1171,21 +1057,18 @@ textarea{
     id="navClients"
     onclick="switchTab('clients')"
   >
-
     <svg viewBox="0 0 24 24">
       <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3z"/>
     </svg>
-
     Clients
-
   </button>
 
 </nav>
 
 
-<!-- =========================================================
+<!-- ============================================================
      MODAL CLIENT
-========================================================= -->
+============================================================ -->
 
 <div class="modal" id="addModal">
 
@@ -1212,6 +1095,7 @@ textarea{
       <label>Adresse postale</label>
       <input
         id="newAddress"
+        type="text"
         placeholder="Rue, numéro, code postal, ville"
       >
     </div>
@@ -1227,17 +1111,11 @@ textarea{
 
     <div class="modal-actions">
 
-      <button
-        class="btn btn-red"
-        onclick="closeAddModal()"
-      >
+      <button class="btn btn-red" onclick="closeAddModal()">
         Annuler
       </button>
 
-      <button
-        class="btn btn-dark"
-        onclick="saveClient()"
-      >
+      <button class="btn btn-dark" onclick="saveClient()">
         Enregistrer
       </button>
 
@@ -1248,9 +1126,51 @@ textarea{
 </div>
 
 
-<!-- =========================================================
-     MODAL CLIENT
-========================================================= -->
+<!-- ============================================================
+     MODAL MODIFICATION CLIENT
+============================================================ -->
+
+<div class="modal" id="editClientModal">
+
+  <div class="modal-content">
+
+    <h2>Modifier le client</h2>
+
+    <input type="hidden" id="editClientId">
+
+    <div class="form-group">
+      <label>Prénom</label>
+      <input id="editClientPrenom">
+    </div>
+
+    <div class="form-group">
+      <label>Nom</label>
+      <input id="editClientNom">
+    </div>
+
+    <div class="form-group">
+      <label>Téléphone</label>
+      <input id="editClientTel" type="tel">
+    </div>
+
+    <div class="form-group">
+      <label>Adresse postale</label>
+      <input id="editClientAddress" type="text" placeholder="Rue, numéro, code postal, ville">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-red" onclick="closeEditClientModal()">Annuler</button>
+      <button class="btn btn-dark" onclick="saveEditedClient()">Enregistrer</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ============================================================
+     MODAL DETAIL CLIENT
+============================================================ -->
 
 <div class="modal" id="detailModal">
 
@@ -1260,42 +1180,11 @@ textarea{
 
     <div style="text-align:center;margin-bottom:15px">
 
-      <div
-        class="discount"
-        id="detDiscount"
-      >
-        0%
-      </div>
+      <div class="discount" id="detDiscount">0%</div>
 
-      <p
-        id="detPhone"
-        style="color:#777;margin-top:6px"
-      ></p>
+      <p id="detPhone" style="color:#777;margin-top:6px"></p>
 
-      <p
-        id="detAddress"
-        style="color:#777;margin-top:5px;font-size:.82rem"
-      ></p>
-
-    </div>
-
-
-    <div class="stats-grid">
-
-      <div class="stat">
-        <span>Rendez-vous</span>
-        <strong id="detNbBookings">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>Dépensé</span>
-        <strong id="detSpent">0,00 €</strong>
-      </div>
-
-      <div class="stat">
-        <span>Dernier RDV</span>
-        <strong id="detLastBooking">-</strong>
-      </div>
+      <p id="detAddress" style="color:#777;margin-top:5px"></p>
 
     </div>
 
@@ -1307,46 +1196,58 @@ textarea{
         <strong id="detCode"></strong>
       </span>
 
-      <button
-        class="small-btn"
-        id="detCopyBtn"
-      >
+      <button class="small-btn" id="detCopyBtn">
         Copier
       </button>
 
     </div>
 
 
-    <div class="form-group">
+    <div class="info-grid">
+
+      <div class="info-box">
+        <small>Total dépensé</small>
+        <strong id="detTotalSpent">0,00 €</strong>
+      </div>
+
+      <div class="info-box">
+        <small>Dernier rendez-vous</small>
+        <strong id="detLastBooking">Aucun</strong>
+      </div>
+
+      <div class="info-box">
+        <small>Prochain rendez-vous</small>
+        <strong id="detNextBooking">Aucun</strong>
+      </div>
+
+      <div class="info-box">
+        <small>Nombre de rendez-vous</small>
+        <strong id="detBookingCount">0</strong>
+      </div>
+
+    </div>
+
+
+    <div class="form-group" style="margin-top:15px">
 
       <label>Ajouter une réduction</label>
 
       <div style="display:flex;gap:8px">
 
         <select id="creditPercentSelect">
+
           <option value="5">5%</option>
           <option value="10" selected>10%</option>
           <option value="15">15%</option>
           <option value="20">20%</option>
+
         </select>
 
-        <button
-          class="btn btn-dark"
-          onclick="addCustomDiscount()"
-        >
+        <button class="btn btn-dark" onclick="addCustomDiscount()">
           Ajouter
         </button>
 
       </div>
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label>Historique des rendez-vous</label>
-
-      <div id="detBookingHistory"></div>
 
     </div>
 
@@ -1360,10 +1261,16 @@ textarea{
     </div>
 
 
-    <button
-      class="btn btn-red full"
-      id="deleteBtnAction"
-    >
+    <div class="form-group">
+
+      <label>Historique des rendez-vous</label>
+
+      <div id="detHistoryList"></div>
+
+    </div>
+
+
+    <button class="btn btn-red full" id="deleteBtnAction">
       Supprimer définitivement
     </button>
 
@@ -1380,46 +1287,29 @@ textarea{
 </div>
 
 
-<!-- =========================================================
+<!-- ============================================================
      MODAL SERVICE
-========================================================= -->
+============================================================ -->
 
 <div class="modal" id="serviceModal">
 
   <div class="modal-content">
 
-    <h2 id="serviceModalTitle">
-      Nouvelle prestation
-    </h2>
+    <h2 id="serviceModalTitle">Nouvelle prestation</h2>
 
     <div class="form-group">
-
       <label>Nom</label>
-
-      <input
-        id="serviceName"
-        placeholder="Ex : WashDetail Essential"
-      >
-
+      <input id="serviceName">
     </div>
 
     <div class="form-group">
-
       <label>Description</label>
-
       <textarea id="serviceDescription"></textarea>
-
     </div>
 
     <div class="form-group">
-
       <label>Durée</label>
-
-      <input
-        id="serviceDuration"
-        placeholder="Ex : 2h30"
-      >
-
+      <input id="serviceDuration">
     </div>
 
     <div class="form-group">
@@ -1444,17 +1334,11 @@ textarea{
 
     <div class="modal-actions">
 
-      <button
-        class="btn btn-red"
-        onclick="closeServiceModal()"
-      >
+      <button class="btn btn-red" onclick="closeServiceModal()">
         Annuler
       </button>
 
-      <button
-        class="btn btn-dark"
-        onclick="saveService()"
-      >
+      <button class="btn btn-dark" onclick="saveService()">
         Enregistrer
       </button>
 
@@ -1465,9 +1349,9 @@ textarea{
 </div>
 
 
-<!-- =========================================================
+<!-- ============================================================
      MODAL BLOCAGE
-========================================================= -->
+============================================================ -->
 
 <div class="modal" id="blockModal">
 
@@ -1481,15 +1365,12 @@ textarea{
     ></p>
 
     <div class="notice">
-      Les mardi, mercredi, jeudi, vendredi et dimanche sont normalement
-      des jours non travaillés. Tu peux néanmoins y créer exceptionnellement
-      un rendez-vous.
+      Les mardi, mercredi, jeudi, vendredi et dimanche sont gris car tu
+      ne travailles normalement pas. Tu peux néanmoins y créer
+      exceptionnellement un rendez-vous.
     </div>
 
-    <button
-      class="btn btn-dark full"
-      onclick="toggleBlockedDay()"
-    >
+    <button class="btn btn-dark full" onclick="toggleBlockedDay()">
       Bloquer / débloquer cette journée
     </button>
 
@@ -1506,20 +1387,75 @@ textarea{
 </div>
 
 
+<!-- ============================================================
+     MODAL MODIFICATION RDV
+============================================================ -->
+
+<div class="modal" id="editBookingModal">
+
+  <div class="modal-content">
+
+    <h2>Modifier le rendez-vous</h2>
+
+    <input type="hidden" id="editBookingId">
+
+    <div class="form-group">
+
+      <label>Date</label>
+
+      <input
+        type="date"
+        id="editBookingDate"
+      >
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Heure</label>
+
+      <select id="editBookingTime"></select>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Adresse à domicile</label>
+
+      <input
+        type="text"
+        id="editBookingAddress"
+      >
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn btn-red"
+        onclick="closeEditBookingModal()"
+      >
+        Annuler
+      </button>
+
+      <button
+        class="btn btn-dark"
+        onclick="saveEditedBooking()"
+      >
+        Enregistrer
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <script>
 
 /* ============================================================
-   CONFIGURATION
-============================================================ */
-
-const PROFESSIONAL_PHONE = "0489403404";
-
-const GOOGLE_REVIEW_URL =
-  "https://g.page/r/CTt-olIItnbIEAE/review";
-
-
-/* ============================================================
-   SERVICES PAR DEFAUT
+   DONNÉES
 ============================================================ */
 
 const defaultServices = [
@@ -1670,10 +1606,6 @@ const defaultServices = [
 ];
 
 
-/* ============================================================
-   DONNEES
-============================================================ */
-
 let clients =
   JSON.parse(localStorage.getItem("as_details_clients")) ||
   [
@@ -1698,13 +1630,11 @@ let services =
 
 
 let bookings =
-  JSON.parse(localStorage.getItem("as_details_bookings")) ||
-  [];
+  JSON.parse(localStorage.getItem("as_details_bookings")) || [];
 
 
 let blockedDays =
-  JSON.parse(localStorage.getItem("as_details_blocked_days")) ||
-  [];
+  JSON.parse(localStorage.getItem("as_details_blocked_days")) || [];
 
 
 let currentDetailId = null;
@@ -1719,15 +1649,26 @@ let calendarDate = new Date();
 
 
 /* ============================================================
-   MIGRATION ANCIENNES DONNEES
+   MIGRATION ANCIENS CLIENTS
 ============================================================ */
 
-clients = clients.map(c => ({
-  ...c,
-  address:c.address || "",
-  filleuls:c.filleuls || [],
-  discount:Number(c.discount || 0)
-}));
+clients = clients.map(c => {
+
+  if(typeof c.address !== "string"){
+    c.address = "";
+  }
+
+  if(!Array.isArray(c.filleuls)){
+    c.filleuls = [];
+  }
+
+  if(typeof c.discount !== "number"){
+    c.discount = Number(c.discount) || 0;
+  }
+
+  return c;
+
+});
 
 
 /* ============================================================
@@ -1778,29 +1719,21 @@ function formatDate(dateString){
 
   const d = new Date(dateString);
 
-  const day =
-    String(d.getDate()).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+  const month = String(d.getMonth()+1).padStart(2,"0");
+  const year = d.getFullYear();
 
-  const month =
-    String(d.getMonth()+1).padStart(2,"0");
-
-  const year =
-    d.getFullYear();
-
-  const hours =
-    String(d.getHours()).padStart(2,"0");
-
-  const minutes =
-    String(d.getMinutes()).padStart(2,"0");
+  const hours = String(d.getHours()).padStart(2,"0");
+  const minutes = String(d.getMinutes()).padStart(2,"0");
 
   return `${day}/${month}/${year} à ${hours}:${minutes}`;
 
 }
 
 
-function formatShortDate(dateString){
+function formatDateOnly(dateString){
 
-  if(!dateString) return "-";
+  if(!dateString) return "";
 
   const d = new Date(dateString);
 
@@ -1816,12 +1749,8 @@ function dateKey(date){
   }
 
   const y = date.getFullYear();
-
-  const m =
-    String(date.getMonth()+1).padStart(2,"0");
-
-  const d =
-    String(date.getDate()).padStart(2,"0");
+  const m = String(date.getMonth()+1).padStart(2,"0");
+  const d = String(date.getDate()).padStart(2,"0");
 
   return `${y}-${m}-${d}`;
 
@@ -1830,7 +1759,10 @@ function dateKey(date){
 
 function isNormallyWorking(date){
 
-  const day = date.getDay();
+  const day =
+    typeof date === "string"
+      ? new Date(date + "T12:00:00").getDay()
+      : date.getDay();
 
   return day === 1 || day === 6;
 
@@ -1844,9 +1776,28 @@ function isBlocked(key){
 }
 
 
-function escapeHTML(value){
+function getTimeSlots(){
 
-  return String(value || "")
+  return [
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00"
+  ];
+
+}
+
+
+function escapeHtml(text){
+
+  return String(text || "")
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
@@ -1863,24 +1814,18 @@ function escapeHTML(value){
 function switchTab(tab){
 
   document.querySelectorAll(".view-section")
-    .forEach(el =>
-      el.classList.remove("active")
-    );
+    .forEach(el => el.classList.remove("active"));
 
   document.querySelectorAll(".nav-item")
-    .forEach(el =>
-      el.classList.remove("active")
-    );
+    .forEach(el => el.classList.remove("active"));
 
 
   if(tab === "booking"){
 
-    document
-      .getElementById("viewBooking")
+    document.getElementById("viewBooking")
       .classList.add("active");
 
-    document
-      .getElementById("navBooking")
+    document.getElementById("navBooking")
       .classList.add("active");
 
   }
@@ -1888,12 +1833,10 @@ function switchTab(tab){
 
   if(tab === "appointments"){
 
-    document
-      .getElementById("viewAppointments")
+    document.getElementById("viewAppointments")
       .classList.add("active");
 
-    document
-      .getElementById("navAppointments")
+    document.getElementById("navAppointments")
       .classList.add("active");
 
     renderAppointments();
@@ -1903,12 +1846,10 @@ function switchTab(tab){
 
   if(tab === "services"){
 
-    document
-      .getElementById("viewServices")
+    document.getElementById("viewServices")
       .classList.add("active");
 
-    document
-      .getElementById("navServices")
+    document.getElementById("navServices")
       .classList.add("active");
 
     renderServices();
@@ -1918,12 +1859,10 @@ function switchTab(tab){
 
   if(tab === "clients"){
 
-    document
-      .getElementById("viewClients")
+    document.getElementById("viewClients")
       .classList.add("active");
 
-    document
-      .getElementById("navClients")
+    document.getElementById("navClients")
       .classList.add("active");
 
     renderClients();
@@ -1950,47 +1889,41 @@ function changeMonth(amount){
 
 function renderCalendar(){
 
-  const year =
-    calendarDate.getFullYear();
-
-  const month =
-    calendarDate.getMonth();
-
+  const year = calendarDate.getFullYear();
+  const month = calendarDate.getMonth();
 
   const monthNames = [
-    "Janvier","Février","Mars","Avril",
-    "Mai","Juin","Juillet","Août",
-    "Septembre","Octobre","Novembre","Décembre"
+    "Janvier","Février","Mars","Avril","Mai","Juin",
+    "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
   ];
-
 
   document.getElementById("monthTitle").innerText =
     `${monthNames[month]} ${year}`;
-
 
   const grid =
     document.getElementById("calendarGrid");
 
   grid.innerHTML = "";
 
+  const weekdays =
+    ["L","M","M","J","V","S","D"];
 
-  ["L","M","M","J","V","S","D"]
-    .forEach(w => {
 
-      const el =
-        document.createElement("div");
+  weekdays.forEach(w => {
 
-      el.className = "weekday";
-      el.innerText = w;
+    const el =
+      document.createElement("div");
 
-      grid.appendChild(el);
+    el.className = "weekday";
+    el.innerText = w;
 
-    });
+    grid.appendChild(el);
+
+  });
 
 
   const firstDay =
     new Date(year,month,1);
-
 
   let start =
     firstDay.getDay();
@@ -2008,8 +1941,7 @@ function renderCalendar(){
     const empty =
       document.createElement("div");
 
-    empty.className =
-      "day empty";
+    empty.className = "day empty";
 
     grid.appendChild(empty);
 
@@ -2027,39 +1959,33 @@ function renderCalendar(){
     const el =
       document.createElement("div");
 
-    el.className =
-      "day";
+    el.className = "day";
 
 
-    if(!isNormallyWorking(date)){
+    const working =
+      isNormallyWorking(date);
 
+
+    if(!working){
       el.classList.add("not-working");
-
     }
 
 
     if(isBlocked(key)){
-
       el.classList.add("blocked");
-
     }
 
 
     if(selectedDate === key){
-
       el.classList.add("selected");
-
     }
 
 
     const number =
       document.createElement("div");
 
-    number.className =
-      "day-number";
-
-    number.innerText =
-      day;
+    number.className = "day-number";
+    number.innerText = day;
 
     el.appendChild(number);
 
@@ -2074,8 +2000,7 @@ function renderCalendar(){
     const dot =
       document.createElement("div");
 
-    dot.className =
-      "day-dot";
+    dot.className = "day-dot";
 
 
     if(dayBookings.length > 0){
@@ -2086,14 +2011,10 @@ function renderCalendar(){
 
       dot.classList.add("dot-grey");
 
-    }else if(!isNormallyWorking(date)){
+    }else if(!working){
 
-      /*
-       * Jour non travaillé :
-       * pastille blanche
-       */
-
-      dot.classList.add("dot-grey");
+      // Jour non travaillé = pastille blanche
+      dot.classList.add("dot-white");
 
     }else{
 
@@ -2131,19 +2052,8 @@ function selectCalendarDay(key){
 
 
 /* ============================================================
-   CRENEAUX
+   CRÉNEAUX
 ============================================================ */
-
-function getTimeSlots(){
-
-  return [
-    "08:00","09:00","10:00","11:00",
-    "12:00","13:00","14:00","15:00",
-    "16:00","17:00","18:00"
-  ];
-
-}
-
 
 function renderSlots(){
 
@@ -2164,27 +2074,27 @@ function renderSlots(){
 
 
   const selectedDateObj =
-    new Date(selectedDate + "T00:00:00");
+    new Date(selectedDate + "T12:00:00");
 
 
   document.getElementById("selectedDateLabel").innerText =
-    formatShortDate(selectedDate + "T12:00:00");
+    formatDateOnly(selectedDate + "T12:00:00");
 
 
   if(isBlocked(selectedDate)){
 
     document.getElementById("dayStatusNotice").innerText =
-      "⛔ Cette journée est bloquée.";
+      "Cette journée est bloquée.";
 
   }else if(!isNormallyWorking(selectedDateObj)){
 
     document.getElementById("dayStatusNotice").innerText =
-      "ℹ️ Jour normalement non travaillé. Tu peux néanmoins réserver exceptionnellement.";
+      "Jour normalement non travaillé. Tu peux néanmoins réserver exceptionnellement.";
 
   }else{
 
     document.getElementById("dayStatusNotice").innerText =
-      "🟢 Sélectionnez une heure disponible.";
+      "Sélectionnez une heure disponible.";
 
   }
 
@@ -2194,8 +2104,7 @@ function renderSlots(){
     const slot =
       document.createElement("button");
 
-    slot.className =
-      "slot";
+    slot.className = "slot";
 
 
     const reserved =
@@ -2204,26 +2113,19 @@ function renderSlots(){
       );
 
 
-    slot.innerText =
-      time;
+    slot.innerText = time;
 
 
     if(reserved){
 
       slot.classList.add("reserved");
-
-      slot.innerText =
-        `${time} 🔴`;
-
+      slot.innerText = `${time} — Réservé`;
       slot.disabled = true;
 
     }else if(isBlocked(selectedDate)){
 
       slot.classList.add("closed");
-
-      slot.innerText =
-        `${time} —`;
-
+      slot.innerText = `${time} —`;
       slot.disabled = true;
 
     }else{
@@ -2231,20 +2133,22 @@ function renderSlots(){
       slot.classList.add("available");
 
 
+      if(selectedTime === time){
+        slot.classList.add("selected");
+      }
+
+
       slot.onclick = () => {
 
         const alreadyReserved =
           bookings.some(b =>
-            b.dateTime ===
-            `${selectedDate}T${time}`
+            b.dateTime === `${selectedDate}T${time}`
           );
 
 
         if(alreadyReserved){
 
-          alert(
-            "Ce créneau vient d'être réservé."
-          );
+          alert("Ce créneau vient d'être réservé.");
 
           renderSlots();
 
@@ -2253,12 +2157,10 @@ function renderSlots(){
         }
 
 
-        selectedTime =
-          time;
+        selectedTime = time;
 
 
-        document
-          .querySelectorAll(".slot")
+        document.querySelectorAll(".slot")
           .forEach(s =>
             s.classList.remove("selected")
           );
@@ -2271,10 +2173,9 @@ function renderSlots(){
           `${selectedDate}T${time}`;
 
 
-        document
-          .getElementById("chosenDateTime")
+        document.getElementById("chosenDateTime")
           .innerText =
-          formatDate(dateTime);
+            formatDate(dateTime);
 
       };
 
@@ -2296,35 +2197,27 @@ function openBlockModal(){
 
   if(!selectedDate){
 
-    alert(
-      "Sélectionnez d'abord une journée."
-    );
+    alert("Sélectionnez d'abord une journée dans le calendrier.");
 
     return;
 
   }
 
 
-  document
-    .getElementById("blockDateText")
-    .innerText =
-    formatShortDate(
-      selectedDate + "T12:00:00"
-    );
+  document.getElementById("blockDateText").innerText =
+    formatDateOnly(selectedDate + "T12:00:00");
 
 
-  document
-    .getElementById("blockModal")
-    .style.display = "flex";
+  document.getElementById("blockModal").style.display =
+    "flex";
 
 }
 
 
 function closeBlockModal(){
 
-  document
-    .getElementById("blockModal")
-    .style.display = "none";
+  document.getElementById("blockModal").style.display =
+    "none";
 
 }
 
@@ -2337,8 +2230,8 @@ function toggleBlockedDay(){
   if(blockedDays.includes(selectedDate)){
 
     blockedDays =
-      blockedDays.filter(
-        d => d !== selectedDate
+      blockedDays.filter(d =>
+        d !== selectedDate
       );
 
     alert("Journée débloquée.");
@@ -2348,8 +2241,7 @@ function toggleBlockedDay(){
     const hasBookings =
       bookings.some(b =>
         b.dateTime &&
-        b.dateTime.substring(0,10) ===
-        selectedDate
+        b.dateTime.substring(0,10) === selectedDate
       );
 
 
@@ -2383,57 +2275,62 @@ function toggleBlockedDay(){
 
 
 /* ============================================================
-   CLIENT — RECHERCHE
+   CLIENTS — RECHERCHE
 ============================================================ */
 
 function populateClientSelect(){
 
   const select =
-    document.getElementById(
-      "bookingClientSelect"
-    );
-
+    document.getElementById("bookingClientSelect");
 
   const search =
-    document.getElementById(
-      "clientSearch"
-    ).value
+    document.getElementById("clientSearch")
+      .value
       .toLowerCase()
       .trim();
+
+
+  const current =
+    select.value;
 
 
   select.innerHTML =
     '<option value="">-- Sélectionner un client --</option>';
 
 
-  clients
-    .filter(c => {
+  const filtered =
+    clients.filter(c => {
 
       if(!search) return true;
 
-
       return (
-        String(c.prenom).toLowerCase().includes(search) ||
-        String(c.nom).toLowerCase().includes(search) ||
-        String(c.tel).toLowerCase().includes(search) ||
-        String(c.code).toLowerCase().includes(search)
+        String(c.prenom || "").toLowerCase().includes(search) ||
+        String(c.nom || "").toLowerCase().includes(search) ||
+        String(c.tel || "").toLowerCase().includes(search) ||
+        String(c.code || "").toLowerCase().includes(search)
       );
 
-    })
-    .forEach(c => {
-
-      const option =
-        document.createElement("option");
-
-      option.value =
-        c.id;
-
-      option.textContent =
-        `${c.prenom} ${c.nom} — ${c.tel}`;
-
-      select.appendChild(option);
-
     });
+
+
+  filtered.forEach(c => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = c.id;
+
+    option.textContent =
+      `${c.prenom} ${c.nom} — ${c.tel}`;
+
+    select.appendChild(option);
+
+  });
+
+
+  if(filtered.some(c => c.id === current)){
+    select.value = current;
+  }
 
 }
 
@@ -2442,61 +2339,121 @@ function searchBookingClients(){
 
   populateClientSelect();
 
-
   const search =
-    document.getElementById(
-      "clientSearch"
-    ).value
+    document.getElementById("clientSearch")
+      .value
       .toLowerCase()
       .trim();
 
-
   const results =
-    document.getElementById(
-      "bookingSearchResults"
-    );
-
-
-  const createButton =
-    document.getElementById(
-      "createClientFromBooking"
-    );
-
-
-  results.innerHTML = "";
+    document.getElementById("bookingSearchResults");
 
 
   if(!search){
 
-    createButton.classList.add("hidden");
+    results.innerHTML = "";
 
     return;
 
   }
 
 
-  const found =
+  const filtered =
     clients.filter(c =>
-      `${c.prenom} ${c.nom} ${c.tel} ${c.code}`
-        .toLowerCase()
-        .includes(search)
+      String(c.prenom || "").toLowerCase().includes(search) ||
+      String(c.nom || "").toLowerCase().includes(search) ||
+      String(c.tel || "").toLowerCase().includes(search) ||
+      String(c.code || "").toLowerCase().includes(search)
     );
 
 
-  if(!found.length){
+  if(!filtered.length){
 
     results.innerHTML = `
-      <div class="notice">
-        Aucun client trouvé pour
-        <strong>${escapeHTML(search)}</strong>.
+
+      <div class="no-results" style="margin-bottom:12px">
+
+        Aucun client trouvé.
+
+        <button
+          class="btn btn-dark full"
+          style="margin-top:10px"
+          onclick="createClientFromSearch()"
+        >
+          + Créer ce client
+        </button>
+
       </div>
+
     `;
 
-    createButton.classList.remove("hidden");
+    return;
 
-  }else{
+  }
 
-    createButton.classList.add("hidden");
+
+  results.innerHTML = filtered
+    .slice(0,8)
+    .map(c => `
+
+      <button
+        class="radio-option"
+        style="width:100%;margin-bottom:7px;text-align:left"
+        onclick="selectClientFromSearch('${c.id}')"
+      >
+
+        <span>
+          <strong>${escapeHtml(c.prenom)} ${escapeHtml(c.nom)}</strong>
+          <small style="display:block;color:inherit;opacity:.7">
+            ${escapeHtml(c.tel)}
+          </small>
+        </span>
+
+        <span>${c.discount}%</span>
+
+      </button>
+
+    `)
+    .join("");
+
+}
+
+
+function selectClientFromSearch(id){
+
+  document.getElementById("bookingClientSelect").value = id;
+
+  selectBookingClient();
+
+  document.getElementById("bookingSearchResults")
+    .innerHTML = "";
+
+}
+
+
+function createClientFromSearch(){
+
+  const search =
+    document.getElementById("clientSearch").value.trim();
+
+  openAddModal();
+
+  const parts =
+    search.split(/\s+/);
+
+
+  if(parts.length >= 1){
+
+    document.getElementById("newPrenom").value =
+      parts[0];
+
+  }
+
+
+  if(parts.length >= 2){
+
+    document.getElementById("newNom").value =
+      parts.slice(1).join(" ");
 
   }
 
@@ -2506,28 +2463,21 @@ function searchBookingClients(){
 function selectBookingClient(){
 
   const id =
-    document.getElementById(
-      "bookingClientSelect"
-    ).value;
-
+    document.getElementById("bookingClientSelect").value;
 
   const c =
     clients.find(x => x.id === id);
 
 
   const info =
-    document.getElementById(
-      "bookingClientInfo"
-    );
+    document.getElementById("bookingClientInfo");
 
 
   if(!c){
 
     info.classList.add("hidden");
 
-    document
-      .getElementById("referralBalanceNotice")
-      .innerText =
+    document.getElementById("referralBalanceNotice").innerText =
       "Sélectionnez un client pour voir sa réduction disponible.";
 
     return;
@@ -2539,41 +2489,36 @@ function selectBookingClient(){
 
 
   info.innerHTML = `
-    <strong>${escapeHTML(c.prenom)} ${escapeHTML(c.nom)}</strong><br>
-    ${escapeHTML(c.tel)}<br>
+
+    <strong>${escapeHtml(c.prenom)} ${escapeHtml(c.nom)}</strong><br>
+
+    ${escapeHtml(c.tel)}
+
     ${
       c.address
-      ? "Adresse : " + escapeHTML(c.address)
-      : "Adresse postale : non enregistrée"
-    }<br>
-    Réduction parrainage :
+        ? `<br>${escapeHtml(c.address)}`
+        : ""
+    }
+
+    <br>
+    Réduction parrainage disponible :
     <strong>${c.discount}%</strong>
+
   `;
 
 
-  document
-    .getElementById(
-      "referralBalanceNotice"
-    )
-    .innerHTML =
-    `🎁 <strong>${escapeHTML(c.prenom)}</strong> dispose actuellement de <strong>${c.discount}%</strong> de réduction parrainage.`;
+  document.getElementById("referralBalanceNotice").innerHTML =
+    `<strong>${escapeHtml(c.prenom)}</strong> dispose actuellement de <strong>${c.discount}%</strong> de réduction parrainage.`;
 
 
-  document
-    .getElementById("referralUsed")
-    .value = 0;
+  document.getElementById("referralUsed").value = 0;
 
 
-  /*
-   * Si on choisit domicile,
-   * l'adresse du client est automatiquement reprise.
-   */
-
+  // L'adresse du client est seulement copiée dans le RDV.
+  // Elle ne modifie pas la fiche client.
   if(selectedLocation === "domicile"){
 
-    document
-      .getElementById("homeAddress")
-      .value =
+    document.getElementById("homeAddress").value =
       c.address || "";
 
   }
@@ -2585,36 +2530,13 @@ function selectBookingClient(){
 
 
 /* ============================================================
-   CREATION CLIENT DEPUIS RDV
-============================================================ */
-
-function openAddModalFromBooking(){
-
-  const search =
-    document.getElementById(
-      "clientSearch"
-    ).value.trim();
-
-
-  document.getElementById("newPrenom").value =
-    search.split(" ")[0] || "";
-
-
-  openAddModal();
-
-}
-
-
-/* ============================================================
    SERVICES
 ============================================================ */
 
 function populateServiceSelect(){
 
   const select =
-    document.getElementById(
-      "bookingServiceSelect"
-    );
+    document.getElementById("bookingServiceSelect");
 
 
   select.innerHTML =
@@ -2626,11 +2548,8 @@ function populateServiceSelect(){
     const option =
       document.createElement("option");
 
-    option.value =
-      s.id;
-
-    option.textContent =
-      s.name;
+    option.value = s.id;
+    option.textContent = s.name;
 
     select.appendChild(option);
 
@@ -2642,21 +2561,15 @@ function populateServiceSelect(){
 function updateVehiclePrices(){
 
   const serviceId =
-    document.getElementById(
-      "bookingServiceSelect"
-    ).value;
+    document.getElementById("bookingServiceSelect").value;
 
 
   const service =
-    services.find(
-      s => s.id === serviceId
-    );
+    services.find(s => s.id === serviceId);
 
 
   const group =
-    document.getElementById(
-      "vehicleGroup"
-    );
+    document.getElementById("vehicleGroup");
 
 
   group.innerHTML = "";
@@ -2664,8 +2577,7 @@ function updateVehiclePrices(){
 
   if(!service){
 
-    selectedVehicle =
-      "petite";
+    selectedVehicle = "petite";
 
     updateCalculation();
 
@@ -2675,10 +2587,12 @@ function updateVehiclePrices(){
 
 
   const vehicles = [
+
     ["petite","Petite"],
     ["moyenne","Moyenne"],
     ["grande","Grande"],
     ["utilitaire","Utilitaire"]
+
   ];
 
 
@@ -2694,26 +2608,29 @@ function updateVehiclePrices(){
 
 
     div.innerHTML = `
+
       <span>${label}</span>
-      <span>${money(service.prices[key])}</span>
+
+      <span>
+        ${money(service.prices[key])}
+      </span>
+
     `;
 
 
     div.onclick = () => {
 
-      document
-        .querySelectorAll(
-          "#vehicleGroup .radio-option"
-        )
-        .forEach(x =>
-          x.classList.remove("selected")
-        );
+      document.querySelectorAll(
+        "#vehicleGroup .radio-option"
+      )
+      .forEach(x =>
+        x.classList.remove("selected")
+      );
 
 
       div.classList.add("selected");
 
-      selectedVehicle =
-        key;
+      selectedVehicle = key;
 
       updateCalculation();
 
@@ -2725,8 +2642,7 @@ function updateVehiclePrices(){
   });
 
 
-  selectedVehicle =
-    "petite";
+  selectedVehicle = "petite";
 
   updateCalculation();
 
@@ -2739,13 +2655,12 @@ function updateVehiclePrices(){
 
 function selectLocation(el){
 
-  document
-    .querySelectorAll(
-      "#locationGroup .radio-option"
-    )
-    .forEach(x =>
-      x.classList.remove("selected")
-    );
+  document.querySelectorAll(
+    "#locationGroup .radio-option"
+  )
+  .forEach(x =>
+    x.classList.remove("selected")
+  );
 
 
   el.classList.add("selected");
@@ -2756,15 +2671,10 @@ function selectLocation(el){
 
 
   const distance =
-    document.getElementById(
-      "distanceGroup"
-    );
-
+    document.getElementById("distanceGroup");
 
   const address =
-    document.getElementById(
-      "addressGroup"
-    );
+    document.getElementById("addressGroup");
 
 
   if(selectedLocation === "domicile"){
@@ -2773,29 +2683,23 @@ function selectLocation(el){
     address.classList.remove("hidden");
 
 
-    /*
-     * Récupération automatique
-     * de l'adresse enregistrée du client.
-     */
-
-    const id =
-      document.getElementById(
-        "bookingClientSelect"
-      ).value;
+    const clientId =
+      document.getElementById("bookingClientSelect").value;
 
 
     const client =
-      clients.find(c => c.id === id);
+      clients.find(c =>
+        c.id === clientId
+      );
 
 
     if(client){
 
-      document.getElementById(
-        "homeAddress"
-      ).value =
+      document.getElementById("homeAddress").value =
         client.address || "";
 
     }
+
 
   }else{
 
@@ -2817,15 +2721,11 @@ function selectLocation(el){
 function getCurrentBasePrice(){
 
   const serviceId =
-    document.getElementById(
-      "bookingServiceSelect"
-    ).value;
+    document.getElementById("bookingServiceSelect").value;
 
 
   const service =
-    services.find(
-      s => s.id === serviceId
-    );
+    services.find(s => s.id === serviceId);
 
 
   if(!service) return 0;
@@ -2841,21 +2741,15 @@ function getCurrentBasePrice(){
 function validateReferralInput(){
 
   const id =
-    document.getElementById(
-      "bookingClientSelect"
-    ).value;
+    document.getElementById("bookingClientSelect").value;
 
 
   const client =
-    clients.find(
-      c => c.id === id
-    );
+    clients.find(c => c.id === id);
 
 
   const input =
-    document.getElementById(
-      "referralUsed"
-    );
+    document.getElementById("referralUsed");
 
 
   if(!client){
@@ -2871,17 +2765,16 @@ function validateReferralInput(){
     parseFloat(input.value) || 0;
 
 
-  if(value < 0)
+  if(value < 0){
     value = 0;
+  }
 
 
   if(value > client.discount){
 
-    value =
-      client.discount;
+    value = client.discount;
 
-    input.value =
-      value;
+    input.value = value;
 
   }
 
@@ -2896,9 +2789,7 @@ function updateCalculation(){
 
   const aboPercent =
     parseFloat(
-      document.getElementById(
-        "aboSelect"
-      ).value
+      document.getElementById("aboSelect").value
     ) || 0;
 
 
@@ -2908,9 +2799,7 @@ function updateCalculation(){
 
   const referral =
     parseFloat(
-      document.getElementById(
-        "referralUsed"
-      ).value
+      document.getElementById("referralUsed").value
     ) || 0;
 
 
@@ -2919,8 +2808,7 @@ function updateCalculation(){
 
 
   const referralDiscount =
-    priceAfterAbo *
-    referral / 100;
+    priceAfterAbo * referral / 100;
 
 
   let travel = 0;
@@ -2930,9 +2818,7 @@ function updateCalculation(){
 
     const km =
       parseFloat(
-        document.getElementById(
-          "distanceKm"
-        ).value
+        document.getElementById("distanceKm").value
       ) || 0;
 
 
@@ -2944,9 +2830,7 @@ function updateCalculation(){
 
   const supplement =
     parseFloat(
-      document.getElementById(
-        "suppPrix"
-      ).value
+      document.getElementById("suppPrix").value
     ) || 0;
 
 
@@ -2957,39 +2841,27 @@ function updateCalculation(){
     supplement;
 
 
-  document.getElementById(
-    "summaryBasePrice"
-  ).innerText =
+  document.getElementById("summaryBasePrice").innerText =
     money(base);
 
 
-  document.getElementById(
-    "summaryAbo"
-  ).innerText =
+  document.getElementById("summaryAbo").innerText =
     "-" + money(aboDiscount);
 
 
-  document.getElementById(
-    "summaryReferral"
-  ).innerText =
+  document.getElementById("summaryReferral").innerText =
     "-" + money(referralDiscount);
 
 
-  document.getElementById(
-    "summaryTravel"
-  ).innerText =
+  document.getElementById("summaryTravel").innerText =
     money(travel);
 
 
-  document.getElementById(
-    "summarySupp"
-  ).innerText =
+  document.getElementById("summarySupp").innerText =
     money(supplement);
 
 
-  document.getElementById(
-    "summaryTotal"
-  ).innerText =
+  document.getElementById("summaryTotal").innerText =
     money(Math.max(0,total));
 
 }
@@ -3002,22 +2874,16 @@ function updateCalculation(){
 function saveBooking(){
 
   const clientId =
-    document.getElementById(
-      "bookingClientSelect"
-    ).value;
+    document.getElementById("bookingClientSelect").value;
 
 
   const serviceId =
-    document.getElementById(
-      "bookingServiceSelect"
-    ).value;
+    document.getElementById("bookingServiceSelect").value;
 
 
   if(!clientId){
 
-    alert(
-      "Veuillez sélectionner un client."
-    );
+    alert("Veuillez sélectionner un client.");
 
     return;
 
@@ -3026,9 +2892,7 @@ function saveBooking(){
 
   if(!serviceId){
 
-    alert(
-      "Veuillez sélectionner une prestation."
-    );
+    alert("Veuillez sélectionner une prestation.");
 
     return;
 
@@ -3037,9 +2901,7 @@ function saveBooking(){
 
   if(!selectedDate || !selectedTime){
 
-    alert(
-      "Veuillez sélectionner une date et une heure."
-    );
+    alert("Veuillez sélectionner une date et une heure disponibles.");
 
     return;
 
@@ -3048,9 +2910,7 @@ function saveBooking(){
 
   if(isBlocked(selectedDate)){
 
-    alert(
-      "Cette journée est bloquée."
-    );
+    alert("Cette journée est bloquée.");
 
     return;
 
@@ -3062,16 +2922,14 @@ function saveBooking(){
 
 
   const alreadyReserved =
-    bookings.some(
-      b => b.dateTime === dateTime
+    bookings.some(b =>
+      b.dateTime === dateTime
     );
 
 
   if(alreadyReserved){
 
-    alert(
-      "Ce créneau est déjà réservé."
-    );
+    alert("Ce créneau est déjà réservé.");
 
     renderSlots();
 
@@ -3081,15 +2939,24 @@ function saveBooking(){
 
 
   const client =
-    clients.find(
-      c => c.id === clientId
+    clients.find(c =>
+      c.id === clientId
     );
 
 
   const service =
-    services.find(
-      s => s.id === serviceId
+    services.find(s =>
+      s.id === serviceId
     );
+
+
+  if(!client || !service){
+
+    alert("Client ou prestation introuvable.");
+
+    return;
+
+  }
 
 
   const base =
@@ -3098,9 +2965,7 @@ function saveBooking(){
 
   const aboPercent =
     parseFloat(
-      document.getElementById(
-        "aboSelect"
-      ).value
+      document.getElementById("aboSelect").value
     ) || 0;
 
 
@@ -3110,9 +2975,7 @@ function saveBooking(){
 
   const referralUsed =
     parseFloat(
-      document.getElementById(
-        "referralUsed"
-      ).value
+      document.getElementById("referralUsed").value
     ) || 0;
 
 
@@ -3132,8 +2995,7 @@ function saveBooking(){
 
 
   const referralDiscount =
-    priceAfterAbo *
-    referralUsed / 100;
+    priceAfterAbo * referralUsed / 100;
 
 
   let travel = 0;
@@ -3144,17 +3006,13 @@ function saveBooking(){
 
     distanceKm =
       parseFloat(
-        document.getElementById(
-          "distanceKm"
-        ).value
+        document.getElementById("distanceKm").value
       ) || 0;
 
 
     if(distanceKm < 0){
 
-      alert(
-        "Distance invalide."
-      );
+      alert("Distance invalide.");
 
       return;
 
@@ -3169,9 +3027,7 @@ function saveBooking(){
 
   const supplementPrice =
     parseFloat(
-      document.getElementById(
-        "suppPrix"
-      ).value
+      document.getElementById("suppPrix").value
     ) || 0;
 
 
@@ -3187,33 +3043,13 @@ function saveBooking(){
 
   if(referralUsed > 0){
 
-    client.discount -=
-      referralUsed;
+    client.discount -= referralUsed;
 
-
-    if(client.discount < 0)
+    if(client.discount < 0){
       client.discount = 0;
+    }
 
   }
-
-
-  /*
-   * Adresse :
-   * elle est enregistrée dans la fiche client.
-   * Pour le RDV domicile on conserve également
-   * une copie de l'adresse utilisée au moment du RDV.
-   */
-
-  const bookingAddress =
-    selectedLocation === "domicile"
-      ? (
-          document.getElementById(
-            "homeAddress"
-          ).value.trim() ||
-          client.address ||
-          ""
-        )
-      : "";
 
 
   const booking = {
@@ -3227,6 +3063,9 @@ function saveBooking(){
 
     clientPhone:
       client.tel,
+
+    clientAddress:
+      client.address || "",
 
     serviceId,
 
@@ -3242,7 +3081,9 @@ function saveBooking(){
       selectedLocation,
 
     homeAddress:
-      bookingAddress,
+      selectedLocation === "domicile"
+        ? document.getElementById("homeAddress").value.trim()
+        : "",
 
     distanceKm,
 
@@ -3253,14 +3094,11 @@ function saveBooking(){
     referralDiscount,
 
     supplementName:
-      document.getElementById(
-        "suppNom"
-      ).value.trim(),
+      document.getElementById("suppNom").value.trim(),
 
     supplementPrice,
 
-    basePrice:
-      base,
+    basePrice:base,
 
     aboDiscount,
 
@@ -3268,7 +3106,8 @@ function saveBooking(){
 
     total,
 
-    reviewSent:false
+    createdAt:
+      new Date().toISOString()
 
   };
 
@@ -3283,29 +3122,34 @@ function saveBooking(){
 
   alert(
     `Rendez-vous enregistré le ${formatDate(dateTime)}.\n\n` +
-    `Réduction parrainage utilisée : ${referralUsed}%\n` +
-    `Nouveau solde : ${client.discount}%`
+    `Nouveau solde parrainage : ${client.discount}%`
   );
 
 
+  resetBookingForm();
+
   renderCalendar();
+
   renderSlots();
+
   populateClientSelect();
+
   renderClients();
+
   renderAppointments();
 
 }
 
 
 /* ============================================================
-   SMS CONFIRMATION
+   SMS
 ============================================================ */
 
 function prepareConfirmationSms(booking){
 
   const client =
-    clients.find(
-      c => c.id === booking.clientId
+    clients.find(c =>
+      c.id === booking.clientId
     );
 
 
@@ -3336,14 +3180,14 @@ function prepareConfirmationSms(booking){
 
   const supp =
     booking.supplementName
-      ? `${booking.supplementName} (${booking.supplementPrice.toFixed(2)} €)`
-      : "Aucun (0,00 €)";
+      ? `${booking.supplementName} (${money(booking.supplementPrice)})`
+      : "Aucun";
 
 
   const referralText =
     booking.referralUsed > 0
-      ? `${booking.referralUsed}% (${booking.referralDiscount.toFixed(2)} €)`
-      : "0% (0,00 €)";
+      ? `${booking.referralUsed}% (${money(booking.referralDiscount)})`
+      : "0%";
 
 
   const vehicleNames = {
@@ -3364,16 +3208,16 @@ Bonjour ${client.prenom} ${client.nom},
 Votre réservation pour la prestation ${booking.serviceName} (${vehicleNames[booking.vehicle]}) est validée avec succès.
 
 Informations rendez-vous :
-📅 Date & Heure : ${formatDate(booking.dateTime)}
-📍 Lieu : ${locationText}
-🏷️ Formule : ${formula}
-🎁 Parrainage utilisé : ${referralText}
-➕ Supplément : ${supp}
-💶 Montant total : ${booking.total.toFixed(2)} €
+Date & Heure : ${formatDate(booking.dateTime)}
+Lieu : ${locationText}
+Formule : ${formula}
+Parrainage utilisé : ${referralText}
+Supplément : ${supp}
+Montant total : ${money(booking.total)}
 
-📌 Préparation du véhicule :
+Préparation du véhicule & conditions :
 • Merci de mettre à disposition le véhicule libéré de tout effet personnel.
-• Pour les prestations à domicile : merci de prévoir un accès direct à un point d'eau et une prise électrique.
+• Pour les prestations à domicile : veuillez prévoir un accès direct à un point d'eau et une prise électrique.
 
 Un imprévu ou une précision ? Répondez directement à ce message.
 
@@ -3381,164 +3225,189 @@ Au plaisir de prendre soin de votre véhicule,
 Alex — L'As Du Détail`;
 
 
-  /*
-   * Le lien SMS ouvre l'application Messages.
-   * Le numéro professionnel est explicitement utilisé comme destinataire.
-   */
-
   const link =
-    `sms:${PROFESSIONAL_PHONE}?body=${encodeURIComponent(message)}`;
+    `sms:${client.tel}?body=${encodeURIComponent(message)}`;
 
 
   const button =
-    document.getElementById(
-      "confirmationSmsBtn"
-    );
+    document.getElementById("confirmationSmsBtn");
 
 
-  button.href =
-    link;
+  button.href = link;
 
 
-  document
-    .getElementById(
-      "bookingActions"
-    )
+  document.getElementById("bookingActions")
     .classList.remove("hidden");
 
 }
 
 
 /* ============================================================
-   SMS AVIS GOOGLE
+   RESET RDV
 ============================================================ */
 
-function createReviewSms(booking){
+function resetBookingForm(){
 
-  const client =
-    clients.find(
-      c => c.id === booking.clientId
-    );
+  document.getElementById("clientSearch").value = "";
 
+  document.getElementById("bookingClientSelect").value = "";
 
-  if(!client) return "";
+  document.getElementById("bookingServiceSelect").value = "";
 
+  document.getElementById("aboSelect").value = "0";
 
-  const message =
-`Bonjour ${client.prenom} 😊
+  document.getElementById("referralUsed").value = "0";
 
-Alors, le résultat vous plaît ? 😁🚗✨
+  document.getElementById("suppNom").value = "";
 
-Si oui, ça nous ferait super plaisir d’avoir votre petit retour ⭐
-Promis, ça prend 1 minute chrono… même pas le temps de refaire le tour de votre voiture 😂
+  document.getElementById("suppPrix").value = "0";
 
-👉 Cliquez ici pour laisser votre avis ⭐
-${GOOGLE_REVIEW_URL}
+  document.getElementById("distanceKm").value = "";
 
-Votre avis nous aide énormément ❤️
-
-Merci encore pour votre confiance et à bientôt chez L’As Du Détail !
-
-Plus qu’un nettoyage, une signature.`;
+  document.getElementById("homeAddress").value = "";
 
 
-  return message;
+  selectedVehicle = "petite";
+  selectedLocation = "atelier";
 
-}
-
-
-function getReviewSmsLink(booking){
-
-  const message =
-    createReviewSms(booking);
+  selectedDate = null;
+  selectedTime = null;
 
 
-  return `sms:${PROFESSIONAL_PHONE}?body=${encodeURIComponent(message)}`;
+  document.querySelectorAll(
+    "#locationGroup .radio-option"
+  )
+  .forEach(x =>
+    x.classList.remove("selected")
+  );
+
+
+  document.querySelector(
+    '#locationGroup .radio-option[data-value="atelier"]'
+  )
+  .classList.add("selected");
+
+
+  document.getElementById("distanceGroup")
+    .classList.add("hidden");
+
+
+  document.getElementById("addressGroup")
+    .classList.add("hidden");
+
+
+  document.getElementById("bookingClientInfo")
+    .classList.add("hidden");
+
+
+  document.getElementById("bookingSearchResults")
+    .innerHTML = "";
+
+
+  document.getElementById("referralBalanceNotice").innerText =
+    "Sélectionnez un client pour voir sa réduction disponible.";
+
+
+  document.getElementById("chosenDateTime").innerText =
+    "Aucun créneau sélectionné";
+
+
+  document.getElementById("bookingActions")
+    .classList.add("hidden");
+
+
+  populateClientSelect();
+
+  updateVehiclePrices();
+
+  updateCalculation();
+
+  renderCalendar();
+
+  renderSlots();
 
 }
 
 
 /* ============================================================
-   RDV — RECHERCHE
+   RENDEZ-VOUS — LISTE
 ============================================================ */
 
 function renderAppointments(){
 
   const list =
-    document.getElementById(
-      "appointmentList"
-    );
+    document.getElementById("appointmentList");
 
 
   if(!list) return;
 
 
   const search =
-    (
-      document.getElementById(
-        "appointmentSearch"
-      ).value || ""
-    )
+    document.getElementById("appointmentSearch")
+      .value
       .toLowerCase()
       .trim();
 
 
-  const dateSearch =
-    document.getElementById(
-      "appointmentDateSearch"
-    ).value;
+  const filter =
+    document.getElementById("appointmentFilter").value;
+
+
+  const now =
+    new Date();
 
 
   let filtered =
     [...bookings];
 
 
-  if(search){
+  filtered =
+    filtered.filter(b => {
 
-    filtered =
-      filtered.filter(b => {
-
-        const text =
-          `${b.clientName}
-           ${b.clientPhone}
-           ${b.serviceName}
-           ${b.homeAddress || ""}`
-            .toLowerCase();
+      const date =
+        new Date(b.dateTime);
 
 
-        return text.includes(search);
-
-      });
-
-  }
+      if(filter === "future" && date < now){
+        return false;
+      }
 
 
-  if(dateSearch){
+      if(filter === "past" && date >= now){
+        return false;
+      }
 
-    filtered =
-      filtered.filter(b =>
-        b.dateTime &&
-        b.dateTime.substring(0,10) ===
-        dateSearch
+
+      if(!search){
+        return true;
+      }
+
+
+      const formatted =
+        formatDate(b.dateTime).toLowerCase();
+
+
+      return (
+        String(b.clientName || "").toLowerCase().includes(search) ||
+        String(b.clientPhone || "").toLowerCase().includes(search) ||
+        formatted.includes(search) ||
+        String(b.dateTime || "").includes(search) ||
+        String(b.serviceName || "").toLowerCase().includes(search)
       );
 
-  }
+    });
 
 
-  filtered.sort(
-    (a,b) =>
-      new Date(a.dateTime) -
-      new Date(b.dateTime)
+  filtered.sort((a,b) =>
+    new Date(a.dateTime) -
+    new Date(b.dateTime)
   );
-
-
-  list.innerHTML = "";
 
 
   if(!filtered.length){
 
     list.innerHTML = `
-      <div class="card empty">
+      <div class="no-results">
         Aucun rendez-vous trouvé.
       </div>
     `;
@@ -3548,13 +3417,10 @@ function renderAppointments(){
   }
 
 
+  list.innerHTML = "";
+
+
   filtered.forEach(booking => {
-
-    const client =
-      clients.find(
-        c => c.id === booking.clientId
-      );
-
 
     const card =
       document.createElement("div");
@@ -3564,125 +3430,88 @@ function renderAppointments(){
       "booking-card";
 
 
-    const isPast =
-      new Date(booking.dateTime) <
-      new Date();
-
-
-    const canReview =
-      isPast &&
-      (
-        Date.now() -
-        new Date(booking.dateTime).getTime()
-      ) >=
-      24 * 60 * 60 * 1000;
+    const future =
+      new Date(booking.dateTime) >= new Date();
 
 
     const location =
       booking.location === "atelier"
         ? "Atelier — Rue de Prâle 139, 4300 Waremme"
-        : `Domicile — ${booking.homeAddress || "Adresse non renseignée"}`;
+        : booking.homeAddress || "À domicile";
 
 
     card.innerHTML = `
 
-      <div class="booking-header">
+      <div class="row">
 
-        <div class="booking-date">
-          ${formatDate(booking.dateTime)}
+        <div>
+
+          <strong>
+            ${escapeHtml(booking.clientName)}
+          </strong>
+
+          <div class="phone">
+            ${escapeHtml(booking.clientPhone)}
+          </div>
+
         </div>
 
-        <div class="booking-client">
-          ${escapeHTML(booking.clientName)}
-        </div>
+        <span class="booking-status">
+          ${future ? "À venir" : "Terminé"}
+        </span>
 
       </div>
 
 
-      <div class="booking-details">
+      <div class="booking-detail">
+
+        <strong>Date :</strong>
+        ${formatDate(booking.dateTime)}
+
+        <br>
 
         <strong>Prestation :</strong>
-        ${escapeHTML(booking.serviceName)}
+        ${escapeHtml(booking.serviceName)}
+
         <br>
 
         <strong>Véhicule :</strong>
-        ${escapeHTML(booking.vehicle)}
+        ${vehicleLabel(booking.vehicle)}
+
         <br>
 
         <strong>Lieu :</strong>
-        ${escapeHTML(location)}
+        ${escapeHtml(location)}
+
         <br>
 
-        <strong>Formule :</strong>
-        ${booking.aboPercent}%
-        <br>
-
-        <strong>Parrainage :</strong>
-        ${booking.referralUsed || 0}%
-        <br>
-
-        ${
-          booking.supplementName
-            ? `<strong>Supplément :</strong>
-               ${escapeHTML(booking.supplementName)}
-               (${money(booking.supplementPrice)})<br>`
-            : ""
-        }
+        <strong>Total :</strong>
+        ${money(booking.total)}
 
       </div>
 
 
       <div
-        class="row"
+        class="actions"
         style="margin-top:12px"
       >
 
-        <span class="booking-total">
-          ${money(booking.total)}
-        </span>
-
-        <span class="badge ${
-          isPast
-            ? "badge-grey"
-            : "badge-green"
-        }">
-          ${isPast ? "Terminé" : "À venir"}
-        </span>
-
-      </div>
+        <button
+          class="action-btn"
+          style="background:#202124;color:white"
+          onclick="sendBookingSms('${booking.id}')"
+        >
+          Envoyer le SMS de confirmation
+        </button>
 
 
-      <div class="actions" style="margin-top:12px">
-
-        ${
-          client
-          ? `
-            <a
-              class="action-btn"
-              style="background:#202124;color:white"
-              href="sms:${PROFESSIONAL_PHONE}?body=${encodeURIComponent(
-                createConfirmationSms(booking)
-              )}"
-            >
-              Envoyer SMS au client
-            </a>
-          `
-          : ""
-        }
-
-
-        ${
-          canReview
-          ? `
-            <a
-              class="review-btn"
-              href="${getReviewSmsLink(booking)}"
-            >
-              ⭐ Cliquez ici pour demander l'avis
-            </a>
-          `
-          : ""
-        }
+        <button
+          class="action-btn"
+          style="background:#f3f4f6;color:#222"
+          onclick="openEditBooking('${booking.id}')"
+        >
+          Modifier le rendez-vous
+        </button>
 
 
         <button
@@ -3705,67 +3534,46 @@ function renderAppointments(){
 }
 
 
-/* ============================================================
-   SMS CONFIRMATION POUR RDV EXISTANT
-============================================================ */
+function vehicleLabel(vehicle){
 
-function createConfirmationSms(booking){
+  const names = {
 
-  const client =
-    clients.find(
-      c => c.id === booking.clientId
-    );
-
-
-  if(!client) return "";
-
-
-  const locationText =
-    booking.location === "atelier"
-      ? "Rue de Prâle 139, 4300 Waremme"
-      : booking.homeAddress || "À domicile";
-
-
-  const vehicleNames = {
     petite:"Petite",
     moyenne:"Moyenne",
     grande:"Grande",
     utilitaire:"Utilitaire"
+
   };
 
-
-  return `L'AS DU DÉTAIL — Confirmation d'intervention
-
-Bonjour ${client.prenom} ${client.nom},
-
-Votre réservation pour la prestation ${booking.serviceName} (${vehicleNames[booking.vehicle]}) est validée avec succès.
-
-Informations rendez-vous :
-📅 Date & Heure : ${formatDate(booking.dateTime)}
-📍 Lieu : ${locationText}
-💶 Montant total : ${booking.total.toFixed(2)} €
-
-📌 Préparation du véhicule :
-• Merci de mettre à disposition le véhicule libéré de tout effet personnel.
-• Pour les prestations à domicile : merci de prévoir un accès direct à un point d'eau et une prise électrique.
-
-Au plaisir de prendre soin de votre véhicule,
-Alex — L'As Du Détail`;
+  return names[vehicle] || vehicle || "";
 
 }
 
 
-function clearAppointmentSearch(){
+function sendBookingSms(id){
 
-  document.getElementById(
-    "appointmentSearch"
-  ).value = "";
+  const booking =
+    bookings.find(b =>
+      b.id === id
+    );
 
-  document.getElementById(
-    "appointmentDateSearch"
-  ).value = "";
 
-  renderAppointments();
+  if(!booking) return;
+
+
+  prepareConfirmationSms(booking);
+
+
+  const button =
+    document.getElementById("confirmationSmsBtn");
+
+
+  if(button.href){
+
+    window.location.href =
+      button.href;
+
+  }
 
 }
 
@@ -3773,8 +3581,8 @@ function clearAppointmentSearch(){
 function deleteBooking(id){
 
   const booking =
-    bookings.find(
-      b => b.id === id
+    bookings.find(b =>
+      b.id === id
     );
 
 
@@ -3782,22 +3590,471 @@ function deleteBooking(id){
 
 
   if(!confirm(
-    `Supprimer le rendez-vous de ${booking.clientName} ?`
-  )) return;
+    `Supprimer le rendez-vous de ${booking.clientName} du ${formatDate(booking.dateTime)} ?`
+  )){
+
+    return;
+
+  }
+
+
+  // Si un pourcentage avait été utilisé,
+  // on le restitue au client.
+  if(Number(booking.referralUsed) > 0){
+
+    const client =
+      clients.find(c =>
+        c.id === booking.clientId
+      );
+
+
+    if(client){
+
+      client.discount =
+        Number(client.discount || 0) +
+        Number(booking.referralUsed || 0);
+
+    }
+
+  }
 
 
   bookings =
-    bookings.filter(
-      b => b.id !== id
+    bookings.filter(b =>
+      b.id !== id
     );
 
 
   saveAll();
 
+
   renderAppointments();
   renderCalendar();
-  renderSlots();
   renderClients();
+
+}
+
+
+/* ============================================================
+   MODIFICATION RDV
+============================================================ */
+
+function openEditBooking(id){
+
+  const booking =
+    bookings.find(b =>
+      b.id === id
+    );
+
+
+  if(!booking) return;
+
+
+  document.getElementById("editBookingId").value =
+    id;
+
+
+  document.getElementById("editBookingDate").value =
+    booking.dateTime.substring(0,10);
+
+
+  const select =
+    document.getElementById("editBookingTime");
+
+
+  select.innerHTML = "";
+
+
+  getTimeSlots().forEach(time => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = time;
+    option.textContent = time;
+
+    select.appendChild(option);
+
+  });
+
+
+  select.value =
+    booking.dateTime.substring(11,16);
+
+
+  document.getElementById("editBookingAddress").value =
+    booking.homeAddress || "";
+
+
+  document.getElementById("editBookingModal")
+    .style.display = "flex";
+
+}
+
+
+function closeEditBookingModal(){
+
+  document.getElementById("editBookingModal")
+    .style.display = "none";
+
+}
+
+
+function saveEditedBooking(){
+
+  const id =
+    document.getElementById("editBookingId").value;
+
+
+  const booking =
+    bookings.find(b =>
+      b.id === id
+    );
+
+
+  if(!booking) return;
+
+
+  const date =
+    document.getElementById("editBookingDate").value;
+
+
+  const time =
+    document.getElementById("editBookingTime").value;
+
+
+  if(!date || !time){
+
+    alert("Veuillez sélectionner une date et une heure.");
+
+    return;
+
+  }
+
+
+  const newDateTime =
+    `${date}T${time}`;
+
+
+  const conflict =
+    bookings.some(b =>
+      b.id !== id &&
+      b.dateTime === newDateTime
+    );
+
+
+  if(conflict){
+
+    alert("Ce créneau est déjà réservé.");
+
+    return;
+
+  }
+
+
+  if(isBlocked(date)){
+
+    alert("Cette journée est bloquée.");
+
+    return;
+
+  }
+
+
+  booking.dateTime =
+    newDateTime;
+
+
+  if(booking.location === "domicile"){
+
+    booking.homeAddress =
+      document.getElementById("editBookingAddress").value.trim();
+
+  }
+
+
+  saveAll();
+
+
+  closeEditBookingModal();
+
+  renderAppointments();
+
+  renderCalendar();
+
+  renderClients();
+
+}
+
+
+/* ============================================================
+   SERVICES — CRUD
+============================================================ */
+
+function renderServices(){
+
+  const list =
+    document.getElementById("serviceList");
+
+
+  list.innerHTML = "";
+
+
+  services.forEach(service => {
+
+    const card =
+      document.createElement("div");
+
+
+    card.className =
+      "service-card";
+
+
+    card.innerHTML = `
+
+      <div class="row">
+
+        <div>
+
+          <strong>
+            ${escapeHtml(service.name)}
+          </strong>
+
+          <div style="font-size:.78rem;color:#777;margin-top:4px">
+            ${escapeHtml(service.description || "")}
+          </div>
+
+          <div style="font-size:.75rem;color:#777;margin-top:4px">
+            Durée : ${escapeHtml(service.duration || "Non définie")}
+          </div>
+
+        </div>
+
+        <button
+          class="small-btn"
+          onclick="editService('${service.id}')"
+        >
+          Modifier
+        </button>
+
+      </div>
+
+
+      <div
+        class="service-price-grid"
+        style="margin-top:13px"
+      >
+
+        <div class="price-item">
+          Petite
+          <strong>${money(service.prices.petite)}</strong>
+        </div>
+
+        <div class="price-item">
+          Moyenne
+          <strong>${money(service.prices.moyenne)}</strong>
+        </div>
+
+        <div class="price-item">
+          Grande
+          <strong>${money(service.prices.grande)}</strong>
+        </div>
+
+        <div class="price-item">
+          Utilitaire
+          <strong>${money(service.prices.utilitaire)}</strong>
+        </div>
+
+      </div>
+
+
+      <button
+        class="btn btn-red full"
+        style="margin-top:10px"
+        onclick="deleteService('${service.id}')"
+      >
+        Supprimer
+      </button>
+
+    `;
+
+
+    list.appendChild(card);
+
+  });
+
+}
+
+
+function openServiceModal(id=null){
+
+  editingServiceId = id;
+
+
+  document.getElementById("serviceModalTitle").innerText =
+    id
+      ? "Modifier la prestation"
+      : "Nouvelle prestation";
+
+
+  [
+    "serviceName",
+    "serviceDescription",
+    "serviceDuration",
+    "pricePetite",
+    "priceMoyenne",
+    "priceGrande",
+    "priceUtilitaire"
+  ].forEach(id => {
+
+    document.getElementById(id).value = "";
+
+  });
+
+
+  if(id){
+
+    const s =
+      services.find(x =>
+        x.id === id
+      );
+
+
+    if(s){
+
+      document.getElementById("serviceName").value =
+        s.name;
+
+      document.getElementById("serviceDescription").value =
+        s.description || "";
+
+      document.getElementById("serviceDuration").value =
+        s.duration || "";
+
+      document.getElementById("pricePetite").value =
+        s.prices.petite;
+
+      document.getElementById("priceMoyenne").value =
+        s.prices.moyenne;
+
+      document.getElementById("priceGrande").value =
+        s.prices.grande;
+
+      document.getElementById("priceUtilitaire").value =
+        s.prices.utilitaire;
+
+    }
+
+  }
+
+
+  document.getElementById("serviceModal")
+    .style.display = "flex";
+
+}
+
+
+function closeServiceModal(){
+
+  document.getElementById("serviceModal")
+    .style.display = "none";
+
+  editingServiceId = null;
+
+}
+
+
+function saveService(){
+
+  const name =
+    document.getElementById("serviceName")
+      .value
+      .trim();
+
+
+  if(!name){
+
+    alert("Le nom de la prestation est obligatoire.");
+
+    return;
+
+  }
+
+
+  const service = {
+
+    id:
+      editingServiceId ||
+      "service-" + Date.now(),
+
+    name,
+
+    description:
+      document.getElementById("serviceDescription")
+        .value
+        .trim(),
+
+    duration:
+      document.getElementById("serviceDuration")
+        .value
+        .trim(),
+
+    prices:{
+
+      petite:
+        parseFloat(
+          document.getElementById("pricePetite").value
+        ) || 0,
+
+      moyenne:
+        parseFloat(
+          document.getElementById("priceMoyenne").value
+        ) || 0,
+
+      grande:
+        parseFloat(
+          document.getElementById("priceGrande").value
+        ) || 0,
+
+      utilitaire:
+        parseFloat(
+          document.getElementById("priceUtilitaire").value
+        ) || 0
+
+    }
+
+  };
+
+
+  if(editingServiceId){
+
+    const index =
+      services.findIndex(s =>
+        s.id === editingServiceId
+      );
+
+
+    if(index !== -1){
+
+      services[index] =
+        service;
+
+    }
+
+  }else{
+
+    services.push(service);
+
+  }
+
+
+  saveAll();
+
+  closeServiceModal();
+
+  populateServiceSelect();
+
+  renderServices();
 
 }
 
@@ -3809,20 +4066,15 @@ function deleteBooking(id){
 function renderClients(){
 
   const list =
-    document.getElementById(
-      "clientList"
-    );
+    document.getElementById("clientList");
 
 
   if(!list) return;
 
 
   const search =
-    (
-      document.getElementById(
-        "searchInput"
-      ).value || ""
-    )
+    document.getElementById("searchInput")
+      .value
       .toLowerCase()
       .trim();
 
@@ -3833,10 +4085,10 @@ function renderClients(){
   const filtered =
     clients.filter(c =>
 
-      String(c.prenom).toLowerCase().includes(search) ||
-      String(c.nom).toLowerCase().includes(search) ||
-      String(c.tel).toLowerCase().includes(search) ||
-      String(c.code).toLowerCase().includes(search) ||
+      String(c.prenom || "").toLowerCase().includes(search) ||
+      String(c.nom || "").toLowerCase().includes(search) ||
+      String(c.tel || "").toLowerCase().includes(search) ||
+      String(c.code || "").toLowerCase().includes(search) ||
       String(c.address || "").toLowerCase().includes(search)
 
     );
@@ -3845,7 +4097,7 @@ function renderClients(){
   if(!filtered.length){
 
     list.innerHTML = `
-      <div class="card empty">
+      <div class="no-results">
         Aucun client trouvé.
       </div>
     `;
@@ -3857,28 +4109,16 @@ function renderClients(){
 
   filtered.forEach(c => {
 
-    const clientBookings =
-      bookings
-        .filter(
-          b => b.clientId === c.id
-        )
-        .sort(
-          (a,b) =>
-            new Date(b.dateTime) -
-            new Date(a.dateTime)
-        );
+    const card =
+      document.createElement("div");
 
 
-    const spent =
-      clientBookings.reduce(
-        (sum,b) =>
-          sum + Number(b.total || 0),
-        0
-      );
+    card.className =
+      "client-card";
 
 
-    const lastBooking =
-      clientBookings[0];
+    const stats =
+      getClientStats(c.id);
 
 
     const smsActivation =
@@ -3895,14 +4135,6 @@ L'As du Détail — Plus qu’un nettoyage, une signature.`
       );
 
 
-    const card =
-      document.createElement("div");
-
-
-    card.className =
-      "client-card";
-
-
     card.innerHTML = `
 
       <div
@@ -3914,19 +4146,18 @@ L'As du Détail — Plus qu’un nettoyage, une signature.`
         <div>
 
           <div class="client-name">
-            ${escapeHTML(c.prenom)}
-            ${escapeHTML(c.nom)}
+            ${escapeHtml(c.prenom)} ${escapeHtml(c.nom)}
           </div>
 
           <div class="phone">
-            ${escapeHTML(c.tel)}
+            ${escapeHtml(c.tel)}
           </div>
 
           ${
             c.address
               ? `
                 <div class="address">
-                  ${escapeHTML(c.address)}
+                  ${escapeHtml(c.address)}
                 </div>
               `
               : ""
@@ -3939,7 +4170,7 @@ L'As du Détail — Plus qu’un nettoyage, une signature.`
                 ? "badge-green"
                 : "badge-red"
             }">
-              ${escapeHTML(c.statut)}
+              ${escapeHtml(c.statut)}
             </span>
 
           </div>
@@ -3954,41 +4185,16 @@ L'As du Détail — Plus qu’un nettoyage, une signature.`
       </div>
 
 
-      <div class="stats-grid">
-
-        <div class="stat">
-          <span>RDV</span>
-          <strong>${clientBookings.length}</strong>
-        </div>
-
-        <div class="stat">
-          <span>Dépensé</span>
-          <strong>${money(spent)}</strong>
-        </div>
-
-        <div class="stat">
-          <span>Dernier RDV</span>
-          <strong>
-            ${lastBooking
-              ? formatShortDate(lastBooking.dateTime)
-              : "-"
-            }
-          </strong>
-        </div>
-
-      </div>
-
-
       <div class="referral">
 
         <span>
           Code Parrain :
-          <strong>${escapeHTML(c.code)}</strong>
+          <strong>${escapeHtml(c.code)}</strong>
         </span>
 
         <button
           class="small-btn"
-          onclick="event.stopPropagation();copyCode('${escapeHTML(c.code)}')"
+          onclick="event.stopPropagation();copyCode('${escapeHtml(c.code)}')"
         >
           Copier
         </button>
@@ -3996,7 +4202,30 @@ L'As du Détail — Plus qu’un nettoyage, une signature.`
       </div>
 
 
-      <div class="actions">
+      <div class="info-grid">
+
+        <div class="info-box">
+          <small>Total dépensé</small>
+          <strong>${money(stats.totalSpent)}</strong>
+        </div>
+
+        <div class="info-box">
+          <small>Dernier RDV</small>
+          <strong>${stats.lastBooking ? formatDate(stats.lastBooking.dateTime) : "Aucun"}</strong>
+        </div>
+
+      </div>
+
+
+      <div class="actions" style="margin-top:10px">
+
+        <button
+          class="action-btn"
+          style="background:#f3f4f6;color:#222"
+          onclick="openEditClientModal('${c.id}')"
+        >
+          Modifier le client
+        </button>
 
         ${
           c.statut === "Inactif"
@@ -4004,10 +4233,10 @@ L'As du Détail — Plus qu’un nettoyage, une signature.`
             <a
               class="action-btn"
               style="background:#202124;color:white"
-              href="sms:${PROFESSIONAL_PHONE}?body=${smsActivation}"
+              href="sms:${c.tel}?body=${smsActivation}"
               onclick="activateAccount('${c.id}')"
             >
-              Activer le compte — SMS ➔
+              Activer le compte
             </a>
           `
           : ""
@@ -4040,6 +4269,69 @@ L'As du Détail — Plus qu’un nettoyage, une signature.`
 }
 
 
+function getClientStats(clientId){
+
+  const clientBookings =
+    bookings.filter(b =>
+      b.clientId === clientId
+    );
+
+
+  const totalSpent =
+    clientBookings.reduce(
+      (sum,b) =>
+        sum + Number(b.total || 0),
+      0
+    );
+
+
+  const sorted =
+    [...clientBookings]
+      .sort(
+        (a,b) =>
+          new Date(a.dateTime) -
+          new Date(b.dateTime)
+      );
+
+
+  const now =
+    new Date();
+
+
+  const past =
+    sorted.filter(b =>
+      new Date(b.dateTime) < now
+    );
+
+
+  const future =
+    sorted.filter(b =>
+      new Date(b.dateTime) >= now
+    );
+
+
+  return {
+
+    totalSpent,
+
+    lastBooking:
+      past.length
+        ? past[past.length - 1]
+        : null,
+
+    nextBooking:
+      future.length
+        ? future[0]
+        : null,
+
+    count:
+      clientBookings.length
+
+  };
+
+}
+
+
 function copyCode(code){
 
   if(navigator.clipboard){
@@ -4048,9 +4340,7 @@ function copyCode(code){
 
   }
 
-  alert(
-    "Code copié : " + code
-  );
+  alert("Code copié : " + code);
 
 }
 
@@ -4058,15 +4348,14 @@ function copyCode(code){
 function activateAccount(id){
 
   const c =
-    clients.find(
-      x => x.id === id
+    clients.find(x =>
+      x.id === id
     );
 
 
   if(c){
 
-    c.statut =
-      "Actif";
+    c.statut = "Actif";
 
     saveAll();
 
@@ -4075,12 +4364,14 @@ function activateAccount(id){
 }
 
 
+/* ============================================================
+   AJOUT / MODIFICATION CLIENT
+============================================================ */
+
 function openAddModal(){
 
   const select =
-    document.getElementById(
-      "newParrainSelect"
-    );
+    document.getElementById("newParrainSelect");
 
 
   select.innerHTML =
@@ -4091,28 +4382,22 @@ function openAddModal(){
 
     select.innerHTML +=
       `<option value="${c.id}">
-        ${escapeHTML(c.prenom)}
-        ${escapeHTML(c.nom)}
-        (${escapeHTML(c.code)})
+        ${escapeHtml(c.prenom)} ${escapeHtml(c.nom)} (${escapeHtml(c.code)})
       </option>`;
 
   });
 
 
-  document.getElementById(
-    "addModal"
-  ).style.display =
-    "flex";
+  document.getElementById("addModal")
+    .style.display = "flex";
 
 }
 
 
 function closeAddModal(){
 
-  document.getElementById(
-    "addModal"
-  ).style.display =
-    "none";
+  document.getElementById("addModal")
+    .style.display = "none";
 
 }
 
@@ -4120,40 +4405,37 @@ function closeAddModal(){
 function saveClient(){
 
   const prenom =
-    document.getElementById(
-      "newPrenom"
-    ).value.trim();
+    document.getElementById("newPrenom")
+      .value
+      .trim();
 
 
   const nom =
-    document.getElementById(
-      "newNom"
-    ).value.trim();
+    document.getElementById("newNom")
+      .value
+      .trim();
 
 
   const tel =
-    document.getElementById(
-      "newTel"
-    ).value.trim();
+    document.getElementById("newTel")
+      .value
+      .trim();
 
 
   const address =
-    document.getElementById(
-      "newAddress"
-    ).value.trim();
+    document.getElementById("newAddress")
+      .value
+      .trim();
 
 
   const parrainId =
-    document.getElementById(
-      "newParrainSelect"
-    ).value;
+    document.getElementById("newParrainSelect")
+      .value;
 
 
   if(!prenom || !tel){
 
-    alert(
-      "Prénom et téléphone sont obligatoires."
-    );
+    alert("Prénom et téléphone sont obligatoires.");
 
     return;
 
@@ -4163,16 +4445,13 @@ function saveClient(){
   const code =
     (
       prenom.substring(0,3) +
-      Math.floor(
-        100 + Math.random()*900
-      )
+      Math.floor(100 + Math.random()*900)
     ).toUpperCase();
 
 
   const newClient = {
 
-    id:
-      Date.now().toString(),
+    id:Date.now().toString(),
 
     prenom,
 
@@ -4195,16 +4474,14 @@ function saveClient(){
   };
 
 
-  clients.push(
-    newClient
-  );
+  clients.push(newClient);
 
 
   if(parrainId){
 
     const parrain =
-      clients.find(
-        c => c.id === parrainId
+      clients.find(c =>
+        c.id === parrainId
       );
 
 
@@ -4232,56 +4509,67 @@ function saveClient(){
   closeAddModal();
 
 
-  document.getElementById(
-    "newPrenom"
-  ).value = "";
-
-
-  document.getElementById(
-    "newNom"
-  ).value = "";
-
-
-  document.getElementById(
-    "newTel"
-  ).value = "";
-
-
-  document.getElementById(
-    "newAddress"
-  ).value = "";
-
-
-  document.getElementById(
-    "clientSearch"
-  ).value =
-    `${prenom} ${nom}`;
+  document.getElementById("newPrenom").value = "";
+  document.getElementById("newNom").value = "";
+  document.getElementById("newTel").value = "";
+  document.getElementById("newAddress").value = "";
 
 
   renderClients();
 
   populateClientSelect();
 
-  searchBookingClients();
 
-
-  /*
-   * Sélection automatique du nouveau client
-   * si la création vient de la réservation.
-   */
-
-  const select =
-    document.getElementById(
-      "bookingClientSelect"
-    );
-
-
-  select.value =
+  // Si le client a été créé depuis la recherche,
+  // on le sélectionne automatiquement.
+  document.getElementById("bookingClientSelect").value =
     newClient.id;
 
 
   selectBookingClient();
 
+}
+
+
+function openEditClientModal(id){
+  const c = clients.find(x => x.id === id);
+  if(!c) return;
+
+  document.getElementById("editClientId").value = c.id;
+  document.getElementById("editClientPrenom").value = c.prenom || "";
+  document.getElementById("editClientNom").value = c.nom || "";
+  document.getElementById("editClientTel").value = c.tel || "";
+  document.getElementById("editClientAddress").value = c.address || "";
+
+  document.getElementById("editClientModal").style.display = "flex";
+}
+
+function closeEditClientModal(){
+  document.getElementById("editClientModal").style.display = "none";
+}
+
+function saveEditedClient(){
+  const id = document.getElementById("editClientId").value;
+  const c = clients.find(x => x.id === id);
+  if(!c) return;
+
+  const prenom = document.getElementById("editClientPrenom").value.trim();
+  const tel = document.getElementById("editClientTel").value.trim();
+
+  if(!prenom || !tel){
+    alert("Prénom et téléphone sont obligatoires.");
+    return;
+  }
+
+  c.prenom = prenom;
+  c.nom = document.getElementById("editClientNom").value.trim();
+  c.tel = tel;
+  c.address = document.getElementById("editClientAddress").value.trim();
+
+  saveAll();
+  closeEditClientModal();
+  renderClients();
+  populateClientSelect();
 }
 
 
@@ -4291,158 +4579,70 @@ function saveClient(){
 
 function openDetailModal(id){
 
-  currentDetailId =
-    id;
+  currentDetailId = id;
 
 
   const c =
-    clients.find(
-      x => x.id === id
+    clients.find(x =>
+      x.id === id
     );
 
 
   if(!c) return;
 
 
-  document.getElementById(
-    "detName"
-  ).innerText =
+  const stats =
+    getClientStats(id);
+
+
+  document.getElementById("detName").innerText =
     `${c.prenom} ${c.nom}`;
 
 
-  document.getElementById(
-    "detPhone"
-  ).innerText =
+  document.getElementById("detPhone").innerText =
     c.tel;
 
 
-  document.getElementById(
-    "detAddress"
-  ).innerText =
+  document.getElementById("detAddress").innerText =
     c.address
-      ? `Adresse : ${c.address}`
-      : "Adresse postale non enregistrée";
+      ? c.address
+      : "Adresse non renseignée";
 
 
-  document.getElementById(
-    "detDiscount"
-  ).innerText =
+  document.getElementById("detDiscount").innerText =
     `${c.discount}%`;
 
 
-  document.getElementById(
-    "detCode"
-  ).innerText =
+  document.getElementById("detCode").innerText =
     c.code;
 
 
-  document.getElementById(
-    "detCopyBtn"
-  ).onclick =
+  document.getElementById("detTotalSpent").innerText =
+    money(stats.totalSpent);
+
+
+  document.getElementById("detLastBooking").innerText =
+    stats.lastBooking
+      ? formatDate(stats.lastBooking.dateTime)
+      : "Aucun";
+
+
+  document.getElementById("detNextBooking").innerText =
+    stats.nextBooking
+      ? formatDate(stats.nextBooking.dateTime)
+      : "Aucun";
+
+
+  document.getElementById("detBookingCount").innerText =
+    stats.count;
+
+
+  document.getElementById("detCopyBtn").onclick =
     () => copyCode(c.code);
 
 
-  const clientBookings =
-    bookings
-      .filter(
-        b => b.clientId === id
-      )
-      .sort(
-        (a,b) =>
-          new Date(b.dateTime) -
-          new Date(a.dateTime)
-      );
-
-
-  const spent =
-    clientBookings.reduce(
-      (sum,b) =>
-        sum + Number(b.total || 0),
-      0
-    );
-
-
-  document.getElementById(
-    "detNbBookings"
-  ).innerText =
-    clientBookings.length;
-
-
-  document.getElementById(
-    "detSpent"
-  ).innerText =
-    money(spent);
-
-
-  document.getElementById(
-    "detLastBooking"
-  ).innerText =
-    clientBookings.length
-      ? formatShortDate(
-          clientBookings[0].dateTime
-        )
-      : "-";
-
-
-  const history =
-    document.getElementById(
-      "detBookingHistory"
-    );
-
-
-  history.innerHTML = "";
-
-
-  if(!clientBookings.length){
-
-    history.innerHTML =
-      `<div style="color:#777;font-size:.82rem">
-        Aucun rendez-vous enregistré.
-      </div>`;
-
-  }else{
-
-    clientBookings.forEach(b => {
-
-      history.innerHTML += `
-        <div class="history-item">
-
-          <strong>
-            ${formatDate(b.dateTime)}
-          </strong>
-
-          <br>
-
-          ${escapeHTML(b.serviceName)}
-
-          <br>
-
-          ${b.location === "atelier"
-            ? "Atelier"
-            : "Domicile — " +
-              escapeHTML(
-                b.homeAddress || ""
-              )
-          }
-
-          <br>
-
-          <strong style="color:#b9972f">
-            ${money(b.total)}
-          </strong>
-
-        </div>
-      `;
-
-    });
-
-  }
-
-
   const list =
-    document.getElementById(
-      "detFilleulsList"
-    );
+    document.getElementById("detFilleulsList");
 
 
   list.innerHTML = "";
@@ -4452,22 +4652,26 @@ function openDetailModal(id){
 
     c.filleuls.forEach(f => {
 
-      list.innerHTML +=
-        `<div style="
-          padding:9px;
-          background:#f5f5f5;
-          border-radius:8px;
-          margin-bottom:6px;
-          font-size:.82rem
-        ">
-          ${escapeHTML(f)}
-          <strong style="
-            float:right;
-            color:#b9972f
-          ">
+      list.innerHTML += `
+        <div
+          style="
+            padding:9px;
+            background:#f5f5f5;
+            border-radius:8px;
+            margin-bottom:6px;
+            font-size:.82rem
+          "
+        >
+          ${escapeHtml(f)}
+
+          <strong
+            style="float:right;color:#b9972f"
+          >
             +10%
           </strong>
-        </div>`;
+
+        </div>
+      `;
 
     });
 
@@ -4479,9 +4683,70 @@ function openDetailModal(id){
   }
 
 
-  document.getElementById(
-    "deleteBtnAction"
-  ).onclick =
+  const history =
+    document.getElementById("detHistoryList");
+
+
+  const clientBookings =
+    bookings
+      .filter(b =>
+        b.clientId === id
+      )
+      .sort(
+        (a,b) =>
+          new Date(b.dateTime) -
+          new Date(a.dateTime)
+      );
+
+
+  history.innerHTML = "";
+
+
+  if(!clientBookings.length){
+
+    history.innerHTML =
+      '<div style="color:#777;font-size:.82rem">Aucun rendez-vous enregistré.</div>';
+
+  }else{
+
+    clientBookings.forEach(b => {
+
+      history.innerHTML += `
+
+        <div
+          style="
+            padding:10px;
+            background:#f5f5f5;
+            border-radius:9px;
+            margin-bottom:7px;
+            font-size:.8rem
+          "
+        >
+
+          <strong>
+            ${escapeHtml(b.serviceName)}
+          </strong>
+
+          <br>
+
+          ${formatDate(b.dateTime)}
+
+          <br>
+
+          ${vehicleLabel(b.vehicle)}
+
+          — ${money(b.total)}
+
+        </div>
+
+      `;
+
+    });
+
+  }
+
+
+  document.getElementById("deleteBtnAction").onclick =
     () => {
 
       if(confirm(
@@ -4489,8 +4754,8 @@ function openDetailModal(id){
       )){
 
         clients =
-          clients.filter(
-            x => x.id !== id
+          clients.filter(x =>
+            x.id !== id
           );
 
 
@@ -4507,41 +4772,35 @@ function openDetailModal(id){
     };
 
 
-  document.getElementById(
-    "detailModal"
-  ).style.display =
-    "flex";
+  document.getElementById("detailModal")
+    .style.display = "flex";
 
 }
 
 
 function closeDetailModal(){
 
-  document.getElementById(
-    "detailModal"
-  ).style.display =
-    "none";
+  document.getElementById("detailModal")
+    .style.display = "none";
 
 }
 
 
 function addCustomDiscount(){
 
-  if(!currentDetailId)
-    return;
+  if(!currentDetailId) return;
 
 
   const c =
-    clients.find(
-      x => x.id === currentDetailId
+    clients.find(x =>
+      x.id === currentDetailId
     );
 
 
   const amount =
     parseInt(
-      document.getElementById(
-        "creditPercentSelect"
-      ).value
+      document.getElementById("creditPercentSelect")
+        .value
     );
 
 
@@ -4567,25 +4826,16 @@ function openDiscountFromClient(id){
 
   setTimeout(() => {
 
-    document.getElementById(
-      "clientSearch"
-    ).value = "";
-
+    document.getElementById("clientSearch").value = "";
 
     populateClientSelect();
 
-
-    document.getElementById(
-      "bookingClientSelect"
-    ).value = id;
-
+    document.getElementById("bookingClientSelect").value =
+      id;
 
     selectBookingClient();
 
-
-    document.getElementById(
-      "referralUsed"
-    ).focus();
+    document.getElementById("referralUsed").focus();
 
   },50);
 
@@ -4593,336 +4843,8 @@ function openDiscountFromClient(id){
 
 
 /* ============================================================
-   SERVICES CRUD
+   SUPPRESSION SERVICE
 ============================================================ */
-
-function renderServices(){
-
-  const list =
-    document.getElementById(
-      "serviceList"
-    );
-
-
-  list.innerHTML = "";
-
-
-  services.forEach(service => {
-
-    const card =
-      document.createElement("div");
-
-
-    card.className =
-      "service-card";
-
-
-    card.innerHTML = `
-
-      <div class="row">
-
-        <div>
-
-          <strong>
-            ${escapeHTML(service.name)}
-          </strong>
-
-          <div style="
-            font-size:.78rem;
-            color:#777;
-            margin-top:4px
-          ">
-            ${escapeHTML(service.description || "")}
-          </div>
-
-          <div style="
-            font-size:.75rem;
-            color:#777;
-            margin-top:4px
-          ">
-            Durée :
-            ${escapeHTML(service.duration || "Non définie")}
-          </div>
-
-        </div>
-
-        <button
-          class="small-btn"
-          onclick="editService('${service.id}')"
-        >
-          Modifier
-        </button>
-
-      </div>
-
-
-      <div
-        class="service-price-grid"
-        style="margin-top:13px"
-      >
-
-        <div class="price-item">
-          Petite
-          <strong>
-            ${money(service.prices.petite)}
-          </strong>
-        </div>
-
-        <div class="price-item">
-          Moyenne
-          <strong>
-            ${money(service.prices.moyenne)}
-          </strong>
-        </div>
-
-        <div class="price-item">
-          Grande
-          <strong>
-            ${money(service.prices.grande)}
-          </strong>
-        </div>
-
-        <div class="price-item">
-          Utilitaire
-          <strong>
-            ${money(service.prices.utilitaire)}
-          </strong>
-        </div>
-
-      </div>
-
-
-      <button
-        class="btn btn-red full"
-        style="margin-top:10px"
-        onclick="deleteService('${service.id}')"
-      >
-        Supprimer
-      </button>
-
-    `;
-
-
-    list.appendChild(card);
-
-  });
-
-}
-
-
-function openServiceModal(id=null){
-
-  editingServiceId =
-    id;
-
-
-  document.getElementById(
-    "serviceModalTitle"
-  ).innerText =
-    id
-      ? "Modifier la prestation"
-      : "Nouvelle prestation";
-
-
-  [
-    "serviceName",
-    "serviceDescription",
-    "serviceDuration",
-    "pricePetite",
-    "priceMoyenne",
-    "priceGrande",
-    "priceUtilitaire"
-  ].forEach(id => {
-
-    document.getElementById(id).value = "";
-
-  });
-
-
-  if(id){
-
-    const s =
-      services.find(
-        x => x.id === id
-      );
-
-
-    if(s){
-
-      document.getElementById(
-        "serviceName"
-      ).value =
-        s.name;
-
-
-      document.getElementById(
-        "serviceDescription"
-      ).value =
-        s.description || "";
-
-
-      document.getElementById(
-        "serviceDuration"
-      ).value =
-        s.duration || "";
-
-
-      document.getElementById(
-        "pricePetite"
-      ).value =
-        s.prices.petite;
-
-
-      document.getElementById(
-        "priceMoyenne"
-      ).value =
-        s.prices.moyenne;
-
-
-      document.getElementById(
-        "priceGrande"
-      ).value =
-        s.prices.grande;
-
-
-      document.getElementById(
-        "priceUtilitaire"
-      ).value =
-        s.prices.utilitaire;
-
-    }
-
-  }
-
-
-  document.getElementById(
-    "serviceModal"
-  ).style.display =
-    "flex";
-
-}
-
-
-function closeServiceModal(){
-
-  document.getElementById(
-    "serviceModal"
-  ).style.display =
-    "none";
-
-
-  editingServiceId =
-    null;
-
-}
-
-
-function saveService(){
-
-  const name =
-    document.getElementById(
-      "serviceName"
-    ).value.trim();
-
-
-  if(!name){
-
-    alert(
-      "Le nom de la prestation est obligatoire."
-    );
-
-    return;
-
-  }
-
-
-  const service = {
-
-    id:
-      editingServiceId ||
-      "service-" + Date.now(),
-
-    name,
-
-    description:
-      document.getElementById(
-        "serviceDescription"
-      ).value.trim(),
-
-    duration:
-      document.getElementById(
-        "serviceDuration"
-      ).value.trim(),
-
-    prices:{
-
-      petite:
-        parseFloat(
-          document.getElementById(
-            "pricePetite"
-          ).value
-        ) || 0,
-
-      moyenne:
-        parseFloat(
-          document.getElementById(
-            "priceMoyenne"
-          ).value
-        ) || 0,
-
-      grande:
-        parseFloat(
-          document.getElementById(
-            "priceGrande"
-          ).value
-        ) || 0,
-
-      utilitaire:
-        parseFloat(
-          document.getElementById(
-            "priceUtilitaire"
-          ).value
-        ) || 0
-
-    }
-
-  };
-
-
-  if(editingServiceId){
-
-    const index =
-      services.findIndex(
-        s => s.id === editingServiceId
-      );
-
-
-    if(index !== -1){
-
-      services[index] =
-        service;
-
-    }
-
-  }else{
-
-    services.push(
-      service
-    );
-
-  }
-
-
-  saveAll();
-
-  closeServiceModal();
-
-  populateServiceSelect();
-
-  renderServices();
-
-}
-
 
 function editService(id){
 
@@ -4934,8 +4856,8 @@ function editService(id){
 function deleteService(id){
 
   const service =
-    services.find(
-      s => s.id === id
+    services.find(s =>
+      s.id === id
     );
 
 
@@ -4947,8 +4869,8 @@ function deleteService(id){
   )){
 
     services =
-      services.filter(
-        s => s.id !== id
+      services.filter(s =>
+        s.id !== id
       );
 
 
@@ -4959,142 +4881,6 @@ function deleteService(id){
     populateServiceSelect();
 
   }
-
-}
-
-
-/* ============================================================
-   RESET FORMULAIRE RDV
-============================================================ */
-
-function resetBookingForm(){
-
-  document.getElementById(
-    "clientSearch"
-  ).value = "";
-
-
-  document.getElementById(
-    "bookingClientSelect"
-  ).value = "";
-
-
-  document.getElementById(
-    "bookingServiceSelect"
-  ).value = "";
-
-
-  document.getElementById(
-    "aboSelect"
-  ).value = "0";
-
-
-  document.getElementById(
-    "referralUsed"
-  ).value = "0";
-
-
-  document.getElementById(
-    "suppNom"
-  ).value = "";
-
-
-  document.getElementById(
-    "suppPrix"
-  ).value = "0";
-
-
-  document.getElementById(
-    "distanceKm"
-  ).value = "";
-
-
-  document.getElementById(
-    "homeAddress"
-  ).value = "";
-
-
-  selectedVehicle =
-    "petite";
-
-
-  selectedLocation =
-    "atelier";
-
-
-  selectedDate =
-    null;
-
-
-  selectedTime =
-    null;
-
-
-  document
-    .querySelectorAll(
-      "#locationGroup .radio-option"
-    )
-    .forEach(x =>
-      x.classList.remove("selected")
-    );
-
-
-  document.querySelector(
-    '#locationGroup .radio-option[data-value="atelier"]'
-  ).classList.add("selected");
-
-
-  document.getElementById(
-    "distanceGroup"
-  ).classList.add("hidden");
-
-
-  document.getElementById(
-    "addressGroup"
-  ).classList.add("hidden");
-
-
-  document.getElementById(
-    "bookingClientInfo"
-  ).classList.add("hidden");
-
-
-  document.getElementById(
-    "bookingSearchResults"
-  ).innerHTML = "";
-
-
-  document.getElementById(
-    "createClientFromBooking"
-  ).classList.add("hidden");
-
-
-  document.getElementById(
-    "referralBalanceNotice"
-  ).innerText =
-    "Sélectionnez un client pour voir sa réduction disponible.";
-
-
-  document.getElementById(
-    "chosenDateTime"
-  ).innerText =
-    "Aucun créneau sélectionné";
-
-
-  document.getElementById(
-    "bookingActions"
-  ).classList.add("hidden");
-
-
-  populateClientSelect();
-
-  updateVehiclePrices();
-
-  updateCalculation();
-
-  renderCalendar();
-
-  renderSlots();
 
 }
 
