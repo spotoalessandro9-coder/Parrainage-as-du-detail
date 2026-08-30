@@ -6,69 +6,73 @@
   <title>L'As du Détail — Parrainage</title>
   <style>
     :root {
-      --bg: #09090B;
-      --card-bg: #18181B;
-      --card-border: #27272A;
-      --gold: #C5A059;
-      --text-light: #F4F4F5;
-      --text-muted: #A1A1AA;
+      --bg: #F8F9FA;
+      --card-bg: #FFFFFF;
+      --card-border: #E5E7EB;
+      --gold: #B8860B;
+      --gold-light: #FFFBEB;
+      --text-main: #111827;
+      --text-muted: #6B7280;
+      --danger: #DC2626;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--bg); color: var(--text-light); padding: 16px; max-width: 600px; margin: 0 auto; min-height: 100vh; }
+    body { background-color: var(--bg); color: var(--text-main); padding: 16px; max-width: 600px; margin: 0 auto; min-height: 100vh; }
     
     /* Header */
     header { text-align: center; margin-bottom: 24px; padding-top: 12px; }
-    header h1 { font-size: 1.6rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; color: #FFF; }
-    header p { color: var(--gold); font-size: 0.8rem; font-style: italic; margin-top: 6px; letter-spacing: 0.5px; }
+    header h1 { font-size: 1.6rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; color: var(--text-main); }
+    header p { color: var(--gold); font-size: 0.8rem; font-style: italic; margin-top: 4px; letter-spacing: 0.5px; font-weight: 600; }
     
     /* Controls & Search */
     .controls { display: flex; gap: 8px; margin-bottom: 20px; }
     input[type="text"], input[type="tel"], input[type="number"], select { 
-      flex: 1; padding: 14px 16px; background: #121214; border: 1px solid var(--card-border); 
-      border-radius: 10px; font-size: 0.95rem; color: #FFF; outline: none; width: 100%;
+      flex: 1; padding: 14px 16px; background: #FFFFFF; border: 1px solid var(--card-border); 
+      border-radius: 12px; font-size: 0.95rem; color: var(--text-main); outline: none; width: 100%;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
-    input[type="text"]:focus, input[type="tel"]:focus, input[type="number"]:focus, select:focus { border-color: var(--gold); }
-    .btn-add { background: var(--gold); color: #000; border: none; padding: 0 18px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+    input:focus, select:focus { border-color: var(--gold); }
+    .btn-add { background: var(--text-main); color: #FFF; border: none; padding: 0 18px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
 
     /* Client Cards */
-    .client-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); cursor: pointer; transition: border-color 0.2s; }
-    .client-card:active { border-color: var(--gold); }
+    .client-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor: pointer; transition: transform 0.1s; }
+    .client-card:active { transform: scale(0.99); }
     .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-    .client-name { font-size: 1.2rem; font-weight: 700; color: #FFF; }
+    .client-name { font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
     .client-phone { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
-    .status-pill { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; text-transform: uppercase; margin-top: 4px; }
-    .status-inactif { background: rgba(239, 68, 68, 0.2); color: #EF4444; border: 1px solid #EF4444; }
-    .status-actif { background: rgba(34, 197, 94, 0.2); color: #22C55E; border: 1px solid #22C55E; }
+    .status-pill { display: inline-block; font-size: 0.7rem; padding: 3px 8px; border-radius: 20px; font-weight: 700; text-transform: uppercase; margin-top: 6px; }
+    .status-inactif { background: #FEE2E2; color: #DC2626; }
+    .status-actif { background: #DCFCE7; color: #15803D; }
 
-    .discount-badge { background: rgba(197, 160, 89, 0.15); color: var(--gold); border: 1px solid var(--gold); font-size: 1.3rem; font-weight: 800; padding: 8px 14px; border-radius: 14px; text-align: center; }
-    .discount-label { font-size: 0.65rem; color: var(--text-muted); font-weight: 500; display: block; text-transform: uppercase; }
+    .discount-badge { background: var(--gold-light); color: var(--gold); border: 1px solid var(--gold); font-size: 1.3rem; font-weight: 800; padding: 8px 14px; border-radius: 14px; text-align: center; }
+    .discount-label { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; display: block; text-transform: uppercase; }
 
-    .referral-box { background: #09090B; padding: 12px 14px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; margin-bottom: 16px; border: 1px solid var(--card-border); }
-    .copy-btn { background: rgba(197, 160, 89, 0.2); border: 1px solid var(--gold); color: var(--gold); font-weight: 600; cursor: pointer; font-size: 0.8rem; padding: 4px 10px; border-radius: 6px; }
+    .referral-box { background: #F3F4F6; padding: 12px 14px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; margin-bottom: 16px; }
+    .copy-btn { background: #FFFFFF; border: 1px solid var(--card-border); color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 0.8rem; padding: 4px 10px; border-radius: 6px; }
     
     /* Actions SMS */
     .actions-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; font-weight: 700; }
-    .actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-    .btn-action { width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-decoration: none; box-sizing: border-box; }
-    .btn-actif { background: var(--gold); color: #000; }
-    .btn-credit { background: #27272A; color: var(--gold); border: 1px solid var(--gold); }
-    .btn-apply { background: #27272A; color: #FFF; border: 1px solid #3F3F46; }
+    .actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+    .btn-action { width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-decoration: none; box-sizing: border-box; }
+    .btn-actif { background: var(--text-main); color: #FFF; }
+    .btn-credit { background: var(--gold-light); color: var(--gold); border: 1px solid var(--gold); }
+    .btn-apply { background: #F3F4F6; color: var(--text-main); border: 1px solid var(--card-border); }
     
     /* Modals */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; padding: 16px; z-index: 100; overflow-y: auto; }
-    .modal-content { background: var(--card-bg); padding: 24px; border-radius: 16px; width: 100%; max-width: 440px; border: 1px solid var(--card-border); margin: auto; }
-    .modal-content h2 { margin-bottom: 16px; font-size: 1.3rem; color: #FFF; text-align: center; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; padding: 16px; z-index: 100; overflow-y: auto; }
+    .modal-content { background: #FFFFFF; padding: 24px; border-radius: 20px; width: 100%; max-width: 440px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); margin: auto; }
+    .modal-content h2 { margin-bottom: 16px; font-size: 1.3rem; color: var(--text-main); text-align: center; }
     .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 600; }
+    .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
     .modal-btns { display: flex; gap: 10px; margin-top: 18px; }
-    .btn-cancel { background: #27272A; color: #FFF; border: none; padding: 12px; flex: 1; border-radius: 8px; font-weight: 600; }
-    .btn-save { background: var(--gold); color: #000; border: none; padding: 12px; flex: 1; border-radius: 8px; font-weight: 700; }
+    .btn-cancel { background: #F3F4F6; color: var(--text-main); border: none; padding: 12px; flex: 1; border-radius: 10px; font-weight: 600; }
+    .btn-save { background: var(--text-main); color: #FFF; border: none; padding: 12px; flex: 1; border-radius: 10px; font-weight: 700; }
+    .btn-delete { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; padding: 12px; border-radius: 10px; font-weight: 700; width: 100%; margin-top: 12px; cursor: pointer; }
     
     /* Fiche Detail */
     .detail-hero { text-align: center; margin-bottom: 20px; }
     .detail-big-discount { font-size: 3rem; font-weight: 900; color: var(--gold); }
-    .detail-list { background: #09090B; border-radius: 10px; padding: 12px; border: 1px solid var(--card-border); margin-top: 10px; }
-    .detail-item { font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid #18181B; display: flex; justify-content: space-between; }
+    .detail-list { background: #F9FAFB; border-radius: 10px; padding: 12px; border: 1px solid var(--card-border); margin-top: 10px; }
+    .detail-item { font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid #E5E7EB; display: flex; justify-content: space-between; }
     .detail-item:last-child { border-bottom: none; }
   </style>
 </head>
@@ -80,13 +84,13 @@
   </header>
 
   <div class="controls">
-    <input type="text" id="searchInput" placeholder="Rechercher client, tel, code..." oninput="renderClients()">
+    <input type="text" id="searchInput" placeholder="Rechercher nom, téléphone, code..." oninput="renderClients()">
     <button class="btn-add" onclick="openAddModal()">+ Client</button>
   </div>
 
   <div id="clientList"></div>
 
-  <!-- Modal Nouveau Client avec choix du parrain -->
+  <!-- Modal Nouveau Client -->
   <div class="modal" id="addModal">
     <div class="modal-content">
       <h2>Nouveau Client</h2>
@@ -110,7 +114,7 @@
       </div>
       <div class="modal-btns">
         <button class="btn-cancel" onclick="closeAddModal()">Annuler</button>
-        <button class="btn-save" onclick="saveClient()">Enregistrer (+10% au parrain)</button>
+        <button class="btn-save" onclick="saveClient()">Enregistrer (+10% parrain)</button>
       </div>
     </div>
   </div>
@@ -130,7 +134,7 @@
       </div>
 
       <div class="form-group">
-        <label>Choix manuel du % à créditer</label>
+        <label>Ajouter un pourcentage manuel</label>
         <div style="display: flex; gap: 8px;">
           <select id="creditPercentSelect">
             <option value="5">5%</option>
@@ -143,11 +147,13 @@
       </div>
 
       <div class="form-group">
-        <label>Filleuls apportés</label>
+        <label>Historique des filleuls</label>
         <div class="detail-list" id="detFilleulsList">
-          <div class="detail-item"><span>Aucun filleul pour l'instant</span></div>
+          <div class="detail-item"><span>Aucun filleul enregistré</span></div>
         </div>
       </div>
+
+      <button class="btn-delete" onclick="deleteCurrentClient()">Supprimer ce client</button>
 
       <div class="modal-btns">
         <button class="btn-cancel" onclick="closeDetailModal()">Fermer</button>
@@ -155,25 +161,25 @@
     </div>
   </div>
 
-  <!-- Modal Utilisation Réduction Partielle -->
+  <!-- Modal Réduction Partielle -->
   <div class="modal" id="useDiscountModal">
     <div class="modal-content">
       <h2>Utiliser une Réduction</h2>
       <p id="useDiscountInfo" style="font-size: 0.9rem; color: var(--text-muted); text-align: center; margin-bottom: 16px;"></p>
       <div class="form-group">
-        <label>Pourcentage à utiliser aujourd'hui (%)</label>
+        <label>Pourcentage à déduire aujourd'hui (%)</label>
         <input type="number" id="useDiscountAmount" min="1" placeholder="Ex: 50">
       </div>
       <div class="modal-btns">
         <button class="btn-cancel" onclick="closeUseDiscountModal()">Annuler</button>
-        <button class="btn-save" onclick="confirmApplyDiscount()">Valider & SMS ➔</button>
+        <button class="btn-save" onclick="confirmApplyDiscount()">Valider & Envoyé SMS ➔</button>
       </div>
     </div>
   </div>
 
   <script>
     let clients = JSON.parse(localStorage.getItem('as_details_clients')) || [
-      { id: '1', prenom: 'Alex', nom: 'Demo', tel: '0499000000', code: 'ALEX10', statut: 'Inactif', parrainagesPending: 1, discount: 60, filleuls: [] }
+      { id: '1', prenom: 'Alex', nom: 'Demo', tel: '0499000000', code: 'ALEX10', statut: 'Inactif', parrainagesPending: 1, discount: 20, filleuls: [] }
     ];
 
     let currentDetailId = null;
@@ -200,8 +206,11 @@
         const card = document.createElement('div');
         card.className = 'client-card';
         
-        const msgActif = encodeURIComponent(`Bonjour ${c.prenom}, votre compte client chez L'As du Détail est maintenant actif ! Vous disposez actuellement de ${c.discount}% de réduction cumulée.`);
-        const msgCredit = encodeURIComponent(`Félicitations ${c.prenom} ! Un nouveau parrainage vient d'être validé. De la réduction vient d'être ajoutée à votre compte. Vous avez désormais ${c.discount}% de réduction au total chez L'As du Détail !`);
+        // SMS 1: Activation
+        const msgActif = encodeURIComponent(`Bonjour ${c.prenom},\n\nVotre compte VIP chez L'As du Détail est maintenant actif !\nVous profitez actuellement de ${c.discount}% de réduction cumulée.\n\nCode Parrainage : ${c.code}\n\nL'As du Détail — Plus qu’un nettoyage, une signature.`);
+        
+        // SMS 2: Créditer avec SOLDE TOTAL mis à jour
+        const msgCredit = encodeURIComponent(`Bonjour ${c.prenom},\n\nBonne nouvelle ! Un nouveau parrainage vient d'être validé.\n\nVotre nouveau solde est de : ${c.discount}% de réduction disponible chez L'As du Détail !\n\nL'As du Détail — Plus qu’un nettoyage, une signature.`);
 
         card.innerHTML = `
           <div class="card-header" onclick="openDetailModal('${c.id}')">
@@ -221,7 +230,7 @@
             <button class="copy-btn" onclick="copyCode('${c.code}')">Copier</button>
           </div>
 
-          <div class="actions-title">Actions SMS Automatiques</div>
+          <div class="actions-title">Actions SMS Pro</div>
           <div class="actions" onclick="event.stopPropagation()">
             ${c.statut === 'Inactif' ? `
               <a href="sms:${c.tel}?body=${msgActif}" 
@@ -241,7 +250,7 @@
 
             ${c.discount > 0 ? `
               <button class="btn-action btn-apply" onclick="openUseDiscountModal('${c.id}')">
-                <span>3. Utiliser réduction (Disponible: ${c.discount}%)</span>
+                <span>3. Utiliser réduc. (${c.discount}% dispo)</span>
                 <span>Choix ➔</span>
               </button>
             ` : ''}
@@ -269,14 +278,13 @@
       }
     }
 
-    /* Gestion réduction partielle */
+    /* Déduction partielle & SMS élégant */
     function openUseDiscountModal(id) {
       currentUseDiscountId = id;
       const c = clients.find(item => item.id === id);
       if (!c) return;
-      document.getElementById('useDiscountInfo').innerText = `${c.prenom} a actuellement ${c.discount}% de réduction disponible.`;
+      document.getElementById('useDiscountInfo').innerText = `${c.prenom} dispose de ${c.discount}% de réduction cumulée.`;
       document.getElementById('useDiscountAmount').value = c.discount;
-      document.getElementById('useDiscountAmount').max = c.discount;
       document.getElementById('useDiscountModal').style.display = 'flex';
     }
 
@@ -291,25 +299,24 @@
       const amountUsed = parseInt(document.getElementById('useDiscountAmount').value);
 
       if (isNaN(amountUsed) || amountUsed <= 0 || amountUsed > c.discount) {
-        alert('Veuillez entrer une valeur valide (entre 1 et ' + c.discount + '%)');
+        alert('Veuillez entrer une valeur valide.');
         return;
       }
 
       c.discount -= amountUsed;
       saveToStorage();
 
-      let msgBody = `Bonjour ${c.prenom}, votre réduction de ${amountUsed}% a bien été appliquée sur votre prestation aujourd'hui chez L'As du Détail.`;
+      let msgText = `Bonjour ${c.prenom},\n\nVotre réduction de ${amountUsed}% a bien été appliquée lors de votre prestation aujourd'hui !`;
       if (c.discount > 0) {
-        msgBody += ` Il vous reste encore ${c.discount}% de réduction disponible pour votre prochaine visite !`;
-      } else {
-        msgBody += ` Merci pour votre confiance !`;
+        msgText += `\nIl vous reste encore ${c.discount}% de réduction disponible sur votre compte.`;
       }
+      msgText += `\n\nMerci pour votre confiance.\nL'As du Détail — Plus qu’un nettoyage, une signature.`;
 
       closeUseDiscountModal();
-      window.location.href = `sms:${c.tel}?body=${encodeURIComponent(msgBody)}`;
+      window.location.href = `sms:${c.tel}?body=${encodeURIComponent(msgText)}`;
     }
 
-    /* Modal Nouveau Client */
+    /* Creation client */
     function openAddModal() {
       const select = document.getElementById('newParrainSelect');
       select.innerHTML = '<option value="">-- Aucun parrain --</option>';
@@ -358,7 +365,7 @@
       document.getElementById('newTel').value = '';
     }
 
-    /* Modal Fiche Client Détaillée */
+    /* Fiche Client & Suppression */
     function openDetailModal(id) {
       currentDetailId = id;
       const c = clients.find(item => item.id === id);
@@ -374,7 +381,7 @@
       list.innerHTML = '';
       if (c.filleuls && c.filleuls.length > 0) {
         c.filleuls.forEach(f => {
-          list.innerHTML += `<div class="detail-item"><span>${f}</span><span style="color:var(--gold);">Filleul validé</span></div>`;
+          list.innerHTML += `<div class="detail-item"><span>${f}</span><span style="color:var(--gold); font-weight:700;">+10% Crédité</span></div>`;
         });
       } else {
         list.innerHTML = '<div class="detail-item"><span>Aucun filleul enregistré</span></div>';
@@ -393,6 +400,16 @@
         c.discount += val;
         saveToStorage();
         openDetailModal(currentDetailId);
+      }
+    }
+
+    function deleteCurrentClient() {
+      if (!currentDetailId) return;
+      const c = clients.find(item => item.id === currentDetailId);
+      if (c && confirm(`Es-tu sûr de vouloir supprimer définitivement ${c.prenom} ${c.nom} ?`)) {
+        clients = clients.filter(item => item.id !== currentDetailId);
+        saveToStorage();
+        closeDetailModal();
       }
     }
 
