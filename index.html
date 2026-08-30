@@ -64,9 +64,9 @@
     .form-group { margin-bottom: 14px; }
     .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
     .modal-btns { display: flex; gap: 10px; margin-top: 18px; }
-    .btn-cancel { background: #F3F4F6; color: var(--text-main); border: none; padding: 12px; flex: 1; border-radius: 10px; font-weight: 600; }
-    .btn-save { background: var(--text-main); color: #FFF; border: none; padding: 12px; flex: 1; border-radius: 10px; font-weight: 700; }
-    .btn-delete { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; padding: 12px; border-radius: 10px; font-weight: 700; width: 100%; margin-top: 12px; cursor: pointer; }
+    .btn-cancel { background: #F3F4F6; color: var(--text-main); border: none; padding: 12px; flex: 1; border-radius: 10px; font-weight: 600; cursor: pointer; }
+    .btn-save { background: var(--text-main); color: #FFF; border: none; padding: 12px; flex: 1; border-radius: 10px; font-weight: 700; cursor: pointer; }
+    .btn-delete { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; padding: 12px; border-radius: 10px; font-weight: 700; width: 100%; margin-top: 16px; cursor: pointer; text-align: center; }
     
     /* Fiche Detail */
     .detail-hero { text-align: center; margin-bottom: 20px; }
@@ -153,7 +153,7 @@
         </div>
       </div>
 
-      <button class="btn-delete" onclick="deleteCurrentClient()">Supprimer ce client</button>
+      <button class="btn-delete" id="deleteBtnAction">Supprimer définitivement ce client</button>
 
       <div class="modal-btns">
         <button class="btn-cancel" onclick="closeDetailModal()">Fermer</button>
@@ -172,7 +172,7 @@
       </div>
       <div class="modal-btns">
         <button class="btn-cancel" onclick="closeUseDiscountModal()">Annuler</button>
-        <button class="btn-save" onclick="confirmApplyDiscount()">Valider & Envoyé SMS ➔</button>
+        <button class="btn-save" onclick="confirmApplyDiscount()">Valider & Envoyer SMS ➔</button>
       </div>
     </div>
   </div>
@@ -206,10 +206,7 @@
         const card = document.createElement('div');
         card.className = 'client-card';
         
-        // SMS 1: Activation
         const msgActif = encodeURIComponent(`Bonjour ${c.prenom},\n\nVotre compte VIP chez L'As du Détail est maintenant actif !\nVous profitez actuellement de ${c.discount}% de réduction cumulée.\n\nCode Parrainage : ${c.code}\n\nL'As du Détail — Plus qu’un nettoyage, une signature.`);
-        
-        // SMS 2: Créditer avec SOLDE TOTAL mis à jour
         const msgCredit = encodeURIComponent(`Bonjour ${c.prenom},\n\nBonne nouvelle ! Un nouveau parrainage vient d'être validé.\n\nVotre nouveau solde est de : ${c.discount}% de réduction disponible chez L'As du Détail !\n\nL'As du Détail — Plus qu’un nettoyage, une signature.`);
 
         card.innerHTML = `
@@ -278,7 +275,6 @@
       }
     }
 
-    /* Déduction partielle & SMS élégant */
     function openUseDiscountModal(id) {
       currentUseDiscountId = id;
       const c = clients.find(item => item.id === id);
@@ -316,7 +312,6 @@
       window.location.href = `sms:${c.tel}?body=${encodeURIComponent(msgText)}`;
     }
 
-    /* Creation client */
     function openAddModal() {
       const select = document.getElementById('newParrainSelect');
       select.innerHTML = '<option value="">-- Aucun parrain --</option>';
@@ -365,7 +360,6 @@
       document.getElementById('newTel').value = '';
     }
 
-    /* Fiche Client & Suppression */
     function openDetailModal(id) {
       currentDetailId = id;
       const c = clients.find(item => item.id === id);
@@ -387,6 +381,15 @@
         list.innerHTML = '<div class="detail-item"><span>Aucun filleul enregistré</span></div>';
       }
 
+      // Action bouton suppression directe
+      document.getElementById('deleteBtnAction').onclick = function() {
+        if (confirm(`Veux-tu vraiment supprimer définitivement ${c.prenom} ${c.nom} ?`)) {
+          clients = clients.filter(item => item.id !== id);
+          saveToStorage();
+          closeDetailModal();
+        }
+      };
+
       document.getElementById('detailModal').style.display = 'flex';
     }
 
@@ -400,16 +403,6 @@
         c.discount += val;
         saveToStorage();
         openDetailModal(currentDetailId);
-      }
-    }
-
-    function deleteCurrentClient() {
-      if (!currentDetailId) return;
-      const c = clients.find(item => item.id === currentDetailId);
-      if (c && confirm(`Es-tu sûr de vouloir supprimer définitivement ${c.prenom} ${c.nom} ?`)) {
-        clients = clients.filter(item => item.id !== currentDetailId);
-        saveToStorage();
-        closeDetailModal();
       }
     }
 
