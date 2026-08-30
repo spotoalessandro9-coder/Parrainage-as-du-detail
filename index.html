@@ -7,54 +7,68 @@
 
 <style>
 :root{
-  --bg:#F8F9FA;
-  --card:#FFFFFF;
-  --border:#E5E7EB;
-  --gold:#B9972F;
-  --gold-light:#FBF7E8;
-  --black:#171717;
-  --text:#111827;
-  --muted:#6B7280;
-  --green:#15803D;
-  --red:#DC2626;
+  --bg:#f6f6f6;
+  --card:#ffffff;
+  --dark:#171717;
+  --dark2:#242424;
+  --gold:#b9972f;
+  --gold-light:#faf5df;
+  --green:#16a34a;
+  --green-light:#dcfce7;
+  --red:#dc2626;
+  --red-light:#fee2e2;
+  --blue:#0e7490;
+  --text:#171717;
+  --muted:#737373;
+  --border:#e5e5e5;
 }
 
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
 
 body{
   background:var(--bg);
   color:var(--text);
-  padding:16px;
-  padding-bottom:100px;
-  max-width:600px;
+  max-width:700px;
   margin:auto;
   min-height:100vh;
+  padding:16px;
+  padding-bottom:100px;
+}
+
+button,input,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
 }
 
 header{
   text-align:center;
-  padding:12px 0 22px;
+  padding:10px 0 22px;
 }
 
 header h1{
   font-size:1.55rem;
   letter-spacing:2px;
   text-transform:uppercase;
-  font-weight:800;
+  font-weight:900;
 }
 
 header p{
   color:var(--gold);
   font-size:.78rem;
+  font-weight:700;
   font-style:italic;
   margin-top:5px;
-  font-weight:600;
 }
+
+/* VUES */
 
 .view-section{
   display:none;
@@ -64,38 +78,37 @@ header p{
   display:block;
 }
 
+/* NAVIGATION */
+
 .bottom-nav{
   position:fixed;
   bottom:0;
   left:50%;
   transform:translateX(-50%);
   width:100%;
-  max-width:600px;
-  background:#fff;
+  max-width:700px;
+  background:white;
   border-top:1px solid var(--border);
   display:flex;
   justify-content:space-around;
-  padding:9px 0 calc(9px + env(safe-area-inset-bottom));
-  z-index:90;
+  padding:10px 5px 12px;
+  z-index:100;
 }
 
 .nav-item{
   border:0;
   background:none;
-  color:var(--muted);
+  color:#8a8a8a;
   font-size:.72rem;
-  font-weight:600;
-  cursor:pointer;
+  font-weight:700;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:4px;
-  min-width:80px;
 }
 
 .nav-item.active{
   color:var(--gold);
-  font-weight:800;
 }
 
 .nav-item svg{
@@ -104,24 +117,28 @@ header p{
   fill:currentColor;
 }
 
+/* CARTES */
+
 .form-card,
-.client-card,
+.summary-card,
 .service-card,
-.booking-card{
+.booking-card,
+.client-card,
+.calendar-card{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:16px;
+  border-radius:17px;
   padding:18px;
-  margin-bottom:14px;
-  box-shadow:0 4px 12px rgba(0,0,0,.035);
+  margin-bottom:15px;
+  box-shadow:0 4px 15px rgba(0,0,0,.035);
 }
 
-.form-card-title{
-  font-size:.82rem;
-  font-weight:800;
+.section-title{
+  font-size:.85rem;
   text-transform:uppercase;
   letter-spacing:.7px;
   color:var(--muted);
+  font-weight:800;
   margin-bottom:14px;
 }
 
@@ -135,88 +152,69 @@ header p{
 
 label{
   display:block;
-  font-size:.76rem;
+  font-size:.75rem;
+  text-transform:uppercase;
+  font-weight:800;
   color:var(--muted);
   margin-bottom:6px;
-  text-transform:uppercase;
-  font-weight:700;
 }
 
-input[type="text"],
-input[type="tel"],
-input[type="number"],
-input[type="datetime-local"],
-select,
-textarea{
+input,
+select{
   width:100%;
   padding:13px 14px;
-  background:#fff;
   border:1px solid var(--border);
   border-radius:11px;
-  font-size:.93rem;
-  color:var(--text);
+  background:white;
   outline:none;
-}
-
-textarea{
-  min-height:85px;
-  resize:vertical;
+  color:var(--text);
 }
 
 input:focus,
-select:focus,
-textarea:focus{
+select:focus{
   border-color:var(--gold);
 }
 
-.controls{
-  display:flex;
-  gap:8px;
-  margin-bottom:16px;
-}
+/* BOUTONS */
 
-.controls input{
-  flex:1;
-}
-
-.btn-add{
-  background:var(--black);
-  color:white;
+.btn{
   border:0;
-  padding:0 16px;
   border-radius:11px;
-  font-weight:700;
-  cursor:pointer;
-  white-space:nowrap;
-}
-
-.btn-submit{
-  width:100%;
-  padding:16px;
-  border:0;
-  border-radius:12px;
-  background:var(--black);
-  color:#fff;
+  padding:13px 15px;
   font-weight:800;
-  font-size:1rem;
-  cursor:pointer;
-  margin-bottom:10px;
 }
 
-.btn-sms{
-  display:flex;
-  width:100%;
-  justify-content:center;
-  align-items:center;
-  padding:15px;
-  border-radius:12px;
+.btn-dark{
+  background:var(--dark);
+  color:white;
+}
+
+.btn-gold{
   background:var(--gold);
-  color:#fff;
-  text-decoration:none;
-  font-weight:800;
-  font-size:.95rem;
-  margin-bottom:16px;
+  color:white;
 }
+
+.btn-light{
+  background:#f3f3f3;
+  color:var(--dark);
+  border:1px solid var(--border);
+}
+
+.btn-red{
+  background:var(--red-light);
+  color:var(--red);
+}
+
+.btn-green{
+  background:var(--green);
+  color:white;
+}
+
+.full{
+  width:100%;
+}
+
+/* CHOIX */
 
 .radio-group{
   display:flex;
@@ -225,386 +223,405 @@ textarea:focus{
 }
 
 .radio-option{
-  background:#fff;
   border:1px solid var(--border);
   border-radius:11px;
-  padding:13px 14px;
+  padding:13px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  cursor:pointer;
-  font-weight:600;
-  transition:.15s;
+  font-weight:700;
+  background:white;
 }
 
 .radio-option.selected{
-  background:var(--black);
-  color:#fff;
-  border-color:var(--black);
+  background:var(--dark);
+  color:white;
+  border-color:var(--dark);
 }
 
+.radio-option small{
+  opacity:.75;
+}
+
+/* TOTAL */
+
 .summary-card{
-  background:#F9FAFB;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:18px;
-  margin-bottom:15px;
+  background:#202020;
+  color:white;
 }
 
 .summary-row{
   display:flex;
   justify-content:space-between;
   gap:10px;
-  font-size:.9rem;
   margin-bottom:9px;
-  color:var(--muted);
+  color:#d4d4d4;
+  font-size:.9rem;
 }
 
 .summary-row strong{
-  color:var(--text);
+  color:white;
 }
 
-.summary-row.total{
-  border-top:2px dashed var(--border);
-  padding-top:12px;
-  margin-top:12px;
-  margin-bottom:0;
-  color:var(--text);
-  font-size:1.25rem;
-  font-weight:800;
+.summary-row.discount strong{
+  color:#75d99b;
 }
 
-.summary-row.total strong{
-  color:var(--gold);
-}
-
-.section-header{
+.summary-total{
+  border-top:1px dashed #555;
+  margin-top:13px;
+  padding-top:13px;
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  margin-bottom:14px;
-}
-
-.section-header h2{
-  font-size:1.15rem;
-}
-
-.empty{
-  text-align:center;
-  color:var(--muted);
-  padding:35px 15px;
-  background:white;
-  border:1px dashed var(--border);
-  border-radius:15px;
-}
-
-.service-title{
-  font-size:1.05rem;
-  font-weight:800;
-  margin-bottom:5px;
-}
-
-.service-description{
-  font-size:.82rem;
-  color:var(--muted);
-  margin-bottom:12px;
-  line-height:1.4;
-}
-
-.service-price{
-  color:var(--gold);
-  font-size:1.1rem;
-  font-weight:800;
-}
-
-.service-duration{
-  font-size:.78rem;
-  color:var(--muted);
-  margin-top:3px;
-}
-
-.service-actions{
-  display:flex;
-  gap:8px;
-  margin-top:14px;
-}
-
-.small-btn{
-  flex:1;
-  padding:10px;
-  border-radius:9px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.small-btn.delete{
-  color:var(--red);
-  background:#FEF2F2;
-  border-color:#FECACA;
-}
-
-.client-card{
-  cursor:pointer;
-}
-
-.card-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:10px;
-}
-
-.client-name{
-  font-size:1.12rem;
-  font-weight:800;
-}
-
-.client-phone{
-  color:var(--muted);
-  font-size:.82rem;
-  margin-top:3px;
-}
-
-.status-pill{
-  display:inline-block;
-  font-size:.68rem;
-  padding:3px 8px;
-  border-radius:20px;
-  font-weight:800;
-  text-transform:uppercase;
-  margin-top:7px;
-}
-
-.status-actif{
-  background:#DCFCE7;
-  color:#15803D;
-}
-
-.status-inactif{
-  background:#FEE2E2;
-  color:#DC2626;
-}
-
-.discount-badge{
-  background:var(--gold-light);
-  color:var(--gold);
-  border:1px solid var(--gold);
-  font-size:1.25rem;
+  font-size:1.35rem;
   font-weight:900;
-  padding:7px 12px;
-  border-radius:13px;
-  text-align:center;
 }
 
-.discount-label{
-  display:block;
-  color:var(--muted);
-  font-size:.6rem;
-  text-transform:uppercase;
-}
-
-.referral-box{
-  background:#F3F4F6;
-  padding:11px 13px;
-  border-radius:10px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:.85rem;
-  margin:14px 0;
-}
-
-.copy-btn{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:4px 9px;
-  font-size:.75rem;
-  font-weight:700;
-}
-
-.actions{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-
-.btn-action{
-  width:100%;
-  padding:12px;
-  border-radius:9px;
-  font-weight:700;
-  font-size:.82rem;
-  border:0;
-  cursor:pointer;
-  text-decoration:none;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.btn-actif{
-  background:var(--black);
-  color:#fff;
-}
-
-.btn-credit{
-  background:var(--gold-light);
+.summary-total strong{
   color:var(--gold);
-  border:1px solid var(--gold);
 }
 
-.btn-apply{
-  background:#F3F4F6;
-  color:var(--text);
+/* PARRAINAGE */
+
+.referral-info{
+  background:var(--gold-light);
+  border:1px solid #e6d18a;
+  border-radius:12px;
+  padding:13px;
+  margin-top:12px;
 }
+
+.referral-info strong{
+  color:var(--gold);
+}
+
+.referral-balance{
+  font-size:1.2rem;
+  font-weight:900;
+  margin-top:4px;
+}
+
+.warning{
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  border-radius:10px;
+  padding:10px;
+  font-size:.8rem;
+  margin-top:10px;
+}
+
+/* CALENDRIER */
+
+.calendar-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.calendar-head button{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:white;
+  font-weight:900;
+}
+
+.calendar-month{
+  font-size:1.05rem;
+  font-weight:900;
+  text-transform:capitalize;
+}
+
+.calendar-weekdays,
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+}
+
+.calendar-weekdays div{
+  text-align:center;
+  font-size:.65rem;
+  color:var(--muted);
+  font-weight:800;
+  padding-bottom:5px;
+}
+
+.calendar-day{
+  min-height:54px;
+  border:1px solid var(--border);
+  background:white;
+  border-radius:9px;
+  position:relative;
+  padding:6px;
+  cursor:pointer;
+}
+
+.calendar-day.empty{
+  border:0;
+  background:transparent;
+  cursor:default;
+}
+
+.calendar-day.today{
+  border:2px solid var(--gold);
+}
+
+.calendar-day.selected{
+  background:var(--gold-light);
+}
+
+.day-number{
+  font-size:.75rem;
+  font-weight:800;
+}
+
+.status-dot{
+  position:absolute;
+  bottom:6px;
+  left:50%;
+  transform:translateX(-50%);
+  width:8px;
+  height:8px;
+  border-radius:50%;
+}
+
+.dot-green{
+  background:var(--green);
+}
+
+.dot-red{
+  background:var(--red);
+}
+
+.dot-blocked{
+  background:#555;
+}
+
+.day-blocked{
+  background:#eeeeee;
+  color:#888;
+}
+
+.calendar-legend{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin-top:14px;
+  font-size:.7rem;
+  color:var(--muted);
+}
+
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.legend-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+}
+
+/* RDV */
 
 .booking-card{
-  cursor:pointer;
+  border-left:4px solid var(--gold);
 }
 
 .booking-date{
-  color:var(--gold);
-  font-weight:800;
-  font-size:.85rem;
-  margin-bottom:5px;
-}
-
-.booking-client{
-  font-weight:800;
+  font-weight:900;
   font-size:1rem;
 }
 
-.booking-info{
+.booking-meta{
   color:var(--muted);
   font-size:.82rem;
   margin-top:5px;
   line-height:1.5;
 }
 
-.booking-total{
+.booking-price{
   font-size:1.1rem;
   font-weight:900;
   margin-top:10px;
 }
+
+.booking-actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.booking-actions button{
+  flex:1;
+}
+
+/* SERVICES */
+
+.service-card{
+  position:relative;
+}
+
+.service-title{
+  font-weight:900;
+  font-size:1.05rem;
+}
+
+.service-description{
+  color:var(--muted);
+  font-size:.8rem;
+  margin:5px 0 12px;
+}
+
+.price-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+}
+
+.price-item{
+  background:#f7f7f7;
+  border-radius:9px;
+  padding:8px;
+  font-size:.75rem;
+}
+
+.price-item strong{
+  display:block;
+  margin-top:2px;
+}
+
+.service-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:12px;
+  color:var(--muted);
+  font-size:.75rem;
+}
+
+.controls{
+  display:flex;
+  gap:8px;
+  margin-bottom:15px;
+}
+
+/* CLIENTS */
+
+.client-header{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.client-name{
+  font-size:1.1rem;
+  font-weight:900;
+}
+
+.client-phone{
+  color:var(--muted);
+  font-size:.8rem;
+  margin-top:3px;
+}
+
+.discount-badge{
+  background:var(--gold-light);
+  color:var(--gold);
+  border:1px solid #ddc46d;
+  padding:8px 12px;
+  border-radius:11px;
+  text-align:center;
+  font-weight:900;
+}
+
+.discount-badge small{
+  display:block;
+  font-size:.6rem;
+}
+
+.client-actions{
+  display:flex;
+  gap:7px;
+  margin-top:13px;
+}
+
+.client-actions button{
+  flex:1;
+  font-size:.75rem;
+  padding:10px 6px;
+}
+
+/* MODAL */
 
 .modal{
   display:none;
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.55);
+  z-index:200;
+  padding:15px;
+  overflow-y:auto;
+}
+
+.modal.active{
+  display:flex;
   align-items:center;
   justify-content:center;
-  padding:15px;
-  z-index:100;
-  overflow-y:auto;
 }
 
 .modal-content{
-  background:#fff;
-  padding:22px;
-  border-radius:19px;
   width:100%;
-  max-width:440px;
-  max-height:90vh;
+  max-width:480px;
+  background:white;
+  border-radius:20px;
+  padding:22px;
+  max-height:92vh;
   overflow-y:auto;
 }
 
-.modal-content h2{
-  font-size:1.25rem;
+.modal-title{
+  font-size:1.2rem;
+  font-weight:900;
   text-align:center;
   margin-bottom:18px;
 }
 
-.modal-btns{
+.modal-actions{
   display:flex;
-  gap:9px;
+  gap:8px;
   margin-top:18px;
 }
 
-.btn-cancel,
-.btn-save,
-.btn-delete{
-  border:0;
-  padding:12px;
-  border-radius:10px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.btn-cancel{
+.modal-actions button{
   flex:1;
-  background:#F3F4F6;
 }
 
-.btn-save{
-  flex:1;
-  background:var(--black);
-  color:#fff;
-}
+/* RESPONSIVE */
 
-.btn-delete{
-  width:100%;
-  margin-top:14px;
-  background:#FEE2E2;
-  color:var(--red);
-}
+@media(max-width:420px){
+  body{
+    padding:12px;
+    padding-bottom:100px;
+  }
 
-.detail-hero{
-  text-align:center;
-  margin-bottom:18px;
-}
+  .form-card,
+  .summary-card,
+  .service-card,
+  .booking-card,
+  .client-card,
+  .calendar-card{
+    padding:15px;
+  }
 
-.detail-big-discount{
-  font-size:3rem;
-  font-weight:900;
-  color:var(--gold);
-}
-
-.detail-list{
-  background:#F9FAFB;
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:10px;
-}
-
-.detail-item{
-  padding:7px 0;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  justify-content:space-between;
-  font-size:.82rem;
-}
-
-.detail-item:last-child{
-  border-bottom:0;
-}
-
-.hidden{
-  display:none!important;
-}
-
-.price-preview{
-  margin-top:8px;
-  padding:9px;
-  background:var(--gold-light);
-  border-radius:9px;
-  color:var(--gold);
-  font-weight:800;
-  text-align:center;
-  font-size:.9rem;
-}
-
-.notice{
-  padding:10px 12px;
-  background:#F9FAFB;
-  border-radius:9px;
-  color:var(--muted);
-  font-size:.76rem;
-  line-height:1.4;
-  margin-top:8px;
+  .calendar-day{
+    min-height:48px;
+  }
 }
 </style>
 </head>
@@ -616,174 +633,204 @@ textarea:focus{
   <p>las du détail ; plus qu’un nettoyage , une signature</p>
 </header>
 
-<!-- =========================================================
-     PLANNING
-========================================================= -->
+<!-- ========================================================= -->
+<!-- PLANNING -->
+<!-- ========================================================= -->
+
 <section id="viewBooking" class="view-section active">
 
-  <div class="section-header">
-    <h2>Planning</h2>
+  <div class="calendar-card">
+
+    <div class="calendar-head">
+      <button onclick="changeMonth(-1)">‹</button>
+      <div id="calendarMonth" class="calendar-month"></div>
+      <button onclick="changeMonth(1)">›</button>
+    </div>
+
+    <div class="calendar-weekdays">
+      <div>L</div>
+      <div>M</div>
+      <div>M</div>
+      <div>J</div>
+      <div>V</div>
+      <div>S</div>
+      <div>D</div>
+    </div>
+
+    <div id="calendarGrid" class="calendar-grid"></div>
+
+    <div class="calendar-legend">
+      <div class="legend-item">
+        <span class="legend-dot dot-green"></span>
+        Disponible
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-red"></span>
+        Réservé
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-blocked"></span>
+        Fermé
+      </div>
+    </div>
+
   </div>
 
   <div class="form-card">
-    <div class="form-card-title">1. Client & rendez-vous</div>
+
+    <div class="section-title">1. Client & rendez-vous</div>
 
     <div class="form-group">
       <label>Client enregistré</label>
-      <select id="bookingClientSelect" onchange="updateClientInformation(); updateBookingCalculation();">
+      <select id="bookingClientSelect" onchange="updateBookingClient()">
         <option value="">-- Sélectionner un client --</option>
       </select>
     </div>
 
-    <div id="bookingClientInfo" class="notice hidden"></div>
-
-    <div class="form-group">
-      <label>Date & Heure</label>
-      <input type="datetime-local" id="bookingDateTime" onchange="updateBookingCalculation()">
+    <div id="bookingClientInfo" style="display:none" class="referral-info">
+      <div id="bookingClientName"></div>
+      <div id="bookingClientPhone"></div>
+      <div class="referral-balance">
+        Crédit parrainage :
+        <span id="bookingReferralBalance">0%</span>
+      </div>
     </div>
+
+    <div class="form-group" style="margin-top:14px">
+      <label>Date & Heure</label>
+      <input type="datetime-local" id="bookingDateTime" onchange="renderCalendar();updateBookingCalculation()">
+    </div>
+
   </div>
 
   <div class="form-card">
-    <div class="form-card-title">2. Prestation</div>
+
+    <div class="section-title">2. Prestation</div>
 
     <div class="form-group">
       <label>Prestation</label>
-      <select id="bookingServiceSelect" onchange="updateServicePrice(); updateBookingCalculation();">
+      <select id="bookingServiceSelect" onchange="updateServiceSizes()">
         <option value="">-- Sélectionner une prestation --</option>
       </select>
     </div>
 
-    <div id="serviceInfo" class="notice hidden"></div>
-
     <div class="form-group">
       <label>Taille du véhicule</label>
-
-      <div class="radio-group" id="vehicleGroup">
-
-        <div class="radio-option selected"
-             data-value="Petite"
-             onclick="selectVehicle(this)">
-          <span>Petite</span>
-        </div>
-
-        <div class="radio-option"
-             data-value="Moyenne"
-             onclick="selectVehicle(this)">
-          <span>Moyenne</span>
-        </div>
-
-        <div class="radio-option"
-             data-value="Grande"
-             onclick="selectVehicle(this)">
-          <span>Grande</span>
-        </div>
-
-        <div class="radio-option"
-             data-value="Utilitaire"
-             onclick="selectVehicle(this)">
-          <span>Utilitaire</span>
-        </div>
-
-      </div>
-
-      <div id="vehiclePricePreview" class="price-preview">
-        Sélectionnez une prestation
-      </div>
-    </div>
-  </div>
-
-  <div class="form-card">
-    <div class="form-card-title">3. Lieu d'intervention</div>
-
-    <div class="radio-group" id="locationGroup">
-
-      <div class="radio-option selected"
-           data-value="atelier"
-           onclick="selectLocation(this)">
-        <span>Atelier — Waremme</span>
-        <strong>Gratuit</strong>
-      </div>
-
-      <div class="radio-option"
-           data-value="domicile"
-           onclick="selectLocation(this)">
-        <span>À domicile</span>
-        <strong>10 € + 0,35 €/km</strong>
-      </div>
-
-    </div>
-
-    <div id="distanceGroup" class="form-group hidden" style="margin-top:14px;">
-      <label>Distance en km — Aller</label>
-      <input
-        type="number"
-        id="distanceKm"
-        min="0"
-        step="0.1"
-        placeholder="Ex : 15"
-        oninput="updateBookingCalculation()">
-      <div class="notice">
-        Le déplacement est calculé automatiquement : 10 € + 0,35 € par kilomètre.
-      </div>
-    </div>
-
-    <div id="addressGroup" class="form-group hidden" style="margin-top:14px;">
-      <label>Adresse du domicile</label>
-      <input
-        type="text"
-        id="homeAddress"
-        placeholder="Rue, numéro, ville">
-    </div>
-  </div>
-
-  <div class="form-card">
-    <div class="form-card-title">4. Formule / Abonnement</div>
-
-    <div class="form-group">
-      <label>Formule</label>
-
-      <select id="aboSelect" onchange="updateBookingCalculation()">
-        <option value="0">Ponctuel (0%)</option>
-        <option value="5">1x / mois (-5%)</option>
-        <option value="10">2x / mois (-10%)</option>
-        <option value="15">3x / mois (-15%)</option>
-        <option value="20">4x / mois (-20%)</option>
+      <select id="vehicleSizeSelect" onchange="updateBookingCalculation()">
+        <option value="Petite">Petite</option>
+        <option value="Moyenne">Moyenne</option>
+        <option value="Grande">Grande</option>
+        <option value="Utilitaire">Utilitaire</option>
       </select>
     </div>
 
+  </div>
+
+  <div class="form-card">
+
+    <div class="section-title">3. Lieu d'intervention</div>
+
+    <div class="radio-group">
+
+      <div class="radio-option selected"
+           data-location="atelier"
+           onclick="selectLocation(this)">
+        <span>Atelier — Rue de Prâle 139, 4300 Waremme</span>
+        <small>Gratuit</small>
+      </div>
+
+      <div class="radio-option"
+           data-location="domicile"
+           onclick="selectLocation(this)">
+        <span>À domicile</span>
+        <small>10 € + 0,35 €/km</small>
+      </div>
+
+    </div>
+
+    <div id="distanceGroup" class="form-group" style="display:none;margin-top:14px">
+      <label>Distance en kilomètres — Aller</label>
+      <input type="number"
+             id="distanceKm"
+             min="0"
+             step="0.1"
+             placeholder="Ex : 20"
+             oninput="updateBookingCalculation()">
+    </div>
+
+  </div>
+
+  <div class="form-card">
+
+    <div class="section-title">4. Formule / abonnement</div>
+
     <div class="form-group">
-      <label>Supplément — Nom</label>
-      <input
-        type="text"
-        id="suppNom"
-        placeholder="Ex : Ozone / Dépoilage / etc."
-        oninput="updateBookingCalculation()">
+      <label>Abonnement</label>
+
+      <select id="aboSelect" onchange="updateBookingCalculation()">
+        <option value="0">Ponctuel — 0%</option>
+        <option value="5">1x / mois — -5%</option>
+        <option value="10">2x / mois — -10%</option>
+        <option value="15">3x / mois — -15%</option>
+        <option value="20">4x / mois — -20%</option>
+      </select>
+
     </div>
 
     <div class="form-group">
-      <label>Supplément — Prix (€)</label>
-      <input
-        type="number"
-        id="suppPrix"
-        min="0"
-        step="0.01"
-        placeholder="0.00"
-        oninput="updateBookingCalculation()">
+      <label>Utiliser le crédit parrainage</label>
+
+      <select id="referralUseSelect" onchange="updateBookingCalculation()">
+        <option value="0">Ne pas utiliser</option>
+      </select>
+
     </div>
+
+    <div id="referralWarning" class="warning" style="display:none"></div>
+
   </div>
+
+  <div class="form-card">
+
+    <div class="section-title">5. Supplément</div>
+
+    <div class="form-group">
+      <label>Nom du supplément</label>
+      <input type="text"
+             id="suppNom"
+             placeholder="Ex : Ozone, dépoilage... "
+             oninput="updateBookingCalculation()">
+    </div>
+
+    <div class="form-group">
+      <label>Prix du supplément (€)</label>
+      <input type="number"
+             id="suppPrix"
+             min="0"
+             step="0.01"
+             placeholder="0.00"
+             oninput="updateBookingCalculation()">
+    </div>
+
+  </div>
+
+  <!-- TOTAL -->
 
   <div class="summary-card">
 
     <div class="summary-row">
-      <span>Prix prestation :</span>
-      <strong id="summaryBasePrice">0,00 €</strong>
+      <span>Prestation :</span>
+      <strong id="summaryService">0,00 €</strong>
     </div>
 
-    <div class="summary-row" id="summaryAboRow" style="display:none;">
+    <div class="summary-row discount">
       <span>Remise abonnement :</span>
-      <strong id="summaryAboDiscount" style="color:var(--green);">
-        -0,00 €
-      </strong>
+      <strong id="summaryAbo">0,00 €</strong>
+    </div>
+
+    <div class="summary-row discount">
+      <span>Parrainage utilisé :</span>
+      <strong id="summaryReferral">0,00 €</strong>
     </div>
 
     <div class="summary-row">
@@ -796,38 +843,45 @@ textarea:focus{
       <strong id="summarySupp">0,00 €</strong>
     </div>
 
-    <div class="summary-row total">
-      <span>Total :</span>
+    <div class="summary-total">
+      <span>Total</span>
       <strong id="summaryTotal">0,00 €</strong>
     </div>
 
   </div>
 
-  <button class="btn-submit" onclick="saveBooking()">
+  <button class="btn btn-gold full"
+          onclick="saveBooking()">
     Enregistrer le rendez-vous
   </button>
 
-  <a
-    href="#"
-    id="smsConfirmationBtn"
-    class="btn-sms"
-    onclick="prepareSMS(event)">
-    📱 Envoyer SMS de confirmation
-  </a>
+  <div id="smsConfirmationContainer" style="display:none;margin-top:10px">
+    <a id="smsConfirmationBtn"
+       class="btn btn-dark full"
+       style="display:block;text-align:center;text-decoration:none">
+      📱 Envoyer SMS de confirmation
+    </a>
+  </div>
 
-  <div id="bookingList"></div>
+  <div style="margin-top:25px">
+    <div class="section-title">Rendez-vous enregistrés</div>
+    <div id="bookingList"></div>
+  </div>
 
 </section>
 
 
-<!-- =========================================================
-     SERVICES
-========================================================= -->
+<!-- ========================================================= -->
+<!-- SERVICES -->
+<!-- ========================================================= -->
+
 <section id="viewServices" class="view-section">
 
-  <div class="section-header">
-    <h2>Prestations</h2>
-    <button class="btn-add" onclick="openServiceModal()">+ Créer</button>
+  <div class="controls">
+    <button class="btn btn-dark full"
+            onclick="openServiceModal()">
+      + Créer une prestation
+    </button>
   </div>
 
   <div id="serviceList"></div>
@@ -835,19 +889,20 @@ textarea:focus{
 </section>
 
 
-<!-- =========================================================
-     CLIENTS
-========================================================= -->
+<!-- ========================================================= -->
+<!-- CLIENTS -->
+<!-- ========================================================= -->
+
 <section id="viewClients" class="view-section">
 
   <div class="controls">
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Rechercher nom, téléphone, code..."
-      oninput="renderClients()">
+    <input type="text"
+           id="searchInput"
+           placeholder="Rechercher un client..."
+           oninput="renderClients()">
 
-    <button class="btn-add" onclick="openAddModal()">
+    <button class="btn btn-dark"
+            onclick="openClientModal()">
       + Client
     </button>
   </div>
@@ -857,550 +912,374 @@ textarea:focus{
 </section>
 
 
-<!-- =========================================================
-     NAVIGATION
-========================================================= -->
+<!-- ========================================================= -->
+<!-- NAVIGATION -->
+<!-- ========================================================= -->
+
 <nav class="bottom-nav">
 
-  <button
-    class="nav-item active"
-    id="navBooking"
-    onclick="switchTab('booking')">
+  <button class="nav-item active"
+          id="navBooking"
+          onclick="switchTab('booking')">
 
     <svg viewBox="0 0 24 24">
       <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
     </svg>
 
     Planning
+
   </button>
 
-  <button
-    class="nav-item"
-    id="navServices"
-    onclick="switchTab('services')">
+  <button class="nav-item"
+          id="navServices"
+          onclick="switchTab('services')">
 
     <svg viewBox="0 0 24 24">
-      <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.31-.6-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81C14.37 2.34 14.17 2 13.7 2h-3.84c-.46 0-.66.34-.72.81L8.78 5.35c-.59.24-1.13.57-1.62.94l-2.39-.96c-.23-.08-.48 0-.6.22L2.25 8.87c-.12.21-.06.47.12.61L4.4 11.06c-.04.31-.08.63-.08.94s.03.63.08.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.31.6.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.06.47.26.81.72.81h3.84c.46 0 .66-.34.72-.81l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.08.48 0 .6-.22l1.92-3.32c.12-.21.06-.47-.12-.61l-2.03-1.58zM11.78 15.5A3.5 3.5 0 1 1 11.78 8a3.5 3.5 0 0 1 0 7.5z"/>
+      <path d="M19.43 12.98c.04-.32.07-.65.07-.98s-.02-.66-.07-.98l2.11-1.65-2-3.46-2.49 1a7.3 7.3 0 0 0-1.69-.98L15 3h-4l-.37 2.93c-.61.25-1.18.58-1.69.98l-2.49-1-2 3.46 2.11 1.65c-.04.32-.08.65-.08.98s.03.66.08.98l-2.11 1.65 2 3.46 2.49-1c.51.4 1.08.73 1.69.98L11 21h4l.37-2.93c.61-.25 1.18-.58 1.69-.98l2.49 1 2-3.46-2.11-1.65zM13 15.5A3.5 3.5 0 1 1 13 8a3.5 3.5 0 0 1 0 7.5z"/>
     </svg>
 
     Services
+
   </button>
 
-  <button
-    class="nav-item"
-    id="navClients"
-    onclick="switchTab('clients')">
+  <button class="nav-item"
+          id="navClients"
+          onclick="switchTab('clients')">
 
     <svg viewBox="0 0 24 24">
       <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
     </svg>
 
     Clients
+
   </button>
 
 </nav>
 
 
-<!-- =========================================================
-     MODAL CLIENT
-========================================================= -->
-<div class="modal" id="addModal">
+<!-- ========================================================= -->
+<!-- MODAL CLIENT -->
+<!-- ========================================================= -->
+
+<div class="modal" id="clientModal">
 
   <div class="modal-content">
 
-    <h2>Nouveau Client</h2>
+    <div class="modal-title">Nouveau client</div>
 
     <div class="form-group">
       <label>Prénom</label>
-      <input type="text" id="newPrenom" placeholder="Ex : Jean">
+      <input id="newPrenom" type="text">
     </div>
 
     <div class="form-group">
       <label>Nom</label>
-      <input type="text" id="newNom" placeholder="Ex : Dupont">
+      <input id="newNom" type="text">
     </div>
 
     <div class="form-group">
       <label>Téléphone</label>
-      <input type="tel" id="newTel" placeholder="Ex : 0499123456">
+      <input id="newTel" type="tel">
     </div>
 
     <div class="form-group">
       <label>Parrain</label>
-
       <select id="newParrainSelect">
         <option value="">-- Aucun parrain --</option>
       </select>
     </div>
 
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeAddModal()">
-        Annuler
-      </button>
-
-      <button class="btn-save" onclick="saveClient()">
-        Enregistrer
-      </button>
+    <div class="modal-actions">
+      <button class="btn btn-light" onclick="closeClientModal()">Annuler</button>
+      <button class="btn btn-dark" onclick="saveClient()">Créer</button>
     </div>
 
   </div>
+
 </div>
 
 
-<!-- =========================================================
-     MODAL DETAIL CLIENT
-========================================================= -->
-<div class="modal" id="detailModal">
+<!-- ========================================================= -->
+<!-- MODAL SERVICE -->
+<!-- ========================================================= -->
 
-  <div class="modal-content">
-
-    <div class="detail-hero">
-
-      <div class="detail-big-discount" id="detDiscount">
-        0%
-      </div>
-
-      <h2 id="detName" style="margin:0;">
-        -
-      </h2>
-
-      <p id="detPhone"
-         style="color:var(--muted);font-size:.9rem;">
-        -
-      </p>
-
-    </div>
-
-    <div class="referral-box">
-      <span>
-        Code Parrain :
-        <strong id="detCode">-</strong>
-      </span>
-
-      <button class="copy-btn" id="detCopyBtn">
-        Copier
-      </button>
-    </div>
-
-    <div class="form-group">
-
-      <label>Ajouter un pourcentage manuel</label>
-
-      <div style="display:flex;gap:8px;">
-
-        <select id="creditPercentSelect">
-          <option value="5">5%</option>
-          <option value="10" selected>10%</option>
-          <option value="15">15%</option>
-          <option value="20">20%</option>
-        </select>
-
-        <button
-          class="btn-save"
-          style="flex:initial;padding:0 15px;"
-          onclick="addCustomDiscount()">
-          Ajouter
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="form-group">
-
-      <label>Historique des filleuls</label>
-
-      <div class="detail-list" id="detFilleulsList"></div>
-
-    </div>
-
-    <button
-      class="btn-delete"
-      id="deleteBtnAction">
-      Supprimer définitivement ce client
-    </button>
-
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeDetailModal()">
-        Fermer
-      </button>
-    </div>
-
-  </div>
-</div>
-
-
-<!-- =========================================================
-     MODAL UTILISATION REDUCTION
-========================================================= -->
-<div class="modal" id="useDiscountModal">
-
-  <div class="modal-content">
-
-    <h2>Utiliser une Réduction</h2>
-
-    <p
-      id="useDiscountInfo"
-      style="font-size:.9rem;color:var(--muted);text-align:center;margin-bottom:16px;">
-    </p>
-
-    <div class="form-group">
-
-      <label>Pourcentage à déduire aujourd'hui (%)</label>
-
-      <input
-        type="number"
-        id="useDiscountAmount"
-        min="1"
-        placeholder="Ex : 20">
-
-    </div>
-
-    <div class="modal-btns">
-
-      <button
-        class="btn-cancel"
-        onclick="closeUseDiscountModal()">
-        Annuler
-      </button>
-
-      <button
-        class="btn-save"
-        onclick="confirmApplyDiscount()">
-        Valider & SMS ➜
-      </button>
-
-    </div>
-
-  </div>
-</div>
-
-
-<!-- =========================================================
-     MODAL SERVICE
-========================================================= -->
 <div class="modal" id="serviceModal">
 
   <div class="modal-content">
 
-    <h2 id="serviceModalTitle">
-      Nouvelle prestation
-    </h2>
+    <div class="modal-title">Créer une prestation</div>
 
     <div class="form-group">
-
-      <label>Nom de la prestation</label>
-
-      <input
-        type="text"
-        id="serviceName"
-        placeholder="Ex : WashDetail Essential">
-
+      <label>Nom</label>
+      <input id="newServiceName"
+             placeholder="Ex : WashDetail Premium">
     </div>
 
     <div class="form-group">
-
       <label>Description</label>
-
-      <textarea
-        id="serviceDescription"
-        placeholder="Description de la prestation..."></textarea>
-
+      <input id="newServiceDescription"
+             placeholder="Description de la prestation">
     </div>
 
     <div class="form-group">
-
       <label>Prix Petite (€)</label>
-
-      <input
-        type="number"
-        id="pricePetite"
-        min="0"
-        step=".01">
-
+      <input id="priceSmall" type="number" step="0.01">
     </div>
 
     <div class="form-group">
-
       <label>Prix Moyenne (€)</label>
-
-      <input
-        type="number"
-        id="priceMoyenne"
-        min="0"
-        step=".01">
-
+      <input id="priceMedium" type="number" step="0.01">
     </div>
 
     <div class="form-group">
-
       <label>Prix Grande (€)</label>
-
-      <input
-        type="number"
-        id="priceGrande"
-        min="0"
-        step=".01">
-
+      <input id="priceLarge" type="number" step="0.01">
     </div>
 
     <div class="form-group">
-
       <label>Prix Utilitaire (€)</label>
-
-      <input
-        type="number"
-        id="priceUtilitaire"
-        min="0"
-        step=".01">
-
+      <input id="priceUtility" type="number" step="0.01">
     </div>
 
     <div class="form-group">
-
       <label>Durée</label>
-
-      <input
-        type="text"
-        id="serviceDuration"
-        placeholder="Ex : 2h30">
-
+      <input id="newServiceDuration"
+             placeholder="Ex : 2h30">
     </div>
 
-    <div class="modal-btns">
-
-      <button
-        class="btn-cancel"
-        onclick="closeServiceModal()">
+    <div class="modal-actions">
+      <button class="btn btn-light"
+              onclick="closeServiceModal()">
         Annuler
       </button>
 
-      <button
-        class="btn-save"
-        onclick="saveService()">
-        Enregistrer
+      <button class="btn btn-dark"
+              onclick="saveService()">
+        Créer
       </button>
-
     </div>
 
   </div>
+
 </div>
 
 
 <script>
 
-/* =========================================================
-   DONNEES
-========================================================= */
-
-const defaultServices = [
-
-  {
-    id:"wash-essential",
-    name:"WashDetail Essential",
-    description:"Lavage extérieur essentiel.",
-    prices:{
-      Petite:19.99,
-      Moyenne:24.99,
-      Grande:29.99,
-      Utilitaire:34.99
-    },
-    duration:""
-  },
-
-  {
-    id:"wash-signature",
-    name:"WashDetail Signature",
-    description:"Lavage extérieur signature.",
-    prices:{
-      Petite:49.99,
-      Moyenne:54.99,
-      Grande:59.99,
-      Utilitaire:64.99
-    },
-    duration:""
-  },
-
-  {
-    id:"interior-essential",
-    name:"InteriorDetail Essential",
-    description:"Nettoyage intérieur essentiel.",
-    prices:{
-      Petite:59.99,
-      Moyenne:64.99,
-      Grande:79.99,
-      Utilitaire:64.99
-    },
-    duration:""
-  },
-
-  {
-    id:"interior-prestige",
-    name:"InteriorDetail Prestige",
-    description:"Nettoyage intérieur prestige.",
-    prices:{
-      Petite:109.99,
-      Moyenne:119.99,
-      Grande:129.99,
-      Utilitaire:109.99
-    },
-    duration:""
-  },
-
-  {
-    id:"interior-signature",
-    name:"InteriorDetail Signature",
-    description:"Nettoyage intérieur signature.",
-    prices:{
-      Petite:209.99,
-      Moyenne:219.98,
-      Grande:229.98,
-      Utilitaire:169.99
-    },
-    duration:""
-  },
-
-  {
-    id:"pack-essential",
-    name:"Pack Essential",
-    description:"Pack complet Essential.",
-    prices:{
-      Petite:79.99,
-      Moyenne:89.99,
-      Grande:94.99,
-      Utilitaire:99.99
-    },
-    duration:""
-  },
-
-  {
-    id:"pack-prestige",
-    name:"Pack Prestige",
-    description:"Pack complet Prestige.",
-    prices:{
-      Petite:149.99,
-      Moyenne:159.99,
-      Grande:169.99,
-      Utilitaire:169.99
-    },
-    duration:""
-  },
-
-  {
-    id:"pack-signature",
-    name:"Pack Signature",
-    description:"Pack complet Signature.",
-    prices:{
-      Petite:239.99,
-      Moyenne:249.99,
-      Grande:259.99,
-      Utilitaire:229.99
-    },
-    duration:""
-  },
-
-  {
-    id:"ceramique-prestige",
-    name:"Polissage & Céramique Prestige",
-    description:"Polissage & protection céramique Prestige — 12 à 24 mois.",
-    prices:{
-      Petite:480,
-      Moyenne:580,
-      Grande:680,
-      Utilitaire:780
-    },
-    duration:""
-  },
-
-  {
-    id:"ceramique-signature",
-    name:"Polissage & Céramique Signature",
-    description:"Polissage & protection céramique Signature — 60 mois.",
-    prices:{
-      Petite:780,
-      Moyenne:980,
-      Grande:1180,
-      Utilitaire:1380
-    },
-    duration:""
-  },
-
-  {
-    id:"ozone",
-    name:"Ozone",
-    description:"Traitement à l'ozone.",
-    prices:{
-      Petite:95,
-      Moyenne:95,
-      Grande:95,
-      Utilitaire:95
-    },
-    duration:""
-  }
-
-];
-
-
-/* =========================================================
-   LOCAL STORAGE
-========================================================= */
+/* ============================================================
+   DONNÉES
+============================================================ */
 
 let clients =
-  JSON.parse(localStorage.getItem("as_details_clients")) ||
-  [
-    {
-      id:"1",
-      prenom:"Alex",
-      nom:"Demo",
-      tel:"0499000000",
-      code:"ALEX10",
-      statut:"Inactif",
-      parrainagesPending:1,
-      discount:20,
-      filleuls:[]
-    }
-  ];
-
-let services =
-  JSON.parse(localStorage.getItem("as_details_services")) ||
-  defaultServices;
+JSON.parse(localStorage.getItem("as_details_clients")) || [
+  {
+    id:"demo",
+    prenom:"Alex",
+    nom:"Demo",
+    tel:"0499000000",
+    code:"ALEX100",
+    statut:"Actif",
+    discount:20,
+    parrainagesPending:0,
+    filleuls:[]
+  }
+];
 
 let bookings =
-  JSON.parse(localStorage.getItem("as_details_bookings")) ||
-  [];
+JSON.parse(localStorage.getItem("as_details_bookings")) || [];
 
-let currentDetailId = null;
-let currentUseDiscountId = null;
-let editingServiceId = null;
+let blockedDays =
+JSON.parse(localStorage.getItem("as_details_blocked_days")) || [];
 
-let selectedVehicle = "Petite";
-let selectedLocationMode = "atelier";
+let services =
+JSON.parse(localStorage.getItem("as_details_services")) || [];
 
 
-/* =========================================================
-   UTILITAIRES
-========================================================= */
+/* ============================================================
+   PRESTATIONS PAR DÉFAUT
+============================================================ */
 
-function euro(value){
-  return Number(value || 0)
-    .toFixed(2)
-    .replace(".",",") + " €";
+if(services.length === 0){
+
+  services = [
+
+    {
+      id:"wash-essential",
+      name:"WashDetail Essential",
+      description:"Lavage extérieur essentiel.",
+      duration:"1h30",
+      prices:{
+        Petite:19.99,
+        Moyenne:24.99,
+        Grande:29.99,
+        Utilitaire:34.99
+      }
+    },
+
+    {
+      id:"wash-signature",
+      name:"WashDetail Signature",
+      description:"Lavage extérieur signature.",
+      duration:"2h",
+      prices:{
+        Petite:49.99,
+        Moyenne:54.99,
+        Grande:59.99,
+        Utilitaire:64.99
+      }
+    },
+
+    {
+      id:"interior-essential",
+      name:"InteriorDetail Essential",
+      description:"Nettoyage intérieur essentiel.",
+      duration:"2h",
+      prices:{
+        Petite:59.99,
+        Moyenne:64.99,
+        Grande:79.99,
+        Utilitaire:64.99
+      }
+    },
+
+    {
+      id:"interior-prestige",
+      name:"InteriorDetail Prestige",
+      description:"Nettoyage intérieur prestige.",
+      duration:"3h",
+      prices:{
+        Petite:109.99,
+        Moyenne:119.99,
+        Grande:129.99,
+        Utilitaire:109.99
+      }
+    },
+
+    {
+      id:"interior-signature",
+      name:"InteriorDetail Signature",
+      description:"Nettoyage intérieur signature avec finition complète.",
+      duration:"5h",
+      prices:{
+        Petite:209.99,
+        Moyenne:219.98,
+        Grande:229.98,
+        Utilitaire:169.99
+      }
+    },
+
+    {
+      id:"pack-essential",
+      name:"Pack Essential",
+      description:"Pack lavage + intérieur.",
+      duration:"3h",
+      prices:{
+        Petite:79.99,
+        Moyenne:89.99,
+        Grande:94.99,
+        Utilitaire:99.99
+      }
+    },
+
+    {
+      id:"pack-prestige",
+      name:"Pack Prestige",
+      description:"Pack complet prestige.",
+      duration:"4h",
+      prices:{
+        Petite:149.99,
+        Moyenne:159.99,
+        Grande:169.99,
+        Utilitaire:169.99
+      }
+    },
+
+    {
+      id:"pack-signature",
+      name:"Pack Signature",
+      description:"Pack complet signature.",
+      duration:"6h",
+      prices:{
+        Petite:239.99,
+        Moyenne:249.99,
+        Grande:259.99,
+        Utilitaire:229.99
+      }
+    },
+
+    {
+      id:"ceramique-prestige",
+      name:"Polissage & Céramique Prestige",
+      description:"Polissage + protection céramique 12 à 24 mois.",
+      duration:"7h",
+      prices:{
+        Petite:480,
+        Moyenne:580,
+        Grande:680,
+        Utilitaire:780
+      }
+    },
+
+    {
+      id:"ceramique-signature",
+      name:"Polissage & Céramique Signature",
+      description:"Polissage + protection céramique 60 mois.",
+      duration:"7h",
+      prices:{
+        Petite:780,
+        Moyenne:980,
+        Grande:1180,
+        Utilitaire:1380
+      }
+    },
+
+    {
+      id:"ozone",
+      name:"Ozone",
+      description:"Traitement ozone.",
+      duration:"1h",
+      prices:{
+        Petite:95,
+        Moyenne:95,
+        Grande:95,
+        Utilitaire:95
+      }
+    }
+
+  ];
+
+  localStorage.setItem(
+    "as_details_services",
+    JSON.stringify(services)
+  );
 }
 
-function escapeHTML(str){
-  return String(str || "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
 
-function saveAll(){
+/* ============================================================
+   ÉTAT
+============================================================ */
+
+let selectedLocation = "atelier";
+
+let calendarDate = new Date();
+
+let lastSavedBookingId = null;
+
+
+/* ============================================================
+   STORAGE
+============================================================ */
+
+function saveStorage(){
 
   localStorage.setItem(
     "as_details_clients",
     JSON.stringify(clients)
+  );
+
+  localStorage.setItem(
+    "as_details_bookings",
+    JSON.stringify(bookings)
   );
 
   localStorage.setItem(
@@ -1409,20 +1288,25 @@ function saveAll(){
   );
 
   localStorage.setItem(
-    "as_details_bookings",
-    JSON.stringify(bookings)
+    "as_details_blocked_days",
+    JSON.stringify(blockedDays)
   );
 
-  renderClients();
   populateClientSelect();
+  populateParrainSelect();
+  populateServiceSelect();
+
+  renderClients();
   renderServices();
   renderBookings();
+  renderCalendar();
+
 }
 
 
-/* =========================================================
+/* ============================================================
    NAVIGATION
-========================================================= */
+============================================================ */
 
 function switchTab(tab){
 
@@ -1430,44 +1314,153 @@ function switchTab(tab){
     .forEach(v => v.classList.remove("active"));
 
   document.querySelectorAll(".nav-item")
-    .forEach(n => n.classList.remove("active"));
+    .forEach(v => v.classList.remove("active"));
 
   if(tab === "booking"){
-
-    document.getElementById("viewBooking")
-      .classList.add("active");
-
-    document.getElementById("navBooking")
-      .classList.add("active");
-
+    document.getElementById("viewBooking").classList.add("active");
+    document.getElementById("navBooking").classList.add("active");
   }
 
   if(tab === "services"){
-
-    document.getElementById("viewServices")
-      .classList.add("active");
-
-    document.getElementById("navServices")
-      .classList.add("active");
-
+    document.getElementById("viewServices").classList.add("active");
+    document.getElementById("navServices").classList.add("active");
   }
 
   if(tab === "clients"){
+    document.getElementById("viewClients").classList.add("active");
+    document.getElementById("navClients").classList.add("active");
+  }
 
-    document.getElementById("viewClients")
-      .classList.add("active");
+}
 
-    document.getElementById("navClients")
-      .classList.add("active");
+
+/* ============================================================
+   CLIENTS — SELECT
+============================================================ */
+
+function populateClientSelect(){
+
+  const select =
+    document.getElementById("bookingClientSelect");
+
+  const current = select.value;
+
+  select.innerHTML =
+    `<option value="">-- Sélectionner un client --</option>`;
+
+  clients.forEach(c => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = c.id;
+
+    option.textContent =
+      `${c.prenom} ${c.nom} — ${c.tel}`;
+
+    select.appendChild(option);
+
+  });
+
+  if(clients.some(c => c.id === current)){
+    select.value = current;
+  }
+
+}
+
+
+/* ============================================================
+   CLIENT SÉLECTIONNÉ
+============================================================ */
+
+function updateBookingClient(){
+
+  const id =
+    document.getElementById("bookingClientSelect").value;
+
+  const info =
+    document.getElementById("bookingClientInfo");
+
+  if(!id){
+
+    info.style.display = "none";
+
+    updateReferralSelect(0);
+
+    updateBookingCalculation();
+
+    return;
+  }
+
+  const client =
+    clients.find(c => c.id === id);
+
+  if(!client) return;
+
+  info.style.display = "block";
+
+  document.getElementById("bookingClientName").innerHTML =
+    `<strong>${escapeHtml(client.prenom)} ${escapeHtml(client.nom)}</strong>`;
+
+  document.getElementById("bookingClientPhone").innerText =
+    client.tel;
+
+  document.getElementById("bookingReferralBalance").innerText =
+    `${client.discount || 0}%`;
+
+  updateReferralSelect(client.discount || 0);
+
+  updateBookingCalculation();
+
+}
+
+
+/* ============================================================
+   CRÉDIT PARRAINAGE
+============================================================ */
+
+function updateReferralSelect(balance){
+
+  const select =
+    document.getElementById("referralUseSelect");
+
+  select.innerHTML =
+    `<option value="0">Ne pas utiliser</option>`;
+
+  for(let i=5;i<=balance;i+=5){
+
+    const option =
+      document.createElement("option");
+
+    option.value = i;
+
+    option.textContent =
+      `Utiliser ${i}%`;
+
+    select.appendChild(option);
+
+  }
+
+  if(balance > 0){
+
+    const option =
+      document.createElement("option");
+
+    option.value = balance;
+
+    option.textContent =
+      `Utiliser la totalité — ${balance}%`;
+
+    select.appendChild(option);
 
   }
 
 }
 
 
-/* =========================================================
-   SERVICES
-========================================================= */
+/* ============================================================
+   SERVICES — SELECT
+============================================================ */
 
 function populateServiceSelect(){
 
@@ -1481,19 +1474,859 @@ function populateServiceSelect(){
 
   services.forEach(service => {
 
-    select.innerHTML += `
-      <option value="${service.id}">
-        ${escapeHTML(service.name)}
-      </option>
-    `;
+    const option =
+      document.createElement("option");
+
+    option.value = service.id;
+
+    option.textContent = service.name;
+
+    select.appendChild(option);
 
   });
 
-  if(current && services.some(s => s.id === current)){
+  if(services.some(s => s.id === current)){
     select.value = current;
   }
 
 }
+
+
+/* ============================================================
+   TARIF PRESTATION
+============================================================ */
+
+function getSelectedService(){
+
+  const id =
+    document.getElementById("bookingServiceSelect").value;
+
+  return services.find(s => s.id === id);
+
+}
+
+
+function getSelectedBasePrice(){
+
+  const service = getSelectedService();
+
+  if(!service) return 0;
+
+  const size =
+    document.getElementById("vehicleSizeSelect").value;
+
+  return Number(service.prices[size]) || 0;
+
+}
+
+
+function updateServiceSizes(){
+
+  updateBookingCalculation();
+
+}
+
+
+/* ============================================================
+   LIEU
+============================================================ */
+
+function selectLocation(element){
+
+  document.querySelectorAll(".radio-option")
+    .forEach(el => el.classList.remove("selected"));
+
+  element.classList.add("selected");
+
+  selectedLocation =
+    element.dataset.location;
+
+  document.getElementById("distanceGroup").style.display =
+    selectedLocation === "domicile"
+      ? "block"
+      : "none";
+
+  updateBookingCalculation();
+
+}
+
+
+/* ============================================================
+   CALCUL TOTAL EN TEMPS RÉEL
+============================================================ */
+
+function updateBookingCalculation(){
+
+  const basePrice =
+    getSelectedBasePrice();
+
+  const aboPercent =
+    Number(document.getElementById("aboSelect").value) || 0;
+
+  const referralPercent =
+    Number(document.getElementById("referralUseSelect").value) || 0;
+
+  /*
+    IMPORTANT :
+    les pourcentages sont calculés sur le prix de la prestation.
+  */
+
+  const aboDiscount =
+    basePrice * aboPercent / 100;
+
+  const referralDiscount =
+    basePrice * referralPercent / 100;
+
+  let travel = 0;
+
+  if(selectedLocation === "domicile"){
+
+    const km =
+      Number(document.getElementById("distanceKm").value) || 0;
+
+    travel = 10 + (km * 0.35);
+
+  }
+
+  const supplement =
+    Number(document.getElementById("suppPrix").value) || 0;
+
+  const total =
+    Math.max(
+      0,
+      basePrice -
+      aboDiscount -
+      referralDiscount +
+      travel +
+      supplement
+    );
+
+  document.getElementById("summaryService").innerText =
+    formatMoney(basePrice);
+
+  document.getElementById("summaryAbo").innerText =
+    aboDiscount > 0
+      ? `-${formatMoney(aboDiscount)}`
+      : "0,00 €";
+
+  document.getElementById("summaryReferral").innerText =
+    referralDiscount > 0
+      ? `-${formatMoney(referralDiscount)} (${referralPercent}%)`
+      : "0,00 €";
+
+  document.getElementById("summaryTravel").innerText =
+    formatMoney(travel);
+
+  document.getElementById("summarySupp").innerText =
+    formatMoney(supplement);
+
+  document.getElementById("summaryTotal").innerText =
+    formatMoney(total);
+
+  updateReferralWarning();
+
+}
+
+
+/* ============================================================
+   AVERTISSEMENT PARRAINAGE
+============================================================ */
+
+function updateReferralWarning(){
+
+  const id =
+    document.getElementById("bookingClientSelect").value;
+
+  const warning =
+    document.getElementById("referralWarning");
+
+  const used =
+    Number(document.getElementById("referralUseSelect").value) || 0;
+
+  if(!id || used <= 0){
+
+    warning.style.display = "none";
+
+    return;
+  }
+
+  const client =
+    clients.find(c => c.id === id);
+
+  if(!client) return;
+
+  const remaining =
+    Math.max(0,(client.discount || 0) - used);
+
+  warning.style.display = "block";
+
+  warning.innerHTML =
+    `Après cet enregistrement, <strong>${client.prenom}</strong> aura `
+    + `<strong>${remaining}%</strong> de crédit parrainage restant `
+    + `(contre ${client.discount || 0}% actuellement).`;
+
+}
+
+
+/* ============================================================
+   SAUVEGARDER RDV
+============================================================ */
+
+function saveBooking(){
+
+  const clientId =
+    document.getElementById("bookingClientSelect").value;
+
+  const serviceId =
+    document.getElementById("bookingServiceSelect").value;
+
+  const dateTime =
+    document.getElementById("bookingDateTime").value;
+
+  const size =
+    document.getElementById("vehicleSizeSelect").value;
+
+  if(!clientId){
+
+    alert("Veuillez sélectionner un client.");
+
+    return;
+  }
+
+  if(!serviceId){
+
+    alert("Veuillez sélectionner une prestation.");
+
+    return;
+  }
+
+  if(!dateTime){
+
+    alert("Veuillez sélectionner une date et une heure.");
+
+    return;
+  }
+
+  const selectedDate =
+    dateTime.substring(0,10);
+
+  if(blockedDays.includes(selectedDate)){
+
+    alert("Cette journée est bloquée. Aucun rendez-vous ne peut être enregistré.");
+
+    return;
+  }
+
+  const service =
+    services.find(s => s.id === serviceId);
+
+  const client =
+    clients.find(c => c.id === clientId);
+
+  const basePrice =
+    Number(service.prices[size]) || 0;
+
+  const aboPercent =
+    Number(document.getElementById("aboSelect").value) || 0;
+
+  const referralPercent =
+    Number(document.getElementById("referralUseSelect").value) || 0;
+
+  const aboDiscount =
+    basePrice * aboPercent / 100;
+
+  const referralDiscount =
+    basePrice * referralPercent / 100;
+
+  let travel = 0;
+
+  const km =
+    Number(document.getElementById("distanceKm").value) || 0;
+
+  if(selectedLocation === "domicile"){
+    travel = 10 + km * 0.35;
+  }
+
+  const supplementName =
+    document.getElementById("suppNom").value.trim();
+
+  const supplementPrice =
+    Number(document.getElementById("suppPrix").value) || 0;
+
+  const total =
+    Math.max(
+      0,
+      basePrice -
+      aboDiscount -
+      referralDiscount +
+      travel +
+      supplementPrice
+    );
+
+  /*
+    SYNCHRONISATION PARRAINAGE
+    Le crédit est retiré uniquement au moment
+    où le rendez-vous est enregistré.
+  */
+
+  if(referralPercent > (client.discount || 0)){
+
+    alert("Le crédit parrainage disponible est insuffisant.");
+
+    return;
+  }
+
+  client.discount =
+    Math.max(
+      0,
+      (client.discount || 0) - referralPercent
+    );
+
+  const booking = {
+
+    id:Date.now().toString(),
+
+    clientId:client.id,
+
+    clientName:
+      `${client.prenom} ${client.nom}`,
+
+    clientPhone:
+      client.tel,
+
+    serviceId:service.id,
+
+    serviceName:
+      service.name,
+
+    vehicleSize:size,
+
+    dateTime,
+
+    location:selectedLocation,
+
+    distanceKm:km,
+
+    aboPercent,
+
+    aboDiscount,
+
+    referralPercent,
+
+    referralDiscount,
+
+    supplementName,
+
+    supplementPrice,
+
+    travel,
+
+    total,
+
+    referralRemaining:
+      client.discount
+
+  };
+
+  bookings.push(booking);
+
+  lastSavedBookingId =
+    booking.id;
+
+  saveStorage();
+
+  prepareBookingSMS(booking);
+
+  alert(
+    `Rendez-vous enregistré.\n\n`
+    + `Total : ${formatMoney(total)}\n`
+    + `Parrainage utilisé : ${referralPercent}%\n`
+    + `Solde restant : ${client.discount}%`
+  );
+
+}
+
+
+/* ============================================================
+   SMS CONFIRMATION
+============================================================ */
+
+function prepareBookingSMS(booking){
+
+  const dateFormatted =
+    formatDateTime(booking.dateTime);
+
+  const address =
+    booking.location === "atelier"
+      ? "Rue de Prâle 139, 4300 Waremme"
+      : "À domicile";
+
+  const aboText =
+    getAboText(booking.aboPercent);
+
+  const supplementText =
+    booking.supplementName
+      ? `${booking.supplementName} (${formatMoney(booking.supplementPrice)})`
+      : "Aucun";
+
+  const referralText =
+    booking.referralPercent > 0
+      ? `${booking.referralPercent}%`
+      : "Aucun";
+
+  const remainingText =
+    booking.referralPercent > 0
+      ? `\n🎁 Crédit parrainage restant : ${booking.referralRemaining}%`
+      : "";
+
+  const message =
+`L'AS DU DÉTAIL — Confirmation d'intervention
+
+Bonjour ${booking.clientName},
+
+Votre réservation pour la prestation ${booking.serviceName} (${booking.vehicleSize}) est validée avec succès.
+
+Informations rendez-vous :
+📅 Date & Heure : ${dateFormatted}
+📍 Lieu : ${address}
+🏷️ Formule : ${aboText}
+🎁 Parrainage utilisé : ${referralText}${remainingText}
+➕ Supplément : ${supplementText}
+💶 Montant total : ${formatMoney(booking.total)} (remise appliquée sur la prestation)
+
+📌 Préparation du véhicule & conditions :
+• Merci de mettre à disposition le véhicule libéré de tout effet personnel.
+• Pour les prestations à domicile : Veuillez prévoir un accès direct à un point d'eau et une prise électrique.
+
+Un imprévu ou une précision ? Répondez directement à ce message.
+
+Au plaisir de prendre soin de votre véhicule,
+Alex — L'As Du Détail`;
+
+  const sms =
+    `sms:${booking.clientPhone}?body=${encodeURIComponent(message)}`;
+
+  const button =
+    document.getElementById("smsConfirmationBtn");
+
+  button.href = sms;
+
+  document.getElementById(
+    "smsConfirmationContainer"
+  ).style.display = "block";
+
+}
+
+
+/* ============================================================
+   TEXTE ABONNEMENT
+============================================================ */
+
+function getAboText(percent){
+
+  const texts = {
+    0:"Ponctuel (0%)",
+    5:"1x/mois (-5%)",
+    10:"2x/mois (-10%)",
+    15:"3x/mois (-15%)",
+    20:"4x/mois (-20%)"
+  };
+
+  return texts[percent] || `Abonnement (-${percent}%)`;
+
+}
+
+
+/* ============================================================
+   CALENDRIER
+============================================================ */
+
+function changeMonth(amount){
+
+  calendarDate.setMonth(
+    calendarDate.getMonth() + amount
+  );
+
+  renderCalendar();
+
+}
+
+
+function dateKey(year,month,day){
+
+  return `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+
+}
+
+
+function isBookedDay(key){
+
+  return bookings.some(
+    b => b.dateTime.substring(0,10) === key
+  );
+
+}
+
+
+function renderCalendar(){
+
+  const grid =
+    document.getElementById("calendarGrid");
+
+  const monthTitle =
+    document.getElementById("calendarMonth");
+
+  grid.innerHTML = "";
+
+  const year =
+    calendarDate.getFullYear();
+
+  const month =
+    calendarDate.getMonth();
+
+  const monthName =
+    new Intl.DateTimeFormat(
+      "fr-FR",
+      {month:"long",year:"numeric"}
+    ).format(calendarDate);
+
+  monthTitle.innerText =
+    monthName;
+
+  const firstDay =
+    new Date(year,month,1).getDay();
+
+  const mondayIndex =
+    firstDay === 0 ? 6 : firstDay - 1;
+
+  const daysInMonth =
+    new Date(year,month+1,0).getDate();
+
+  const selectedDate =
+    document.getElementById("bookingDateTime").value
+      ? document.getElementById("bookingDateTime").value.substring(0,10)
+      : "";
+
+  for(let i=0;i<mondayIndex;i++){
+
+    const empty =
+      document.createElement("div");
+
+    empty.className =
+      "calendar-day empty";
+
+    grid.appendChild(empty);
+
+  }
+
+  const today =
+    new Date();
+
+  const todayKey =
+    dateKey(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+
+  for(let day=1;day<=daysInMonth;day++){
+
+    const key =
+      dateKey(year,month,day);
+
+    const cell =
+      document.createElement("div");
+
+    cell.className =
+      "calendar-day";
+
+    if(key === todayKey)
+      cell.classList.add("today");
+
+    if(key === selectedDate)
+      cell.classList.add("selected");
+
+    const booked =
+      isBookedDay(key);
+
+    const blocked =
+      blockedDays.includes(key);
+
+    if(blocked)
+      cell.classList.add("day-blocked");
+
+    cell.innerHTML =
+      `<span class="day-number">${day}</span>`;
+
+    const dot =
+      document.createElement("span");
+
+    dot.className =
+      "status-dot "
+      + (
+        blocked
+          ? "dot-blocked"
+          : booked
+            ? "dot-red"
+            : "dot-green"
+      );
+
+    cell.appendChild(dot);
+
+    cell.onclick = () => {
+
+      if(blocked){
+
+        if(confirm(
+          "Cette journée est bloquée.\n\n"
+          + "Voulez-vous la débloquer ?"
+        )){
+
+          unblockDay(key);
+
+        }
+
+        return;
+      }
+
+      /*
+        Double clic = bloquer
+        Simple clic = sélectionner la date.
+      */
+
+      const input =
+        document.getElementById("bookingDateTime");
+
+      let currentTime = "09:00";
+
+      if(input.value){
+        currentTime =
+          input.value.substring(11,16) || "09:00";
+      }
+
+      input.value =
+        `${key}T${currentTime}`;
+
+      renderCalendar();
+
+      updateBookingCalculation();
+
+    };
+
+    cell.ondblclick = event => {
+
+      event.preventDefault();
+
+      if(isBookedDay(key)){
+
+        alert(
+          "Impossible de bloquer cette journée : "
+          + "un rendez-vous existe déjà."
+        );
+
+        return;
+      }
+
+      if(confirm(
+        `Bloquer le ${formatDateOnly(key)} ?\n\n`
+        + "Aucun rendez-vous ne pourra être enregistré ce jour."
+      )){
+
+        blockDay(key);
+
+      }
+
+    };
+
+    grid.appendChild(cell);
+
+  }
+
+}
+
+
+/* ============================================================
+   BLOQUER JOUR
+============================================================ */
+
+function blockDay(key){
+
+  if(!blockedDays.includes(key)){
+
+    blockedDays.push(key);
+
+    saveStorage();
+
+  }
+
+}
+
+
+function unblockDay(key){
+
+  blockedDays =
+    blockedDays.filter(d => d !== key);
+
+  saveStorage();
+
+}
+
+
+/* ============================================================
+   LISTE RDV
+============================================================ */
+
+function renderBookings(){
+
+  const list =
+    document.getElementById("bookingList");
+
+  list.innerHTML = "";
+
+  const sorted =
+    [...bookings].sort(
+      (a,b) =>
+        new Date(a.dateTime) -
+        new Date(b.dateTime)
+    );
+
+  if(sorted.length === 0){
+
+    list.innerHTML =
+      `<div style="text-align:center;color:#888;padding:20px">
+        Aucun rendez-vous enregistré.
+      </div>`;
+
+    return;
+  }
+
+  sorted.forEach(booking => {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "booking-card";
+
+    const location =
+      booking.location === "atelier"
+        ? "Atelier — Waremme"
+        : `À domicile — ${booking.distanceKm} km`;
+
+    card.innerHTML = `
+
+      <div class="booking-date">
+        ${formatDateTime(booking.dateTime)}
+      </div>
+
+      <div style="font-weight:900;margin-top:7px">
+        ${escapeHtml(booking.clientName)}
+      </div>
+
+      <div class="booking-meta">
+        ${escapeHtml(booking.serviceName)}
+        — ${booking.vehicleSize}<br>
+        ${location}<br>
+        Abonnement : ${getAboText(booking.aboPercent)}<br>
+        Parrainage utilisé : ${booking.referralPercent}%<br>
+        ${booking.supplementName
+          ? `Supplément : ${escapeHtml(booking.supplementName)} — ${formatMoney(booking.supplementPrice)}<br>`
+          : ""}
+      </div>
+
+      <div class="booking-price">
+        ${formatMoney(booking.total)}
+      </div>
+
+      <div class="booking-actions">
+
+        <button class="btn btn-dark"
+                onclick="sendBookingSMS('${booking.id}')">
+          📱 SMS
+        </button>
+
+        <button class="btn btn-red"
+                onclick="deleteBooking('${booking.id}')">
+          Supprimer
+        </button>
+
+      </div>
+
+    `;
+
+    list.appendChild(card);
+
+  });
+
+}
+
+
+/* ============================================================
+   SMS RDV EXISTANT
+============================================================ */
+
+function sendBookingSMS(id){
+
+  const booking =
+    bookings.find(b => b.id === id);
+
+  if(!booking) return;
+
+  prepareBookingSMS(booking);
+
+  const link =
+    document.getElementById("smsConfirmationBtn");
+
+  window.location.href =
+    link.href;
+
+}
+
+
+/* ============================================================
+   SUPPRIMER RDV
+============================================================ */
+
+function deleteBooking(id){
+
+  const booking =
+    bookings.find(b => b.id === id);
+
+  if(!booking) return;
+
+  if(!confirm(
+    `Supprimer le rendez-vous de ${booking.clientName} ?\n\n`
+    + "Attention : le crédit parrainage utilisé sera recrédité."
+  )){
+    return;
+  }
+
+  /*
+    On restitue le crédit parrainage utilisé.
+  */
+
+  const client =
+    clients.find(c => c.id === booking.clientId);
+
+  if(client){
+
+    client.discount =
+      (client.discount || 0)
+      + (booking.referralPercent || 0);
+
+  }
+
+  bookings =
+    bookings.filter(b => b.id !== id);
+
+  saveStorage();
+
+}
+
+
+/* ============================================================
+   SERVICES — AFFICHAGE
+============================================================ */
 
 function renderServices(){
 
@@ -1502,227 +2335,144 @@ function renderServices(){
 
   list.innerHTML = "";
 
-  if(!services.length){
-
-    list.innerHTML = `
-      <div class="empty">
-        Aucune prestation créée.
-      </div>
-    `;
-
-    return;
-  }
-
   services.forEach(service => {
 
     const card =
       document.createElement("div");
 
-    card.className = "service-card";
+    card.className =
+      "service-card";
 
     card.innerHTML = `
 
       <div class="service-title">
-        ${escapeHTML(service.name)}
+        ${escapeHtml(service.name)}
       </div>
 
       <div class="service-description">
-        ${escapeHTML(service.description || "Aucune description.")}
+        ${escapeHtml(service.description || "")}
       </div>
 
-      <div style="font-size:.8rem;color:var(--muted);line-height:1.7;">
-        <div>Petite : <strong>${euro(service.prices.Petite)}</strong></div>
-        <div>Moyenne : <strong>${euro(service.prices.Moyenne)}</strong></div>
-        <div>Grande : <strong>${euro(service.prices.Grande)}</strong></div>
-        <div>Utilitaire : <strong>${euro(service.prices.Utilitaire)}</strong></div>
+      <div class="price-grid">
+
+        ${priceBox("Petite",service.prices.Petite)}
+
+        ${priceBox("Moyenne",service.prices.Moyenne)}
+
+        ${priceBox("Grande",service.prices.Grande)}
+
+        ${priceBox("Utilitaire",service.prices.Utilitaire)}
+
       </div>
 
-      ${
-        service.duration
-        ? `<div class="service-duration">
-             ⏱ Durée : ${escapeHTML(service.duration)}
-           </div>`
-        : `<div class="service-duration">
-             ⏱ Durée non renseignée
-           </div>`
-      }
+      <div class="service-footer">
 
-      <div class="service-actions">
+        <span>
+          Durée : ${escapeHtml(service.duration || "-")}
+        </span>
 
-        <button
-          class="small-btn"
-          onclick="editService('${service.id}')">
-          Modifier
-        </button>
-
-        <button
-          class="small-btn delete"
-          onclick="deleteService('${service.id}')">
+        <button class="btn btn-red"
+                style="padding:8px 10px;font-size:.7rem"
+                onclick="deleteService('${service.id}')">
           Supprimer
         </button>
 
       </div>
+
     `;
 
     list.appendChild(card);
 
   });
 
-  populateServiceSelect();
+}
+
+
+function priceBox(name,price){
+
+  return `
+    <div class="price-item">
+      ${name}
+      <strong>${formatMoney(price)}</strong>
+    </div>
+  `;
 
 }
 
-function openServiceModal(id = null){
 
-  editingServiceId = id;
+/* ============================================================
+   CRÉER SERVICE
+============================================================ */
 
-  document.getElementById("serviceModalTitle").innerText =
-    id ? "Modifier la prestation" : "Nouvelle prestation";
-
-  if(id){
-
-    const service =
-      services.find(s => s.id === id);
-
-    if(!service) return;
-
-    document.getElementById("serviceName").value =
-      service.name;
-
-    document.getElementById("serviceDescription").value =
-      service.description || "";
-
-    document.getElementById("pricePetite").value =
-      service.prices.Petite;
-
-    document.getElementById("priceMoyenne").value =
-      service.prices.Moyenne;
-
-    document.getElementById("priceGrande").value =
-      service.prices.Grande;
-
-    document.getElementById("priceUtilitaire").value =
-      service.prices.Utilitaire;
-
-    document.getElementById("serviceDuration").value =
-      service.duration || "";
-
-  }else{
-
-    [
-      "serviceName",
-      "serviceDescription",
-      "pricePetite",
-      "priceMoyenne",
-      "priceGrande",
-      "priceUtilitaire",
-      "serviceDuration"
-    ].forEach(id => {
-      document.getElementById(id).value = "";
-    });
-
-  }
+function openServiceModal(){
 
   document.getElementById("serviceModal")
-    .style.display = "flex";
+    .classList.add("active");
+
 }
+
 
 function closeServiceModal(){
 
   document.getElementById("serviceModal")
-    .style.display = "none";
+    .classList.remove("active");
 
-  editingServiceId = null;
 }
+
 
 function saveService(){
 
   const name =
-    document.getElementById("serviceName").value.trim();
-
-  const description =
-    document.getElementById("serviceDescription").value.trim();
-
-  const petite =
-    parseFloat(document.getElementById("pricePetite").value);
-
-  const moyenne =
-    parseFloat(document.getElementById("priceMoyenne").value);
-
-  const grande =
-    parseFloat(document.getElementById("priceGrande").value);
-
-  const utilitaire =
-    parseFloat(document.getElementById("priceUtilitaire").value);
-
-  const duration =
-    document.getElementById("serviceDuration").value.trim();
+    document.getElementById("newServiceName").value.trim();
 
   if(!name){
 
-    alert("Veuillez entrer le nom de la prestation.");
+    alert("Veuillez entrer un nom de prestation.");
+
     return;
-
-  }
-
-  if(
-    [petite,moyenne,grande,utilitaire]
-      .some(v => isNaN(v) || v < 0)
-  ){
-
-    alert("Veuillez renseigner correctement les quatre prix.");
-    return;
-
   }
 
   const service = {
 
-    id:editingServiceId || "service-" + Date.now(),
+    id:"service-" + Date.now(),
 
     name,
 
-    description,
+    description:
+      document.getElementById("newServiceDescription").value.trim(),
+
+    duration:
+      document.getElementById("newServiceDuration").value.trim(),
 
     prices:{
-      Petite:petite,
-      Moyenne:moyenne,
-      Grande:grande,
-      Utilitaire:utilitaire
-    },
-
-    duration
+      Petite:Number(document.getElementById("priceSmall").value) || 0,
+      Moyenne:Number(document.getElementById("priceMedium").value) || 0,
+      Grande:Number(document.getElementById("priceLarge").value) || 0,
+      Utilitaire:Number(document.getElementById("priceUtility").value) || 0
+    }
 
   };
 
-  if(editingServiceId){
+  services.push(service);
 
-    const index =
-      services.findIndex(s => s.id === editingServiceId);
+  saveStorage();
 
-    if(index !== -1){
-      services[index] = service;
-    }
-
-  }else{
-
-    services.push(service);
-
-  }
-
-  saveAll();
   closeServiceModal();
 
-  alert(
-    editingServiceId
-    ? "Prestation modifiée."
-    : "Prestation créée."
-  );
+  document.getElementById("newServiceName").value = "";
+  document.getElementById("newServiceDescription").value = "";
+  document.getElementById("newServiceDuration").value = "";
+  document.getElementById("priceSmall").value = "";
+  document.getElementById("priceMedium").value = "";
+  document.getElementById("priceLarge").value = "";
+  document.getElementById("priceUtility").value = "";
 
 }
 
-function editService(id){
-  openServiceModal(id);
-}
+
+/* ============================================================
+   SUPPRIMER SERVICE
+============================================================ */
 
 function deleteService(id){
 
@@ -1732,323 +2482,42 @@ function deleteService(id){
   if(!service) return;
 
   if(!confirm(
-    `Supprimer définitivement la prestation "${service.name}" ?`
-  )) return;
+    `Supprimer la prestation "${service.name}" ?`
+  )){
+    return;
+  }
 
   services =
     services.filter(s => s.id !== id);
 
-  saveAll();
-
-  updateServicePrice();
-}
-
-
-/* =========================================================
-   VEHICULE
-========================================================= */
-
-function selectVehicle(el){
-
-  document.querySelectorAll(
-    "#vehicleGroup .radio-option"
-  ).forEach(o =>
-    o.classList.remove("selected")
-  );
-
-  el.classList.add("selected");
-
-  selectedVehicle =
-    el.dataset.value;
-
-  updateServicePrice();
-  updateBookingCalculation();
-}
-
-
-/* =========================================================
-   LIEU
-========================================================= */
-
-function selectLocation(el){
-
-  document.querySelectorAll(
-    "#locationGroup .radio-option"
-  ).forEach(o =>
-    o.classList.remove("selected")
-  );
-
-  el.classList.add("selected");
-
-  selectedLocationMode =
-    el.dataset.value;
-
-  const distanceGroup =
-    document.getElementById("distanceGroup");
-
-  const addressGroup =
-    document.getElementById("addressGroup");
-
-  if(selectedLocationMode === "domicile"){
-
-    distanceGroup.classList.remove("hidden");
-    addressGroup.classList.remove("hidden");
-
-  }else{
-
-    distanceGroup.classList.add("hidden");
-    addressGroup.classList.add("hidden");
-
-  }
-
-  updateBookingCalculation();
-}
-
-
-/* =========================================================
-   PRIX SERVICE
-========================================================= */
-
-function getSelectedService(){
-
-  const id =
-    document.getElementById("bookingServiceSelect").value;
-
-  return services.find(s => s.id === id);
-}
-
-function getBasePrice(){
-
-  const service =
-    getSelectedService();
-
-  if(!service) return 0;
-
-  return Number(
-    service.prices[selectedVehicle] || 0
-  );
-}
-
-function updateServicePrice(){
-
-  const service =
-    getSelectedService();
-
-  const preview =
-    document.getElementById("vehiclePricePreview");
-
-  const info =
-    document.getElementById("serviceInfo");
-
-  if(!service){
-
-    preview.innerText =
-      "Sélectionnez une prestation";
-
-    info.classList.add("hidden");
-
-    updateBookingCalculation();
-
-    return;
-  }
-
-  const price =
-    service.prices[selectedVehicle];
-
-  preview.innerText =
-    `${selectedVehicle} : ${euro(price)}`;
-
-  info.innerHTML =
-    `<strong>${escapeHTML(service.name)}</strong>` +
-    (service.duration
-      ? ` — Durée : ${escapeHTML(service.duration)}`
-      : "");
-
-  info.classList.remove("hidden");
-
-  updateBookingCalculation();
-}
-
-
-/* =========================================================
-   CALCUL
-========================================================= */
-
-function updateBookingCalculation(){
-
-  const basePrice =
-    getBasePrice();
-
-  const aboPercent =
-    parseInt(
-      document.getElementById("aboSelect").value
-    ) || 0;
-
-  const discount =
-    basePrice * aboPercent / 100;
-
-  let travel =
-    0;
-
-  if(selectedLocationMode === "domicile"){
-
-    const km =
-      parseFloat(
-        document.getElementById("distanceKm").value
-      ) || 0;
-
-    travel =
-      10 + (km * 0.35);
-
-  }
-
-  const supplement =
-    parseFloat(
-      document.getElementById("suppPrix").value
-    ) || 0;
-
-  const total =
-    basePrice -
-    discount +
-    travel +
-    supplement;
-
-  document.getElementById("summaryBasePrice")
-    .innerText = euro(basePrice);
-
-  const aboRow =
-    document.getElementById("summaryAboRow");
-
-  if(aboPercent > 0){
-
-    aboRow.style.display = "flex";
-
-    document.getElementById("summaryAboDiscount")
-      .innerText =
-      `-${euro(discount)} (${aboPercent}%)`;
-
-  }else{
-
-    aboRow.style.display = "none";
-
-  }
-
-  document.getElementById("summaryTravel")
-    .innerText = euro(travel);
-
-  document.getElementById("summarySupp")
-    .innerText = euro(supplement);
-
-  document.getElementById("summaryTotal")
-    .innerText = euro(total);
+  saveStorage();
 
 }
 
 
-/* =========================================================
+/* ============================================================
    CLIENTS
-========================================================= */
-
-function populateClientSelect(){
-
-  const select =
-    document.getElementById("bookingClientSelect");
-
-  const current =
-    select.value;
-
-  select.innerHTML =
-    `<option value="">-- Sélectionner un client --</option>`;
-
-  clients.forEach(c => {
-
-    select.innerHTML += `
-      <option value="${c.id}">
-        ${escapeHTML(c.prenom)} ${escapeHTML(c.nom)}
-        — ${escapeHTML(c.tel)}
-      </option>
-    `;
-
-  });
-
-  if(current && clients.some(c => c.id === current)){
-    select.value = current;
-  }
-
-}
-
-function updateClientInformation(){
-
-  const id =
-    document.getElementById("bookingClientSelect").value;
-
-  const info =
-    document.getElementById("bookingClientInfo");
-
-  const client =
-    clients.find(c => c.id === id);
-
-  if(!client){
-
-    info.classList.add("hidden");
-    return;
-
-  }
-
-  info.innerHTML =
-    `👤 <strong>${escapeHTML(client.prenom)} ${escapeHTML(client.nom)}</strong>
-     &nbsp; • &nbsp; 📱 ${escapeHTML(client.tel)}`;
-
-  info.classList.remove("hidden");
-
-}
+============================================================ */
 
 function renderClients(){
 
-  const search =
-    document.getElementById("searchInput")
-      .value
-      .toLowerCase()
-      .trim();
-
   const list =
     document.getElementById("clientList");
+
+  const search =
+    document.getElementById("searchInput").value
+      .toLowerCase();
 
   list.innerHTML = "";
 
   const filtered =
     clients.filter(c =>
-
-      `${c.prenom} ${c.nom}`
-        .toLowerCase()
-        .includes(search)
-
-      ||
-
-      c.tel
-        .toLowerCase()
-        .includes(search)
-
-      ||
-
-      c.code
-        .toLowerCase()
-        .includes(search)
-
+      `${c.prenom} ${c.nom}`.toLowerCase().includes(search)
+      || c.tel.includes(search)
+      || c.code.toLowerCase().includes(search)
     );
 
-  if(!filtered.length){
-
-    list.innerHTML = `
-      <div class="empty">
-        Aucun client trouvé.
-      </div>
-    `;
-
-    return;
-  }
-
-  filtered.forEach(c => {
+  filtered.forEach(client => {
 
     const card =
       document.createElement("div");
@@ -2056,142 +2525,56 @@ function renderClients(){
     card.className =
       "client-card";
 
-    const msgActif =
-      encodeURIComponent(
-`Bonjour ${c.prenom},
-
-Votre compte VIP chez L'As du Détail est maintenant actif !
-Vous profitez actuellement de ${c.discount}% de réduction cumulée.
-
-Code Parrainage : ${c.code}
-
-L'As du Détail — Plus qu’un nettoyage, une signature.`
-      );
-
-    const msgCredit =
-      encodeURIComponent(
-`Bonjour ${c.prenom},
-
-Bonne nouvelle ! Un nouveau parrainage vient d'être validé.
-
-Votre nouveau solde est de : ${c.discount}% de réduction disponible chez L'As du Détail !
-
-L'As du Détail — Plus qu’un nettoyage, une signature.`
-      );
-
     card.innerHTML = `
 
-      <div
-        class="card-header"
-        onclick="openDetailModal('${c.id}')">
+      <div class="client-header">
 
         <div>
-
           <div class="client-name">
-            ${escapeHTML(c.prenom)} ${escapeHTML(c.nom)}
+            ${escapeHtml(client.prenom)}
+            ${escapeHtml(client.nom)}
           </div>
 
           <div class="client-phone">
-            ${escapeHTML(c.tel)}
+            ${escapeHtml(client.tel)}
           </div>
 
-          <span class="status-pill ${
-            c.statut === "Actif"
-              ? "status-actif"
-              : "status-inactif"
-          }">
-            ${escapeHTML(c.statut)}
-          </span>
+          <div style="margin-top:6px;font-size:.72rem;color:#777">
+            Code : <strong>${escapeHtml(client.code)}</strong>
+          </div>
 
         </div>
 
         <div class="discount-badge">
-
-          ${c.discount}%
-
-          <span class="discount-label">
-            Réduction
-          </span>
-
+          ${client.discount || 0}%
+          <small>Parrainage</small>
         </div>
 
       </div>
 
-      <div
-        class="referral-box"
-        onclick="event.stopPropagation()">
+      <div style="margin-top:12px;font-size:.78rem;color:#777">
+        Filleuls : ${(client.filleuls || []).length}
+      </div>
 
-        <span>
-          Code Parrain :
-          <strong>${escapeHTML(c.code)}</strong>
-        </span>
+      <div class="client-actions">
 
-        <button
-          class="copy-btn"
-          onclick="copyCode('${escapeHTML(c.code)}')">
-          Copier
+        <button class="btn btn-dark"
+                onclick="sendClientSMS('${client.id}')">
+          📱 SMS
+        </button>
+
+        <button class="btn btn-light"
+                onclick="addManualDiscount('${client.id}')">
+          + Crédit
+        </button>
+
+        <button class="btn btn-red"
+                onclick="deleteClient('${client.id}')">
+          Supprimer
         </button>
 
       </div>
 
-      <div
-        class="actions"
-        onclick="event.stopPropagation()">
-
-        ${
-          c.statut === "Inactif"
-          ? `
-          <a
-            href="sms:${c.tel}?body=${msgActif}"
-            class="btn-action btn-actif"
-            onclick="activateAccount('${c.id}')">
-
-            <span>1. Activer le compte</span>
-            <span>SMS ➜</span>
-
-          </a>
-          `
-          : ""
-        }
-
-        ${
-          c.parrainagesPending > 0
-          ? `
-          <a
-            href="sms:${c.tel}?body=${msgCredit}"
-            class="btn-action btn-credit"
-            onclick="creditReferral('${c.id}')">
-
-            <span>
-              2. Créditer (${c.parrainagesPending} en attente)
-            </span>
-
-            <span>SMS ➜</span>
-
-          </a>
-          `
-          : ""
-        }
-
-        ${
-          c.discount > 0
-          ? `
-          <button
-            class="btn-action btn-apply"
-            onclick="openUseDiscountModal('${c.id}')">
-
-            <span>
-              3. Utiliser réduc. (${c.discount}% dispo)
-            </span>
-
-            <span>Choix ➜</span>
-
-          </button>
-          `
-          : ""
-        }
-
-      </div>
     `;
 
     list.appendChild(card);
@@ -2200,50 +2583,30 @@ L'As du Détail — Plus qu’un nettoyage, une signature.`
 
 }
 
-function copyCode(code){
 
-  if(navigator.clipboard){
+/* ============================================================
+   MODAL CLIENT
+============================================================ */
 
-    navigator.clipboard.writeText(code);
+function openClientModal(){
 
-  }
+  populateParrainSelect();
 
-  alert("Code parrain copié : " + code);
-}
-
-function activateAccount(id){
-
-  const client =
-    clients.find(c => c.id === id);
-
-  if(client){
-
-    client.statut = "Actif";
-    saveAll();
-
-  }
+  document.getElementById("clientModal")
+    .classList.add("active");
 
 }
 
-function creditReferral(id){
 
-  const client =
-    clients.find(c => c.id === id);
+function closeClientModal(){
 
-  if(
-    client &&
-    client.parrainagesPending > 0
-  ){
-
-    client.parrainagesPending--;
-
-    saveAll();
-
-  }
+  document.getElementById("clientModal")
+    .classList.remove("active");
 
 }
 
-function openAddModal(){
+
+function populateParrainSelect(){
 
   const select =
     document.getElementById("newParrainSelect");
@@ -2253,55 +2616,50 @@ function openAddModal(){
 
   clients.forEach(c => {
 
-    select.innerHTML += `
-      <option value="${c.id}">
-        ${escapeHTML(c.prenom)} ${escapeHTML(c.nom)}
-        (${escapeHTML(c.code)})
-      </option>
-    `;
+    const option =
+      document.createElement("option");
+
+    option.value = c.id;
+
+    option.textContent =
+      `${c.prenom} ${c.nom} — ${c.code}`;
+
+    select.appendChild(option);
 
   });
 
-  document.getElementById("addModal")
-    .style.display = "flex";
 }
 
-function closeAddModal(){
 
-  document.getElementById("addModal")
-    .style.display = "none";
-
-}
+/* ============================================================
+   CRÉER CLIENT
+============================================================ */
 
 function saveClient(){
 
   const prenom =
-    document.getElementById("newPrenom")
-      .value.trim();
+    document.getElementById("newPrenom").value.trim();
 
   const nom =
-    document.getElementById("newNom")
-      .value.trim();
+    document.getElementById("newNom").value.trim();
 
   const tel =
-    document.getElementById("newTel")
-      .value.trim();
+    document.getElementById("newTel").value.trim();
 
   const parrainId =
-    document.getElementById("newParrainSelect")
-      .value;
+    document.getElementById("newParrainSelect").value;
 
   if(!prenom || !tel){
 
-    alert("Prénom et téléphone requis.");
-    return;
+    alert("Prénom et téléphone obligatoires.");
 
+    return;
   }
 
   const code =
     (
-      prenom.substring(0,3) +
-      Math.floor(100 + Math.random() * 900)
+      prenom.substring(0,3)
+      + Math.floor(100 + Math.random()*900)
     ).toUpperCase();
 
   const newClient = {
@@ -2318,15 +2676,19 @@ function saveClient(){
 
     statut:"Inactif",
 
-    parrainagesPending:0,
-
     discount:0,
+
+    parrainagesPending:0,
 
     filleuls:[]
 
   };
 
   clients.push(newClient);
+
+  /*
+    Le parrain gagne automatiquement 10%.
+  */
 
   if(parrainId){
 
@@ -2335,9 +2697,11 @@ function saveClient(){
 
     if(parrain){
 
-      parrain.discount += 10;
+      parrain.discount =
+        (parrain.discount || 0) + 10;
 
-      parrain.parrainagesPending += 1;
+      parrain.parrainagesPending =
+        (parrain.parrainagesPending || 0) + 1;
 
       parrain.filleuls =
         parrain.filleuls || [];
@@ -2350,485 +2714,132 @@ function saveClient(){
 
   }
 
-  saveAll();
+  saveStorage();
 
-  closeAddModal();
+  closeClientModal();
 
   document.getElementById("newPrenom").value = "";
   document.getElementById("newNom").value = "";
   document.getElementById("newTel").value = "";
 
-  alert("Client enregistré avec succès.");
 }
 
 
-/* =========================================================
-   DETAIL CLIENT
-========================================================= */
-
-function openDetailModal(id){
-
-  currentDetailId = id;
-
-  const c =
-    clients.find(item => item.id === id);
-
-  if(!c) return;
-
-  document.getElementById("detName")
-    .innerText =
-    `${c.prenom} ${c.nom}`;
-
-  document.getElementById("detPhone")
-    .innerText = c.tel;
-
-  document.getElementById("detDiscount")
-    .innerText = `${c.discount}%`;
-
-  document.getElementById("detCode")
-    .innerText = c.code;
-
-  document.getElementById("detCopyBtn")
-    .onclick = () => copyCode(c.code);
-
-  const list =
-    document.getElementById("detFilleulsList");
-
-  list.innerHTML = "";
-
-  if(c.filleuls && c.filleuls.length){
-
-    c.filleuls.forEach(f => {
-
-      list.innerHTML += `
-        <div class="detail-item">
-          <span>${escapeHTML(f)}</span>
-          <span style="color:var(--gold);font-weight:700;">
-            +10%
-          </span>
-        </div>
-      `;
-
-    });
-
-  }else{
-
-    list.innerHTML = `
-      <div class="detail-item">
-        <span>Aucun filleul enregistré</span>
-      </div>
-    `;
-
-  }
-
-  document.getElementById("deleteBtnAction")
-    .onclick = function(){
-
-      if(confirm(
-        `Veux-tu vraiment supprimer définitivement ${c.prenom} ${c.nom} ?`
-      )){
-
-        clients =
-          clients.filter(item => item.id !== id);
-
-        saveAll();
-        closeDetailModal();
-
-      }
-
-    };
-
-  document.getElementById("detailModal")
-    .style.display = "flex";
-
-}
-
-function closeDetailModal(){
-
-  document.getElementById("detailModal")
-    .style.display = "none";
-
-}
-
-function addCustomDiscount(){
-
-  if(!currentDetailId) return;
-
-  const val =
-    parseInt(
-      document.getElementById("creditPercentSelect").value
-    );
-
-  const c =
-    clients.find(
-      item => item.id === currentDetailId
-    );
-
-  if(c){
-
-    c.discount += val;
-
-    saveAll();
-
-    openDetailModal(currentDetailId);
-
-  }
-
-}
-
-
-/* =========================================================
-   UTILISATION REDUCTION
-========================================================= */
-
-function openUseDiscountModal(id){
-
-  currentUseDiscountId = id;
-
-  const c =
-    clients.find(item => item.id === id);
-
-  if(!c) return;
-
-  document.getElementById("useDiscountInfo")
-    .innerText =
-    `${c.prenom} dispose de ${c.discount}% de réduction cumulée.`;
-
-  document.getElementById("useDiscountAmount")
-    .value = c.discount;
-
-  document.getElementById("useDiscountModal")
-    .style.display = "flex";
-
-}
-
-function closeUseDiscountModal(){
-
-  document.getElementById("useDiscountModal")
-    .style.display = "none";
-
-  currentUseDiscountId = null;
-
-}
-
-function confirmApplyDiscount(){
-
-  if(!currentUseDiscountId) return;
-
-  const c =
-    clients.find(
-      item => item.id === currentUseDiscountId
-    );
-
-  if(!c) return;
-
-  const amountUsed =
-    parseInt(
-      document.getElementById("useDiscountAmount").value
-    );
-
-  if(
-    isNaN(amountUsed) ||
-    amountUsed <= 0 ||
-    amountUsed > c.discount
-  ){
-
-    alert("Veuillez entrer une valeur valide.");
-    return;
-
-  }
-
-  c.discount -= amountUsed;
-
-  saveAll();
-
-  let msgText =
-`Bonjour ${c.prenom},
-
-Votre réduction de ${amountUsed}% a bien été appliquée lors de votre prestation aujourd'hui !`;
-
-  if(c.discount > 0){
-
-    msgText +=
-`\nIl vous reste encore ${c.discount}% de réduction disponible sur votre compte.`;
-
-  }
-
-  msgText +=
-`\n\nMerci pour votre confiance.
-L'As du Détail — Plus qu’un nettoyage, une signature.`;
-
-  closeUseDiscountModal();
-
-  window.location.href =
-    `sms:${c.tel}?body=${encodeURIComponent(msgText)}`;
-
-}
-
-
-/* =========================================================
-   RESERVATION
-========================================================= */
-
-function saveBooking(){
-
-  const clientId =
-    document.getElementById("bookingClientSelect").value;
-
-  const dateTime =
-    document.getElementById("bookingDateTime").value;
-
-  const service =
-    getSelectedService();
-
-  if(!clientId){
-
-    alert("Veuillez sélectionner un client.");
-    return;
-
-  }
-
-  if(!service){
-
-    alert("Veuillez sélectionner une prestation.");
-    return;
-
-  }
-
-  if(!dateTime){
-
-    alert("Veuillez sélectionner une date et une heure.");
-    return;
-
-  }
-
-  if(
-    selectedLocationMode === "domicile" &&
-    !document.getElementById("homeAddress").value.trim()
-  ){
-
-    alert("Veuillez renseigner l'adresse du domicile.");
-    return;
-
-  }
+/* ============================================================
+   CRÉDIT MANUEL
+============================================================ */
+
+function addManualDiscount(id){
 
   const client =
-    clients.find(c => c.id === clientId);
+    clients.find(c => c.id === id);
 
-  const aboPercent =
-    parseInt(
-      document.getElementById("aboSelect").value
-    ) || 0;
+  if(!client) return;
 
-  const basePrice =
-    getBasePrice();
-
-  const discount =
-    basePrice * aboPercent / 100;
-
-  let travel = 0;
-  let km = 0;
-
-  if(selectedLocationMode === "domicile"){
-
-    km =
-      parseFloat(
-        document.getElementById("distanceKm").value
-      ) || 0;
-
-    travel =
-      10 + km * 0.35;
-
-  }
-
-  const supplementPrice =
-    parseFloat(
-      document.getElementById("suppPrix").value
-    ) || 0;
-
-  const supplementName =
-    document.getElementById("suppNom")
-      .value.trim();
-
-  const total =
-    basePrice -
-    discount +
-    travel +
-    supplementPrice;
-
-  const booking = {
-
-    id:Date.now().toString(),
-
-    clientId,
-
-    clientName:
-      `${client.prenom} ${client.nom}`,
-
-    clientPhone:
-      client.tel,
-
-    serviceId:
-      service.id,
-
-    serviceName:
-      service.name,
-
-    vehicleSize:
-      selectedVehicle,
-
-    dateTime,
-
-    location:
-      selectedLocationMode,
-
-    homeAddress:
-      document.getElementById("homeAddress").value.trim(),
-
-    distanceKm:km,
-
-    aboPercent,
-
-    supplementName,
-
-    supplementPrice,
-
-    basePrice,
-
-    discount,
-
-    travel,
-
-    total
-
-  };
-
-  bookings.push(booking);
-
-  saveAll();
-
-  alert("Rendez-vous enregistré avec succès !");
-
-  prepareSMS();
-
-}
-
-function renderBookings(){
-
-  const list =
-    document.getElementById("bookingList");
-
-  if(!list) return;
-
-  list.innerHTML = "";
-
-  if(!bookings.length) return;
-
-  const title =
-    document.createElement("div");
-
-  title.style.cssText =
-    "font-weight:800;font-size:1rem;margin:22px 0 12px;";
-
-  title.innerText =
-    "Rendez-vous enregistrés";
-
-  list.appendChild(title);
-
-  const sorted =
-    [...bookings].sort(
-      (a,b) =>
-        new Date(a.dateTime) -
-        new Date(b.dateTime)
+  const amount =
+    prompt(
+      `Crédit actuel : ${client.discount || 0}%\n\n`
+      + "Combien de % ajouter ?"
     );
 
-  sorted.forEach(b => {
+  if(amount === null) return;
 
-    const card =
-      document.createElement("div");
+  const value =
+    Number(amount);
 
-    card.className =
-      "booking-card";
+  if(!Number.isFinite(value) || value <= 0){
 
-    const date =
-      formatDateTime(b.dateTime);
+    alert("Valeur invalide.");
 
-    const location =
-      b.location === "atelier"
-      ? "Atelier — Rue de Prâle 139, 4300 Waremme"
-      : `À domicile — ${b.homeAddress || "Adresse non renseignée"}`;
-
-    card.innerHTML = `
-
-      <div class="booking-date">
-        📅 ${escapeHTML(date)}
-      </div>
-
-      <div class="booking-client">
-        ${escapeHTML(b.clientName)}
-      </div>
-
-      <div class="booking-info">
-
-        ${escapeHTML(b.serviceName)}
-        — ${escapeHTML(b.vehicleSize)}
-
-        <br>
-
-        📍 ${escapeHTML(location)}
-
-      </div>
-
-      <div class="booking-total">
-        ${euro(b.total)}
-      </div>
-
-      <div class="service-actions">
-
-        <button
-          class="small-btn"
-          onclick="sendBookingSMS('${b.id}')">
-          📱 SMS
-        </button>
-
-        <button
-          class="small-btn delete"
-          onclick="deleteBooking('${b.id}')">
-          Supprimer
-        </button>
-
-      </div>
-
-    `;
-
-    list.appendChild(card);
-
-  });
-
-}
-
-function deleteBooking(id){
-
-  if(!confirm("Supprimer ce rendez-vous ?"))
     return;
+  }
 
-  bookings =
-    bookings.filter(b => b.id !== id);
+  client.discount =
+    (client.discount || 0) + value;
 
-  saveAll();
+  saveStorage();
 
 }
+
+
+/* ============================================================
+   SUPPRIMER CLIENT
+============================================================ */
+
+function deleteClient(id){
+
+  const client =
+    clients.find(c => c.id === id);
+
+  if(!client) return;
+
+  if(!confirm(
+    `Supprimer définitivement ${client.prenom} ${client.nom} ?`
+  )){
+    return;
+  }
+
+  clients =
+    clients.filter(c => c.id !== id);
+
+  saveStorage();
+
+}
+
+
+/* ============================================================
+   SMS CLIENT
+============================================================ */
+
+function sendClientSMS(id){
+
+  const client =
+    clients.find(c => c.id === id);
+
+  if(!client) return;
+
+  const message =
+`Bonjour ${client.prenom},
+
+Votre compte chez L'As du Détail dispose actuellement de ${client.discount || 0}% de réduction cumulée grâce au programme de parrainage.
+
+Code parrainage : ${client.code}
+
+L'As du Détail — Plus qu’un nettoyage, une signature.`;
+
+  window.location.href =
+    `sms:${client.tel}?body=${encodeURIComponent(message)}`;
+
+}
+
+
+/* ============================================================
+   OUTILS
+============================================================ */
+
+function formatMoney(value){
+
+  return Number(value || 0)
+    .toLocaleString("fr-BE",{
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }) + " €";
+
+}
+
 
 function formatDateTime(value){
-
-  if(!value) return "";
 
   const date =
     new Date(value);
 
+  if(isNaN(date.getTime()))
+    return value;
+
   return date.toLocaleString(
     "fr-BE",
     {
+      weekday:"long",
       day:"2-digit",
       month:"2-digit",
       year:"numeric",
@@ -2840,209 +2851,43 @@ function formatDateTime(value){
 }
 
 
-/* =========================================================
-   SMS DE CONFIRMATION
-========================================================= */
+function formatDateOnly(value){
 
-function buildConfirmationSMS(){
+  const date =
+    new Date(value + "T12:00:00");
 
-  const clientId =
-    document.getElementById("bookingClientSelect").value;
-
-  const client =
-    clients.find(c => c.id === clientId);
-
-  const service =
-    getSelectedService();
-
-  const dateTime =
-    document.getElementById("bookingDateTime").value;
-
-  if(!client || !service || !dateTime){
-
-    return null;
-
-  }
-
-  const dateFormatted =
-    formatDateTime(dateTime);
-
-  const aboSelect =
-    document.getElementById("aboSelect");
-
-  const formule =
-    aboSelect.options[
-      aboSelect.selectedIndex
-    ].text;
-
-  const supplementName =
-    document.getElementById("suppNom")
-      .value.trim();
-
-  const supplementPrice =
-    parseFloat(
-      document.getElementById("suppPrix").value
-    ) || 0;
-
-  let address = "";
-
-  if(selectedLocationMode === "atelier"){
-
-    address =
-      "Atelier — Rue de Prâle 139, 4300 Waremme";
-
-  }else{
-
-    address =
-      document.getElementById("homeAddress")
-        .value.trim();
-
-    if(!address){
-      address = "À domicile";
+  return date.toLocaleDateString(
+    "fr-BE",
+    {
+      weekday:"long",
+      day:"2-digit",
+      month:"long",
+      year:"numeric"
     }
-
-  }
-
-  const total =
-    document.getElementById("summaryTotal")
-      .innerText
-      .replace(" €","")
-      .replace(",",".")
-      .trim();
-
-  const totalFormatted =
-    Number(total || 0).toFixed(2);
-
-  const message =
-`L'AS DU DÉTAIL — Confirmation d'intervention
-
-Bonjour ${client.prenom} ${client.nom},
-
-Votre réservation pour la prestation ${service.name} (${selectedVehicle}) est validée avec succès.
-
-Informations rendez-vous :
-📅 Date & Heure : ${dateFormatted}
-📍 Lieu : ${address}
-🏷️ Formule : ${formule}
-➕ Supplément : ${supplementName || "Aucun"} (${supplementPrice.toFixed(2)} €)
-💶 Montant total : ${totalFormatted} € (remise appliquée sur la prestation)
-
-📌 Préparation du véhicule & conditions :
-• Merci de mettre à disposition le véhicule libéré de tout effet personnel.
-• Pour les prestations à domicile : Veuillez prévoir un accès direct à un point d'eau et une prise électrique.
-
-Un imprévu ou une précision ? Répondez directement à ce message.
-
-Au plaisir de prendre soin de votre véhicule,
-Alex — L'As Du Détail`;
-
-  return {
-    phone:client.tel,
-    message
-  };
-
-}
-
-function prepareSMS(event){
-
-  if(event){
-    event.preventDefault();
-  }
-
-  const data =
-    buildConfirmationSMS();
-
-  if(!data){
-
-    alert(
-      "Sélectionnez un client, une prestation et une date avant d'envoyer le SMS."
-    );
-
-    return;
-
-  }
-
-  const href =
-    `sms:${data.phone}?body=${encodeURIComponent(data.message)}`;
-
-  if(event){
-
-    window.location.href = href;
-
-  }else{
-
-    window.location.href = href;
-
-  }
-
-}
-
-function sendBookingSMS(id){
-
-  const booking =
-    bookings.find(b => b.id === id);
-
-  if(!booking) return;
-
-  const client =
-    clients.find(c => c.id === booking.clientId);
-
-  if(!client) return;
-
-  const dateFormatted =
-    formatDateTime(booking.dateTime);
-
-  const formuleMap = {
-    0:"Ponctuel (0%)",
-    5:"1x / mois (-5%)",
-    10:"2x / mois (-10%)",
-    15:"3x / mois (-15%)",
-    20:"4x / mois (-20%)"
-  };
-
-  const formule =
-    formuleMap[booking.aboPercent] ||
-    "Ponctuel (0%)";
-
-  const address =
-    booking.location === "atelier"
-    ? "Atelier — Rue de Prâle 139, 4300 Waremme"
-    : (booking.homeAddress || "À domicile");
-
-  const message =
-`L'AS DU DÉTAIL — Confirmation d'intervention
-
-Bonjour ${client.prenom} ${client.nom},
-
-Votre réservation pour la prestation ${booking.serviceName} (${booking.vehicleSize}) est validée avec succès.
-
-Informations rendez-vous :
-📅 Date & Heure : ${dateFormatted}
-📍 Lieu : ${address}
-🏷️ Formule : ${formule}
-➕ Supplément : ${booking.supplementName || "Aucun"} (${Number(booking.supplementPrice || 0).toFixed(2)} €)
-💶 Montant total : ${Number(booking.total || 0).toFixed(2)} € (remise appliquée sur la prestation)
-
-📌 Préparation du véhicule & conditions :
-• Merci de mettre à disposition le véhicule libéré de tout effet personnel.
-• Pour les prestations à domicile : Veuillez prévoir un accès direct à un point d'eau et une prise électrique.
-
-Un imprévu ou une précision ? Répondez directement à ce message.
-
-Au plaisir de prendre soin de votre véhicule,
-Alex — L'As Du Détail`;
-
-  window.location.href =
-    `sms:${client.tel}?body=${encodeURIComponent(message)}`;
+  );
 
 }
 
 
-/* =========================================================
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* ============================================================
    INITIALISATION
-========================================================= */
+============================================================ */
 
 populateClientSelect();
+
+populateParrainSelect();
 
 populateServiceSelect();
 
@@ -3052,31 +2897,9 @@ renderServices();
 
 renderBookings();
 
-updateClientInformation();
-
-updateServicePrice();
+renderCalendar();
 
 updateBookingCalculation();
-
-
-/* =========================================================
-   FERMETURE MODALES EN CLIQUANT A L'EXTERIEUR
-========================================================= */
-
-document.querySelectorAll(".modal")
-.forEach(modal => {
-
-  modal.addEventListener("click", function(e){
-
-    if(e.target === modal){
-
-      modal.style.display = "none";
-
-    }
-
-  });
-
-});
 
 </script>
 
