@@ -1,640 +1,3084 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>L'As du Détail — Gestion & Réservations</title>
-  <style>
-    :root {
-      --bg: #F8F9FA;
-      --card-bg: #FFFFFF;
-      --card-border: #E5E7EB;
-      --gold: #B8860B;
-      --gold-light: #FFFBEB;
-      --teal: #0E7490;
-      --teal-light: #E0F2FE;
-      --text-main: #111827;
-      --text-muted: #6B7280;
-      --danger: #DC2626;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--bg); color: var(--text-main); padding: 16px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; min-height: 100vh; }
-    
-    /* Header */
-    header { text-align: center; margin-bottom: 20px; padding-top: 12px; }
-    header h1 { font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; color: var(--text-main); }
-    header p { color: var(--gold); font-size: 0.8rem; font-style: italic; margin-top: 4px; letter-spacing: 0.5px; font-weight: 600; }
-    
-    /* Dynamic Views */
-    .view-section { display: none; }
-    .view-section.active { display: block; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'As du Détail — Gestion</title>
 
-    /* Bottom Navigation */
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-      width: 100%; max-width: 600px; background: #FFFFFF;
-      border-top: 1px solid var(--card-border); display: flex;
-      justify-content: space-around; padding: 10px 0; z-index: 90;
-    }
-    .nav-item { border: none; background: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .nav-item.active { color: var(--teal); font-weight: 800; }
-    .nav-item svg { width: 22px; height: 22px; fill: currentColor; }
+<style>
+:root{
+  --bg:#F8F9FA;
+  --card:#FFFFFF;
+  --border:#E5E7EB;
+  --gold:#B9972F;
+  --gold-light:#FBF7E8;
+  --black:#171717;
+  --text:#111827;
+  --muted:#6B7280;
+  --green:#15803D;
+  --red:#DC2626;
+}
 
-    /* Controls & Inputs */
-    .controls { display: flex; gap: 8px; margin-bottom: 20px; }
-    input[type="text"], input[type="tel"], input[type="number"], input[type="datetime-local"], select { 
-      flex: 1; padding: 14px 16px; background: #FFFFFF; border: 1px solid var(--card-border); 
-      border-radius: 12px; font-size: 0.95rem; color: var(--text-main); outline: none; width: 100%;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-    input:focus, select:focus { border-color: var(--teal); }
-    .btn-add { background: var(--text-main); color: #FFF; border: none; padding: 0 18px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
 
-    /* Radio Group Styling (Custom buttons for car size & location) */
-    .radio-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-    .radio-option {
-      background: #FFFFFF; border: 1px solid var(--card-border); border-radius: 12px;
-      padding: 14px 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
-      transition: all 0.2s;
-    }
-    .radio-option.selected { background: var(--teal); color: #FFFFFF; border-color: var(--teal); }
+body{
+  background:var(--bg);
+  color:var(--text);
+  padding:16px;
+  padding-bottom:100px;
+  max-width:600px;
+  margin:auto;
+  min-height:100vh;
+}
 
-    /* Form Card Container */
-    .form-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-    .form-card-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 14px; }
+header{
+  text-align:center;
+  padding:12px 0 22px;
+}
 
-    /* Pricing Summary Card */
-    .summary-card { background: #F9FAFB; border: 1px solid var(--card-border); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
-    .summary-row { display: flex; justify-content: space-between; font-size: 0.95rem; margin-bottom: 8px; color: var(--text-muted); }
-    .summary-row.total { font-size: 1.3rem; font-weight: 800; color: var(--teal); margin-top: 12px; padding-top: 10px; border-top: 2px dashed var(--card-border); }
+header h1{
+  font-size:1.55rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  font-weight:800;
+}
 
-    /* Client Cards */
-    .client-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor: pointer; }
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-    .client-name { font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
-    .client-phone { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
-    .status-pill { display: inline-block; font-size: 0.7rem; padding: 3px 8px; border-radius: 20px; font-weight: 700; text-transform: uppercase; margin-top: 6px; }
-    .status-inactif { background: #FEE2E2; color: #DC2626; }
-    .status-actif { background: #DCFCE7; color: #15803D; }
+header p{
+  color:var(--gold);
+  font-size:.78rem;
+  font-style:italic;
+  margin-top:5px;
+  font-weight:600;
+}
 
-    .discount-badge { background: var(--gold-light); color: var(--gold); border: 1px solid var(--gold); font-size: 1.3rem; font-weight: 800; padding: 8px 14px; border-radius: 14px; text-align: center; }
-    .discount-label { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; display: block; text-transform: uppercase; }
+.view-section{
+  display:none;
+}
 
-    .referral-box { background: #F3F4F6; padding: 12px 14px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; margin-bottom: 16px; }
-    .copy-btn { background: #FFFFFF; border: 1px solid var(--card-border); color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 0.8rem; padding: 4px 10px; border-radius: 6px; }
+.view-section.active{
+  display:block;
+}
 
-    /* Buttons */
-    .btn-action { width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-decoration: none; box-sizing: border-box; }
-    .btn-submit { background: var(--teal); color: #FFF; border: none; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; width: 100%; text-align: center; }
-    .btn-actif { background: var(--text-main); color: #FFF; }
-    .btn-credit { background: var(--gold-light); color: var(--gold); border: 1px solid var(--gold); }
-    .btn-apply { background: #F3F4F6; color: var(--text-main); border: 1px solid var(--card-border); }
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:600px;
+  background:#fff;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-around;
+  padding:9px 0 calc(9px + env(safe-area-inset-bottom));
+  z-index:90;
+}
 
-    /* Modals */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; padding: 16px; z-index: 100; overflow-y: auto; }
-    .modal-content { background: #FFFFFF; padding: 24px; border-radius: 20px; width: 100%; max-width: 440px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); margin: auto; }
-    .modal-content h2 { margin-bottom: 16px; font-size: 1.3rem; color: var(--text-main); text-align: center; }
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
-    .modal-btns { display: flex; gap: 10px; margin-top: 18px; }
-    .btn-cancel { background: #F3F4F6; color: var(--text-main); border: none; padding: 12px; flex: 1; border-radius: 10px; font-weight: 600; cursor: pointer; }
-    .btn-save { background: var(--text-main); color: #FFF; border: none; padding: 12px; flex: 1; border-radius: 10px; font-weight: 700; cursor: pointer; }
-    .btn-delete { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; padding: 12px; border-radius: 10px; font-weight: 700; width: 100%; margin-top: 16px; cursor: pointer; text-align: center; }
-    
-    .detail-hero { text-align: center; margin-bottom: 20px; }
-    .detail-big-discount { font-size: 3rem; font-weight: 900; color: var(--gold); }
-    .detail-list { background: #F9FAFB; border-radius: 10px; padding: 12px; border: 1px solid var(--card-border); margin-top: 10px; }
-    .detail-item { font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid #E5E7EB; display: flex; justify-content: space-between; }
-  </style>
+.nav-item{
+  border:0;
+  background:none;
+  color:var(--muted);
+  font-size:.72rem;
+  font-weight:600;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  min-width:80px;
+}
+
+.nav-item.active{
+  color:var(--gold);
+  font-weight:800;
+}
+
+.nav-item svg{
+  width:22px;
+  height:22px;
+  fill:currentColor;
+}
+
+.form-card,
+.client-card,
+.service-card,
+.booking-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,.035);
+}
+
+.form-card-title{
+  font-size:.82rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  color:var(--muted);
+  margin-bottom:14px;
+}
+
+.form-group{
+  margin-bottom:14px;
+}
+
+.form-group:last-child{
+  margin-bottom:0;
+}
+
+label{
+  display:block;
+  font-size:.76rem;
+  color:var(--muted);
+  margin-bottom:6px;
+  text-transform:uppercase;
+  font-weight:700;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+input[type="datetime-local"],
+select,
+textarea{
+  width:100%;
+  padding:13px 14px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:11px;
+  font-size:.93rem;
+  color:var(--text);
+  outline:none;
+}
+
+textarea{
+  min-height:85px;
+  resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--gold);
+}
+
+.controls{
+  display:flex;
+  gap:8px;
+  margin-bottom:16px;
+}
+
+.controls input{
+  flex:1;
+}
+
+.btn-add{
+  background:var(--black);
+  color:white;
+  border:0;
+  padding:0 16px;
+  border-radius:11px;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.btn-submit{
+  width:100%;
+  padding:16px;
+  border:0;
+  border-radius:12px;
+  background:var(--black);
+  color:#fff;
+  font-weight:800;
+  font-size:1rem;
+  cursor:pointer;
+  margin-bottom:10px;
+}
+
+.btn-sms{
+  display:flex;
+  width:100%;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
+  border-radius:12px;
+  background:var(--gold);
+  color:#fff;
+  text-decoration:none;
+  font-weight:800;
+  font-size:.95rem;
+  margin-bottom:16px;
+}
+
+.radio-group{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.radio-option{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:13px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+  font-weight:600;
+  transition:.15s;
+}
+
+.radio-option.selected{
+  background:var(--black);
+  color:#fff;
+  border-color:var(--black);
+}
+
+.summary-card{
+  background:#F9FAFB;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:15px;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  font-size:.9rem;
+  margin-bottom:9px;
+  color:var(--muted);
+}
+
+.summary-row strong{
+  color:var(--text);
+}
+
+.summary-row.total{
+  border-top:2px dashed var(--border);
+  padding-top:12px;
+  margin-top:12px;
+  margin-bottom:0;
+  color:var(--text);
+  font-size:1.25rem;
+  font-weight:800;
+}
+
+.summary-row.total strong{
+  color:var(--gold);
+}
+
+.section-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+.section-header h2{
+  font-size:1.15rem;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:35px 15px;
+  background:white;
+  border:1px dashed var(--border);
+  border-radius:15px;
+}
+
+.service-title{
+  font-size:1.05rem;
+  font-weight:800;
+  margin-bottom:5px;
+}
+
+.service-description{
+  font-size:.82rem;
+  color:var(--muted);
+  margin-bottom:12px;
+  line-height:1.4;
+}
+
+.service-price{
+  color:var(--gold);
+  font-size:1.1rem;
+  font-weight:800;
+}
+
+.service-duration{
+  font-size:.78rem;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.service-actions{
+  display:flex;
+  gap:8px;
+  margin-top:14px;
+}
+
+.small-btn{
+  flex:1;
+  padding:10px;
+  border-radius:9px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.small-btn.delete{
+  color:var(--red);
+  background:#FEF2F2;
+  border-color:#FECACA;
+}
+
+.client-card{
+  cursor:pointer;
+}
+
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.client-name{
+  font-size:1.12rem;
+  font-weight:800;
+}
+
+.client-phone{
+  color:var(--muted);
+  font-size:.82rem;
+  margin-top:3px;
+}
+
+.status-pill{
+  display:inline-block;
+  font-size:.68rem;
+  padding:3px 8px;
+  border-radius:20px;
+  font-weight:800;
+  text-transform:uppercase;
+  margin-top:7px;
+}
+
+.status-actif{
+  background:#DCFCE7;
+  color:#15803D;
+}
+
+.status-inactif{
+  background:#FEE2E2;
+  color:#DC2626;
+}
+
+.discount-badge{
+  background:var(--gold-light);
+  color:var(--gold);
+  border:1px solid var(--gold);
+  font-size:1.25rem;
+  font-weight:900;
+  padding:7px 12px;
+  border-radius:13px;
+  text-align:center;
+}
+
+.discount-label{
+  display:block;
+  color:var(--muted);
+  font-size:.6rem;
+  text-transform:uppercase;
+}
+
+.referral-box{
+  background:#F3F4F6;
+  padding:11px 13px;
+  border-radius:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:.85rem;
+  margin:14px 0;
+}
+
+.copy-btn{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:4px 9px;
+  font-size:.75rem;
+  font-weight:700;
+}
+
+.actions{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.btn-action{
+  width:100%;
+  padding:12px;
+  border-radius:9px;
+  font-weight:700;
+  font-size:.82rem;
+  border:0;
+  cursor:pointer;
+  text-decoration:none;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.btn-actif{
+  background:var(--black);
+  color:#fff;
+}
+
+.btn-credit{
+  background:var(--gold-light);
+  color:var(--gold);
+  border:1px solid var(--gold);
+}
+
+.btn-apply{
+  background:#F3F4F6;
+  color:var(--text);
+}
+
+.booking-card{
+  cursor:pointer;
+}
+
+.booking-date{
+  color:var(--gold);
+  font-weight:800;
+  font-size:.85rem;
+  margin-bottom:5px;
+}
+
+.booking-client{
+  font-weight:800;
+  font-size:1rem;
+}
+
+.booking-info{
+  color:var(--muted);
+  font-size:.82rem;
+  margin-top:5px;
+  line-height:1.5;
+}
+
+.booking-total{
+  font-size:1.1rem;
+  font-weight:900;
+  margin-top:10px;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  z-index:100;
+  overflow-y:auto;
+}
+
+.modal-content{
+  background:#fff;
+  padding:22px;
+  border-radius:19px;
+  width:100%;
+  max-width:440px;
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.modal-content h2{
+  font-size:1.25rem;
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.modal-btns{
+  display:flex;
+  gap:9px;
+  margin-top:18px;
+}
+
+.btn-cancel,
+.btn-save,
+.btn-delete{
+  border:0;
+  padding:12px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.btn-cancel{
+  flex:1;
+  background:#F3F4F6;
+}
+
+.btn-save{
+  flex:1;
+  background:var(--black);
+  color:#fff;
+}
+
+.btn-delete{
+  width:100%;
+  margin-top:14px;
+  background:#FEE2E2;
+  color:var(--red);
+}
+
+.detail-hero{
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.detail-big-discount{
+  font-size:3rem;
+  font-weight:900;
+  color:var(--gold);
+}
+
+.detail-list{
+  background:#F9FAFB;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px;
+}
+
+.detail-item{
+  padding:7px 0;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  font-size:.82rem;
+}
+
+.detail-item:last-child{
+  border-bottom:0;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.price-preview{
+  margin-top:8px;
+  padding:9px;
+  background:var(--gold-light);
+  border-radius:9px;
+  color:var(--gold);
+  font-weight:800;
+  text-align:center;
+  font-size:.9rem;
+}
+
+.notice{
+  padding:10px 12px;
+  background:#F9FAFB;
+  border-radius:9px;
+  color:var(--muted);
+  font-size:.76rem;
+  line-height:1.4;
+  margin-top:8px;
+}
+</style>
 </head>
+
 <body>
 
-  <header>
-    <h1>L'As du Détail</h1>
-    <p>las du détail ; plus qu’un nettoyage , une signature</p>
-  </header>
+<header>
+  <h1>L'As du Détail</h1>
+  <p>las du détail ; plus qu’un nettoyage , une signature</p>
+</header>
 
-  <!-- VUE 1 : CRÉATION DE RÉSERVATION -->
-  <section id="viewBooking" class="view-section active">
-    <div class="form-card">
-      <div class="form-card-title">1. Informations Client & RDV</div>
-      <div class="form-group">
-        <label>Client enregistré</label>
-        <select id="bookingClientSelect" onchange="updateBookingCalculation()">
-          <option value="">-- Sélectionner un client --</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Date & Heure du RDV</label>
-        <input type="datetime-local" id="bookingDateTime">
-      </div>
+<!-- =========================================================
+     PLANNING
+========================================================= -->
+<section id="viewBooking" class="view-section active">
+
+  <div class="section-header">
+    <h2>Planning</h2>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">1. Client & rendez-vous</div>
+
+    <div class="form-group">
+      <label>Client enregistré</label>
+      <select id="bookingClientSelect" onchange="updateClientInformation(); updateBookingCalculation();">
+        <option value="">-- Sélectionner un client --</option>
+      </select>
     </div>
 
-    <div class="form-card">
-      <div class="form-card-title">2. Véhicule</div>
+    <div id="bookingClientInfo" class="notice hidden"></div>
+
+    <div class="form-group">
+      <label>Date & Heure</label>
+      <input type="datetime-local" id="bookingDateTime" onchange="updateBookingCalculation()">
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">2. Prestation</div>
+
+    <div class="form-group">
+      <label>Prestation</label>
+      <select id="bookingServiceSelect" onchange="updateServicePrice(); updateBookingCalculation();">
+        <option value="">-- Sélectionner une prestation --</option>
+      </select>
+    </div>
+
+    <div id="serviceInfo" class="notice hidden"></div>
+
+    <div class="form-group">
+      <label>Taille du véhicule</label>
+
       <div class="radio-group" id="vehicleGroup">
-        <div class="radio-option selected" data-value="petite" data-price="150" onclick="selectVehicle(this)">
-          <span>Petite voiture</span>
-          <span style="font-size: 0.85rem; opacity: 0.8;">150,00 €</span>
+
+        <div class="radio-option selected"
+             data-value="Petite"
+             onclick="selectVehicle(this)">
+          <span>Petite</span>
         </div>
-        <div class="radio-option" data-value="moyenne" data-price="180" onclick="selectVehicle(this)">
-          <span>Moyenne voiture</span>
-          <span style="font-size: 0.85rem; opacity: 0.8;">180,00 €</span>
+
+        <div class="radio-option"
+             data-value="Moyenne"
+             onclick="selectVehicle(this)">
+          <span>Moyenne</span>
         </div>
-        <div class="radio-option" data-value="grande" data-price="210" onclick="selectVehicle(this)">
-          <span>Grande voiture</span>
-          <span style="font-size: 0.85rem; opacity: 0.8;">210,00 €</span>
+
+        <div class="radio-option"
+             data-value="Grande"
+             onclick="selectVehicle(this)">
+          <span>Grande</span>
         </div>
-        <div class="radio-option" data-value="camionnette" data-price="259.99" onclick="selectVehicle(this)">
-          <span>Camionnette / Utilitaire</span>
-          <span style="font-size: 0.85rem; opacity: 0.8;">259,99 €</span>
+
+        <div class="radio-option"
+             data-value="Utilitaire"
+             onclick="selectVehicle(this)">
+          <span>Utilitaire</span>
         </div>
+
+      </div>
+
+      <div id="vehiclePricePreview" class="price-preview">
+        Sélectionnez une prestation
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">3. Lieu d'intervention</div>
+
+    <div class="radio-group" id="locationGroup">
+
+      <div class="radio-option selected"
+           data-value="atelier"
+           onclick="selectLocation(this)">
+        <span>Atelier — Waremme</span>
+        <strong>Gratuit</strong>
+      </div>
+
+      <div class="radio-option"
+           data-value="domicile"
+           onclick="selectLocation(this)">
+        <span>À domicile</span>
+        <strong>10 € + 0,35 €/km</strong>
+      </div>
+
+    </div>
+
+    <div id="distanceGroup" class="form-group hidden" style="margin-top:14px;">
+      <label>Distance en km — Aller</label>
+      <input
+        type="number"
+        id="distanceKm"
+        min="0"
+        step="0.1"
+        placeholder="Ex : 15"
+        oninput="updateBookingCalculation()">
+      <div class="notice">
+        Le déplacement est calculé automatiquement : 10 € + 0,35 € par kilomètre.
       </div>
     </div>
 
-    <div class="form-card">
-      <div class="form-card-title">3. Lieu d'intervention</div>
-      <div class="radio-group" id="locationGroup">
-        <div class="radio-option selected" data-value="atelier" onclick="selectLocation(this)">
-          <span>Atelier (Waremme)</span>
-          <span style="font-size: 0.85rem; opacity: 0.8;">Gratuit</span>
-        </div>
-        <div class="radio-option" data-value="deplacement" onclick="selectLocation(this)">
-          <span>En déplacement</span>
-          <span style="font-size: 0.85rem; opacity: 0.8;">10€ + 0,35€/km</span>
-        </div>
-      </div>
+    <div id="addressGroup" class="form-group hidden" style="margin-top:14px;">
+      <label>Adresse du domicile</label>
+      <input
+        type="text"
+        id="homeAddress"
+        placeholder="Rue, numéro, ville">
+    </div>
+  </div>
 
-      <div class="form-group" id="distanceGroup" style="display: none;">
-        <label>Distance en km (Aller)</label>
-        <input type="number" id="distanceKm" placeholder="Ex: 25" min="0" oninput="updateBookingCalculation()">
-        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Utilisée uniquement pour un déplacement.</p>
-      </div>
+  <div class="form-card">
+    <div class="form-card-title">4. Formule / Abonnement</div>
+
+    <div class="form-group">
+      <label>Formule</label>
+
+      <select id="aboSelect" onchange="updateBookingCalculation()">
+        <option value="0">Ponctuel (0%)</option>
+        <option value="5">1x / mois (-5%)</option>
+        <option value="10">2x / mois (-10%)</option>
+        <option value="15">3x / mois (-15%)</option>
+        <option value="20">4x / mois (-20%)</option>
+      </select>
     </div>
 
-    <div class="form-card">
-      <div class="form-card-title">4. Formule & Remises</div>
-      <div class="form-group">
-        <label>Abonnement (Nettoyages mensuels)</label>
-        <select id="aboSelect" onchange="updateBookingCalculation()">
-          <option value="0">Aucun abonnement (0%)</option>
-          <option value="5">1x / mois (-5%)</option>
-          <option value="10">2x / mois (-10%)</option>
-          <option value="15">3x / mois (-15%)</option>
-          <option value="20">4x / mois (-20%)</option>
+    <div class="form-group">
+      <label>Supplément — Nom</label>
+      <input
+        type="text"
+        id="suppNom"
+        placeholder="Ex : Ozone / Dépoilage / etc."
+        oninput="updateBookingCalculation()">
+    </div>
+
+    <div class="form-group">
+      <label>Supplément — Prix (€)</label>
+      <input
+        type="number"
+        id="suppPrix"
+        min="0"
+        step="0.01"
+        placeholder="0.00"
+        oninput="updateBookingCalculation()">
+    </div>
+  </div>
+
+  <div class="summary-card">
+
+    <div class="summary-row">
+      <span>Prix prestation :</span>
+      <strong id="summaryBasePrice">0,00 €</strong>
+    </div>
+
+    <div class="summary-row" id="summaryAboRow" style="display:none;">
+      <span>Remise abonnement :</span>
+      <strong id="summaryAboDiscount" style="color:var(--green);">
+        -0,00 €
+      </strong>
+    </div>
+
+    <div class="summary-row">
+      <span>Déplacement :</span>
+      <strong id="summaryTravel">0,00 €</strong>
+    </div>
+
+    <div class="summary-row">
+      <span>Supplément :</span>
+      <strong id="summarySupp">0,00 €</strong>
+    </div>
+
+    <div class="summary-row total">
+      <span>Total :</span>
+      <strong id="summaryTotal">0,00 €</strong>
+    </div>
+
+  </div>
+
+  <button class="btn-submit" onclick="saveBooking()">
+    Enregistrer le rendez-vous
+  </button>
+
+  <a
+    href="#"
+    id="smsConfirmationBtn"
+    class="btn-sms"
+    onclick="prepareSMS(event)">
+    📱 Envoyer SMS de confirmation
+  </a>
+
+  <div id="bookingList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     SERVICES
+========================================================= -->
+<section id="viewServices" class="view-section">
+
+  <div class="section-header">
+    <h2>Prestations</h2>
+    <button class="btn-add" onclick="openServiceModal()">+ Créer</button>
+  </div>
+
+  <div id="serviceList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     CLIENTS
+========================================================= -->
+<section id="viewClients" class="view-section">
+
+  <div class="controls">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Rechercher nom, téléphone, code..."
+      oninput="renderClients()">
+
+    <button class="btn-add" onclick="openAddModal()">
+      + Client
+    </button>
+  </div>
+
+  <div id="clientList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+<nav class="bottom-nav">
+
+  <button
+    class="nav-item active"
+    id="navBooking"
+    onclick="switchTab('booking')">
+
+    <svg viewBox="0 0 24 24">
+      <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
+    </svg>
+
+    Planning
+  </button>
+
+  <button
+    class="nav-item"
+    id="navServices"
+    onclick="switchTab('services')">
+
+    <svg viewBox="0 0 24 24">
+      <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.31-.6-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81C14.37 2.34 14.17 2 13.7 2h-3.84c-.46 0-.66.34-.72.81L8.78 5.35c-.59.24-1.13.57-1.62.94l-2.39-.96c-.23-.08-.48 0-.6.22L2.25 8.87c-.12.21-.06.47.12.61L4.4 11.06c-.04.31-.08.63-.08.94s.03.63.08.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.31.6.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.06.47.26.81.72.81h3.84c.46 0 .66-.34.72-.81l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.08.48 0 .6-.22l1.92-3.32c.12-.21.06-.47-.12-.61l-2.03-1.58zM11.78 15.5A3.5 3.5 0 1 1 11.78 8a3.5 3.5 0 0 1 0 7.5z"/>
+    </svg>
+
+    Services
+  </button>
+
+  <button
+    class="nav-item"
+    id="navClients"
+    onclick="switchTab('clients')">
+
+    <svg viewBox="0 0 24 24">
+      <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+    </svg>
+
+    Clients
+  </button>
+
+</nav>
+
+
+<!-- =========================================================
+     MODAL CLIENT
+========================================================= -->
+<div class="modal" id="addModal">
+
+  <div class="modal-content">
+
+    <h2>Nouveau Client</h2>
+
+    <div class="form-group">
+      <label>Prénom</label>
+      <input type="text" id="newPrenom" placeholder="Ex : Jean">
+    </div>
+
+    <div class="form-group">
+      <label>Nom</label>
+      <input type="text" id="newNom" placeholder="Ex : Dupont">
+    </div>
+
+    <div class="form-group">
+      <label>Téléphone</label>
+      <input type="tel" id="newTel" placeholder="Ex : 0499123456">
+    </div>
+
+    <div class="form-group">
+      <label>Parrain</label>
+
+      <select id="newParrainSelect">
+        <option value="">-- Aucun parrain --</option>
+      </select>
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAddModal()">
+        Annuler
+      </button>
+
+      <button class="btn-save" onclick="saveClient()">
+        Enregistrer
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- =========================================================
+     MODAL DETAIL CLIENT
+========================================================= -->
+<div class="modal" id="detailModal">
+
+  <div class="modal-content">
+
+    <div class="detail-hero">
+
+      <div class="detail-big-discount" id="detDiscount">
+        0%
+      </div>
+
+      <h2 id="detName" style="margin:0;">
+        -
+      </h2>
+
+      <p id="detPhone"
+         style="color:var(--muted);font-size:.9rem;">
+        -
+      </p>
+
+    </div>
+
+    <div class="referral-box">
+      <span>
+        Code Parrain :
+        <strong id="detCode">-</strong>
+      </span>
+
+      <button class="copy-btn" id="detCopyBtn">
+        Copier
+      </button>
+    </div>
+
+    <div class="form-group">
+
+      <label>Ajouter un pourcentage manuel</label>
+
+      <div style="display:flex;gap:8px;">
+
+        <select id="creditPercentSelect">
+          <option value="5">5%</option>
+          <option value="10" selected>10%</option>
+          <option value="15">15%</option>
+          <option value="20">20%</option>
         </select>
+
+        <button
+          class="btn-save"
+          style="flex:initial;padding:0 15px;"
+          onclick="addCustomDiscount()">
+          Ajouter
+        </button>
+
       </div>
-      <div class="form-group">
-        <label>Supplément (Optionnel)</label>
-        <input type="text" id="suppNom" placeholder="Ex: Dépoilage d'animaux / Ozone">
-      </div>
-      <div class="form-group">
-        <label>Prix du supplément (€)</label>
-        <input type="number" id="suppPrix" placeholder="0.00" min="0" step="0.5" oninput="updateBookingCalculation()">
-      </div>
+
     </div>
 
-    <!-- Pricing Summary Card -->
-    <div class="summary-card">
-      <div class="summary-row">
-        <span>Tarif de base :</span>
-        <strong id="summaryBasePrice">150,00 €</strong>
-      </div>
-      <div class="summary-row" id="summaryAboRow" style="display: none;">
-        <span>Remise Abonnement :</span>
-        <strong id="summaryAboDiscount" style="color: #16A34A;">-0,00 €</strong>
-      </div>
-      <div class="summary-row">
-        <span>Frais de déplacement :</span>
-        <strong id="summaryTravel">0,00 €</strong>
-      </div>
-      <div class="summary-row">
-        <span>Supplément :</span>
-        <strong id="summarySupp">0,00 €</strong>
-      </div>
-      <div class="summary-row total">
-        <span>Total :</span>
-        <strong id="summaryTotal">150,00 €</strong>
-      </div>
+    <div class="form-group">
+
+      <label>Historique des filleuls</label>
+
+      <div class="detail-list" id="detFilleulsList"></div>
+
     </div>
 
-    <button class="btn-submit" onclick="saveBooking()">Enregistrer le rendez-vous</button>
-  </section>
-
-  <!-- VUE 2 : LISTE CLIENTS & PARRAINAGE -->
-  <section id="viewClients" class="view-section">
-    <div class="controls">
-      <input type="text" id="searchInput" placeholder="Rechercher nom, téléphone, code..." oninput="renderClients()">
-      <button class="btn-add" onclick="openAddModal()">+ Client</button>
-    </div>
-    <div id="clientList"></div>
-  </section>
-
-  <!-- BOTTOM NAVIGATION -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" id="navBooking" onclick="switchTab('booking')">
-      <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
-      Planning
+    <button
+      class="btn-delete"
+      id="deleteBtnAction">
+      Supprimer définitivement ce client
     </button>
-    <button class="nav-item" id="navServices" onclick="switchTab('booking')">
-      <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.27-3.82c.14-.4.52-.68.95-.68h9.56c.43 0 .81.28.95.68L19 11H5z"/></svg>
-      Services
-    </button>
-    <button class="nav-item" id="navClients" onclick="switchTab('clients')">
-      <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-      Clients
-    </button>
-  </nav>
 
-  <!-- MODALS -->
-  <div class="modal" id="addModal">
-    <div class="modal-content">
-      <h2>Nouveau Client</h2>
-      <div class="form-group"><label>Prénom</label><input type="text" id="newPrenom" placeholder="Ex: Jean"></div>
-      <div class="form-group"><label>Nom</label><input type="text" id="newNom" placeholder="Ex: Dupont"></div>
-      <div class="form-group"><label>Téléphone</label><input type="tel" id="newTel" placeholder="Ex: 0499123456"></div>
-      <div class="form-group">
-        <label>Parrain (Optionnel)</label>
-        <select id="newParrainSelect"><option value="">-- Aucun parrain --</option></select>
-      </div>
-      <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeAddModal()">Annuler</button>
-        <button class="btn-save" onclick="saveClient()">Enregistrer (+10% parrain)</button>
-      </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeDetailModal()">
+        Fermer
+      </button>
     </div>
-  </div>
 
-  <div class="modal" id="detailModal">
-    <div class="modal-content">
-      <div class="detail-hero">
-        <div class="detail-big-discount" id="detDiscount">0%</div>
-        <h2 id="detName" style="margin: 0;">-</h2>
-        <p id="detPhone" style="color: var(--text-muted); font-size: 0.9rem;">-</p>
-      </div>
-      <div class="referral-box">
-        <span>Code Parrain : <strong id="detCode">-</strong></span>
-        <button class="copy-btn" id="detCopyBtn">Copier</button>
-      </div>
-      <div class="form-group">
-        <label>Ajouter un pourcentage manuel</label>
-        <div style="display: flex; gap: 8px;">
-          <select id="creditPercentSelect">
-            <option value="5">5%</option>
-            <option value="10" selected>10%</option>
-            <option value="15">15%</option>
-            <option value="20">20%</option>
-          </select>
-          <button class="btn-save" style="flex: initial; padding: 0 16px;" onclick="addCustomDiscount()">Ajouter %</button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Historique des filleuls</label>
-        <div class="detail-list" id="detFilleulsList"></div>
-      </div>
-      <button class="btn-delete" id="deleteBtnAction">Supprimer définitivement ce client</button>
-      <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeDetailModal()">Fermer</button>
-      </div>
+  </div>
+</div>
+
+
+<!-- =========================================================
+     MODAL UTILISATION REDUCTION
+========================================================= -->
+<div class="modal" id="useDiscountModal">
+
+  <div class="modal-content">
+
+    <h2>Utiliser une Réduction</h2>
+
+    <p
+      id="useDiscountInfo"
+      style="font-size:.9rem;color:var(--muted);text-align:center;margin-bottom:16px;">
+    </p>
+
+    <div class="form-group">
+
+      <label>Pourcentage à déduire aujourd'hui (%)</label>
+
+      <input
+        type="number"
+        id="useDiscountAmount"
+        min="1"
+        placeholder="Ex : 20">
+
     </div>
-  </div>
 
-  <div class="modal" id="useDiscountModal">
-    <div class="modal-content">
-      <h2>Utiliser une Réduction</h2>
-      <p id="useDiscountInfo" style="font-size: 0.9rem; color: var(--text-muted); text-align: center; margin-bottom: 16px;"></p>
-      <div class="form-group">
-        <label>Pourcentage à déduire aujourd'hui (%)</label>
-        <input type="number" id="useDiscountAmount" min="1" placeholder="Ex: 50">
-      </div>
-      <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeUseDiscountModal()">Annuler</button>
-        <button class="btn-save" onclick="confirmApplyDiscount()">Valider & Envoyer SMS ➔</button>
-      </div>
+    <div class="modal-btns">
+
+      <button
+        class="btn-cancel"
+        onclick="closeUseDiscountModal()">
+        Annuler
+      </button>
+
+      <button
+        class="btn-save"
+        onclick="confirmApplyDiscount()">
+        Valider & SMS ➜
+      </button>
+
     </div>
+
   </div>
+</div>
 
-  <script>
-    // Global State
-    let clients = JSON.parse(localStorage.getItem('as_details_clients')) || [
-      { id: '1', prenom: 'Alex', nom: 'Demo', tel: '0499000000', code: 'ALEX10', statut: 'Inactif', parrainagesPending: 1, discount: 20, filleuls: [] }
-    ];
-    let bookings = JSON.parse(localStorage.getItem('as_details_bookings')) || [];
-    
-    let currentDetailId = null;
-    let currentUseDiscountId = null;
-    let selectedVehiclePrice = 150;
-    let selectedLocationMode = 'atelier';
 
-    function saveToStorage() {
-      localStorage.setItem('as_details_clients', JSON.stringify(clients));
-      localStorage.setItem('as_details_bookings', JSON.stringify(bookings));
-      renderClients();
-      populateClientSelect();
+<!-- =========================================================
+     MODAL SERVICE
+========================================================= -->
+<div class="modal" id="serviceModal">
+
+  <div class="modal-content">
+
+    <h2 id="serviceModalTitle">
+      Nouvelle prestation
+    </h2>
+
+    <div class="form-group">
+
+      <label>Nom de la prestation</label>
+
+      <input
+        type="text"
+        id="serviceName"
+        placeholder="Ex : WashDetail Essential">
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Description</label>
+
+      <textarea
+        id="serviceDescription"
+        placeholder="Description de la prestation..."></textarea>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Prix Petite (€)</label>
+
+      <input
+        type="number"
+        id="pricePetite"
+        min="0"
+        step=".01">
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Prix Moyenne (€)</label>
+
+      <input
+        type="number"
+        id="priceMoyenne"
+        min="0"
+        step=".01">
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Prix Grande (€)</label>
+
+      <input
+        type="number"
+        id="priceGrande"
+        min="0"
+        step=".01">
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Prix Utilitaire (€)</label>
+
+      <input
+        type="number"
+        id="priceUtilitaire"
+        min="0"
+        step=".01">
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Durée</label>
+
+      <input
+        type="text"
+        id="serviceDuration"
+        placeholder="Ex : 2h30">
+
+    </div>
+
+    <div class="modal-btns">
+
+      <button
+        class="btn-cancel"
+        onclick="closeServiceModal()">
+        Annuler
+      </button>
+
+      <button
+        class="btn-save"
+        onclick="saveService()">
+        Enregistrer
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+
+/* =========================================================
+   DONNEES
+========================================================= */
+
+const defaultServices = [
+
+  {
+    id:"wash-essential",
+    name:"WashDetail Essential",
+    description:"Lavage extérieur essentiel.",
+    prices:{
+      Petite:19.99,
+      Moyenne:24.99,
+      Grande:29.99,
+      Utilitaire:34.99
+    },
+    duration:""
+  },
+
+  {
+    id:"wash-signature",
+    name:"WashDetail Signature",
+    description:"Lavage extérieur signature.",
+    prices:{
+      Petite:49.99,
+      Moyenne:54.99,
+      Grande:59.99,
+      Utilitaire:64.99
+    },
+    duration:""
+  },
+
+  {
+    id:"interior-essential",
+    name:"InteriorDetail Essential",
+    description:"Nettoyage intérieur essentiel.",
+    prices:{
+      Petite:59.99,
+      Moyenne:64.99,
+      Grande:79.99,
+      Utilitaire:64.99
+    },
+    duration:""
+  },
+
+  {
+    id:"interior-prestige",
+    name:"InteriorDetail Prestige",
+    description:"Nettoyage intérieur prestige.",
+    prices:{
+      Petite:109.99,
+      Moyenne:119.99,
+      Grande:129.99,
+      Utilitaire:109.99
+    },
+    duration:""
+  },
+
+  {
+    id:"interior-signature",
+    name:"InteriorDetail Signature",
+    description:"Nettoyage intérieur signature.",
+    prices:{
+      Petite:209.99,
+      Moyenne:219.98,
+      Grande:229.98,
+      Utilitaire:169.99
+    },
+    duration:""
+  },
+
+  {
+    id:"pack-essential",
+    name:"Pack Essential",
+    description:"Pack complet Essential.",
+    prices:{
+      Petite:79.99,
+      Moyenne:89.99,
+      Grande:94.99,
+      Utilitaire:99.99
+    },
+    duration:""
+  },
+
+  {
+    id:"pack-prestige",
+    name:"Pack Prestige",
+    description:"Pack complet Prestige.",
+    prices:{
+      Petite:149.99,
+      Moyenne:159.99,
+      Grande:169.99,
+      Utilitaire:169.99
+    },
+    duration:""
+  },
+
+  {
+    id:"pack-signature",
+    name:"Pack Signature",
+    description:"Pack complet Signature.",
+    prices:{
+      Petite:239.99,
+      Moyenne:249.99,
+      Grande:259.99,
+      Utilitaire:229.99
+    },
+    duration:""
+  },
+
+  {
+    id:"ceramique-prestige",
+    name:"Polissage & Céramique Prestige",
+    description:"Polissage & protection céramique Prestige — 12 à 24 mois.",
+    prices:{
+      Petite:480,
+      Moyenne:580,
+      Grande:680,
+      Utilitaire:780
+    },
+    duration:""
+  },
+
+  {
+    id:"ceramique-signature",
+    name:"Polissage & Céramique Signature",
+    description:"Polissage & protection céramique Signature — 60 mois.",
+    prices:{
+      Petite:780,
+      Moyenne:980,
+      Grande:1180,
+      Utilitaire:1380
+    },
+    duration:""
+  },
+
+  {
+    id:"ozone",
+    name:"Ozone",
+    description:"Traitement à l'ozone.",
+    prices:{
+      Petite:95,
+      Moyenne:95,
+      Grande:95,
+      Utilitaire:95
+    },
+    duration:""
+  }
+
+];
+
+
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+
+let clients =
+  JSON.parse(localStorage.getItem("as_details_clients")) ||
+  [
+    {
+      id:"1",
+      prenom:"Alex",
+      nom:"Demo",
+      tel:"0499000000",
+      code:"ALEX10",
+      statut:"Inactif",
+      parrainagesPending:1,
+      discount:20,
+      filleuls:[]
     }
+  ];
 
-    // Tab Navigation
-    function switchTab(tab) {
-      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+let services =
+  JSON.parse(localStorage.getItem("as_details_services")) ||
+  defaultServices;
 
-      if (tab === 'booking') {
-        document.getElementById('viewBooking').classList.add('active');
-        document.getElementById('navBooking').classList.add('active');
-      } else if (tab === 'clients') {
-        document.getElementById('viewClients').classList.add('active');
-        document.getElementById('navClients').classList.add('active');
+let bookings =
+  JSON.parse(localStorage.getItem("as_details_bookings")) ||
+  [];
+
+let currentDetailId = null;
+let currentUseDiscountId = null;
+let editingServiceId = null;
+
+let selectedVehicle = "Petite";
+let selectedLocationMode = "atelier";
+
+
+/* =========================================================
+   UTILITAIRES
+========================================================= */
+
+function euro(value){
+  return Number(value || 0)
+    .toFixed(2)
+    .replace(".",",") + " €";
+}
+
+function escapeHTML(str){
+  return String(str || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function saveAll(){
+
+  localStorage.setItem(
+    "as_details_clients",
+    JSON.stringify(clients)
+  );
+
+  localStorage.setItem(
+    "as_details_services",
+    JSON.stringify(services)
+  );
+
+  localStorage.setItem(
+    "as_details_bookings",
+    JSON.stringify(bookings)
+  );
+
+  renderClients();
+  populateClientSelect();
+  renderServices();
+  renderBookings();
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function switchTab(tab){
+
+  document.querySelectorAll(".view-section")
+    .forEach(v => v.classList.remove("active"));
+
+  document.querySelectorAll(".nav-item")
+    .forEach(n => n.classList.remove("active"));
+
+  if(tab === "booking"){
+
+    document.getElementById("viewBooking")
+      .classList.add("active");
+
+    document.getElementById("navBooking")
+      .classList.add("active");
+
+  }
+
+  if(tab === "services"){
+
+    document.getElementById("viewServices")
+      .classList.add("active");
+
+    document.getElementById("navServices")
+      .classList.add("active");
+
+  }
+
+  if(tab === "clients"){
+
+    document.getElementById("viewClients")
+      .classList.add("active");
+
+    document.getElementById("navClients")
+      .classList.add("active");
+
+  }
+
+}
+
+
+/* =========================================================
+   SERVICES
+========================================================= */
+
+function populateServiceSelect(){
+
+  const select =
+    document.getElementById("bookingServiceSelect");
+
+  const current = select.value;
+
+  select.innerHTML =
+    `<option value="">-- Sélectionner une prestation --</option>`;
+
+  services.forEach(service => {
+
+    select.innerHTML += `
+      <option value="${service.id}">
+        ${escapeHTML(service.name)}
+      </option>
+    `;
+
+  });
+
+  if(current && services.some(s => s.id === current)){
+    select.value = current;
+  }
+
+}
+
+function renderServices(){
+
+  const list =
+    document.getElementById("serviceList");
+
+  list.innerHTML = "";
+
+  if(!services.length){
+
+    list.innerHTML = `
+      <div class="empty">
+        Aucune prestation créée.
+      </div>
+    `;
+
+    return;
+  }
+
+  services.forEach(service => {
+
+    const card =
+      document.createElement("div");
+
+    card.className = "service-card";
+
+    card.innerHTML = `
+
+      <div class="service-title">
+        ${escapeHTML(service.name)}
+      </div>
+
+      <div class="service-description">
+        ${escapeHTML(service.description || "Aucune description.")}
+      </div>
+
+      <div style="font-size:.8rem;color:var(--muted);line-height:1.7;">
+        <div>Petite : <strong>${euro(service.prices.Petite)}</strong></div>
+        <div>Moyenne : <strong>${euro(service.prices.Moyenne)}</strong></div>
+        <div>Grande : <strong>${euro(service.prices.Grande)}</strong></div>
+        <div>Utilitaire : <strong>${euro(service.prices.Utilitaire)}</strong></div>
+      </div>
+
+      ${
+        service.duration
+        ? `<div class="service-duration">
+             ⏱ Durée : ${escapeHTML(service.duration)}
+           </div>`
+        : `<div class="service-duration">
+             ⏱ Durée non renseignée
+           </div>`
       }
+
+      <div class="service-actions">
+
+        <button
+          class="small-btn"
+          onclick="editService('${service.id}')">
+          Modifier
+        </button>
+
+        <button
+          class="small-btn delete"
+          onclick="deleteService('${service.id}')">
+          Supprimer
+        </button>
+
+      </div>
+    `;
+
+    list.appendChild(card);
+
+  });
+
+  populateServiceSelect();
+
+}
+
+function openServiceModal(id = null){
+
+  editingServiceId = id;
+
+  document.getElementById("serviceModalTitle").innerText =
+    id ? "Modifier la prestation" : "Nouvelle prestation";
+
+  if(id){
+
+    const service =
+      services.find(s => s.id === id);
+
+    if(!service) return;
+
+    document.getElementById("serviceName").value =
+      service.name;
+
+    document.getElementById("serviceDescription").value =
+      service.description || "";
+
+    document.getElementById("pricePetite").value =
+      service.prices.Petite;
+
+    document.getElementById("priceMoyenne").value =
+      service.prices.Moyenne;
+
+    document.getElementById("priceGrande").value =
+      service.prices.Grande;
+
+    document.getElementById("priceUtilitaire").value =
+      service.prices.Utilitaire;
+
+    document.getElementById("serviceDuration").value =
+      service.duration || "";
+
+  }else{
+
+    [
+      "serviceName",
+      "serviceDescription",
+      "pricePetite",
+      "priceMoyenne",
+      "priceGrande",
+      "priceUtilitaire",
+      "serviceDuration"
+    ].forEach(id => {
+      document.getElementById(id).value = "";
+    });
+
+  }
+
+  document.getElementById("serviceModal")
+    .style.display = "flex";
+}
+
+function closeServiceModal(){
+
+  document.getElementById("serviceModal")
+    .style.display = "none";
+
+  editingServiceId = null;
+}
+
+function saveService(){
+
+  const name =
+    document.getElementById("serviceName").value.trim();
+
+  const description =
+    document.getElementById("serviceDescription").value.trim();
+
+  const petite =
+    parseFloat(document.getElementById("pricePetite").value);
+
+  const moyenne =
+    parseFloat(document.getElementById("priceMoyenne").value);
+
+  const grande =
+    parseFloat(document.getElementById("priceGrande").value);
+
+  const utilitaire =
+    parseFloat(document.getElementById("priceUtilitaire").value);
+
+  const duration =
+    document.getElementById("serviceDuration").value.trim();
+
+  if(!name){
+
+    alert("Veuillez entrer le nom de la prestation.");
+    return;
+
+  }
+
+  if(
+    [petite,moyenne,grande,utilitaire]
+      .some(v => isNaN(v) || v < 0)
+  ){
+
+    alert("Veuillez renseigner correctement les quatre prix.");
+    return;
+
+  }
+
+  const service = {
+
+    id:editingServiceId || "service-" + Date.now(),
+
+    name,
+
+    description,
+
+    prices:{
+      Petite:petite,
+      Moyenne:moyenne,
+      Grande:grande,
+      Utilitaire:utilitaire
+    },
+
+    duration
+
+  };
+
+  if(editingServiceId){
+
+    const index =
+      services.findIndex(s => s.id === editingServiceId);
+
+    if(index !== -1){
+      services[index] = service;
     }
 
-    // Vehicle Selection
-    function selectVehicle(el) {
-      document.querySelectorAll('#vehicleGroup .radio-option').forEach(o => o.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedVehiclePrice = parseFloat(el.getAttribute('data-price'));
-      updateBookingCalculation();
-    }
+  }else{
 
-    // Location Selection
-    function selectLocation(el) {
-      document.querySelectorAll('#locationGroup .radio-option').forEach(o => o.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedLocationMode = el.getAttribute('data-value');
-      
-      const distanceGroup = document.getElementById('distanceGroup');
-      if (selectedLocationMode === 'deplacement') {
-        distanceGroup.style.display = 'block';
-      } else {
-        distanceGroup.style.display = 'none';
-      }
-      updateBookingCalculation();
-    }
+    services.push(service);
 
-    // Calculation Logic
-    function updateBookingCalculation() {
-      const basePrice = selectedVehiclePrice;
-      const aboDiscountPercent = parseInt(document.getElementById('aboSelect').value) || 0;
-      
-      // Calculate Subscription Discount
-      const aboDiscountAmount = basePrice * (aboDiscountPercent / 100);
-      const priceAfterDiscount = basePrice - aboDiscountAmount;
+  }
 
-      // Calculate Travel Fee (10€ + 0.35€/km)
-      let travelFee = 0;
-      if (selectedLocationMode === 'deplacement') {
-        const km = parseFloat(document.getElementById('distanceKm').value) || 0;
-        travelFee = 10 + (km * 0.35);
-      }
+  saveAll();
+  closeServiceModal();
 
-      // Supplement Price
-      const suppPrice = parseFloat(document.getElementById('suppPrix').value) || 0;
+  alert(
+    editingServiceId
+    ? "Prestation modifiée."
+    : "Prestation créée."
+  );
 
-      // Final Total
-      const total = priceAfterDiscount + travelFee + suppPrice;
+}
 
-      // Display Updates
-      document.getElementById('summaryBasePrice').innerText = basePrice.toFixed(2) + ' €';
-      
-      const summaryAboRow = document.getElementById('summaryAboRow');
-      if (aboDiscountPercent > 0) {
-        summaryAboRow.style.display = 'flex';
-        document.getElementById('summaryAboDiscount').innerText = `-${aboDiscountAmount.toFixed(2)} € (${aboDiscountPercent}%)`;
-      } else {
-        summaryAboRow.style.display = 'none';
-      }
+function editService(id){
+  openServiceModal(id);
+}
 
-      document.getElementById('summaryTravel').innerText = travelFee.toFixed(2) + ' €';
-      document.getElementById('summarySupp').innerText = suppPrice.toFixed(2) + ' €';
-      document.getElementById('summaryTotal').innerText = total.toFixed(2) + ' €';
-    }
+function deleteService(id){
 
-    function populateClientSelect() {
-      const select = document.getElementById('bookingClientSelect');
-      select.innerHTML = '<option value="">-- Sélectionner un client --</option>';
-      clients.forEach(c => {
-        select.innerHTML += `<option value="${c.id}">${c.prenom} ${c.nom} (${c.tel})</option>`;
-      });
-    }
+  const service =
+    services.find(s => s.id === id);
 
-    function saveBooking() {
-      const clientId = document.getElementById('bookingClientSelect').value;
-      const dateTime = document.getElementById('bookingDateTime').value;
+  if(!service) return;
 
-      if (!dateTime) {
-        alert('Veuillez sélectionner une date et une heure pour le rendez-vous.');
-        return;
-      }
+  if(!confirm(
+    `Supprimer définitivement la prestation "${service.name}" ?`
+  )) return;
 
-      const booking = {
-        id: Date.now().toString(),
-        clientId: clientId || null,
-        dateTime,
-        location: selectedLocationMode,
-        distanceKm: parseFloat(document.getElementById('distanceKm').value) || 0,
-        aboPercent: parseInt(document.getElementById('aboSelect').value) || 0,
-        supplementName: document.getElementById('suppNom').value,
-        supplementPrice: parseFloat(document.getElementById('suppPrix').value) || 0,
-        total: document.getElementById('summaryTotal').innerText
-      };
+  services =
+    services.filter(s => s.id !== id);
 
-      bookings.push(booking);
-      saveToStorage();
-      alert('Rendez-vous enregistré avec succès !');
-    }
+  saveAll();
 
-    // Clients Section Logic
-    function renderClients() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const list = document.getElementById('clientList');
-      list.innerHTML = '';
+  updateServicePrice();
+}
 
-      const filtered = clients.filter(c => 
-        c.prenom.toLowerCase().includes(search) || 
-        c.nom.toLowerCase().includes(search) || 
-        c.code.toLowerCase().includes(search) ||
-        c.tel.includes(search)
+
+/* =========================================================
+   VEHICULE
+========================================================= */
+
+function selectVehicle(el){
+
+  document.querySelectorAll(
+    "#vehicleGroup .radio-option"
+  ).forEach(o =>
+    o.classList.remove("selected")
+  );
+
+  el.classList.add("selected");
+
+  selectedVehicle =
+    el.dataset.value;
+
+  updateServicePrice();
+  updateBookingCalculation();
+}
+
+
+/* =========================================================
+   LIEU
+========================================================= */
+
+function selectLocation(el){
+
+  document.querySelectorAll(
+    "#locationGroup .radio-option"
+  ).forEach(o =>
+    o.classList.remove("selected")
+  );
+
+  el.classList.add("selected");
+
+  selectedLocationMode =
+    el.dataset.value;
+
+  const distanceGroup =
+    document.getElementById("distanceGroup");
+
+  const addressGroup =
+    document.getElementById("addressGroup");
+
+  if(selectedLocationMode === "domicile"){
+
+    distanceGroup.classList.remove("hidden");
+    addressGroup.classList.remove("hidden");
+
+  }else{
+
+    distanceGroup.classList.add("hidden");
+    addressGroup.classList.add("hidden");
+
+  }
+
+  updateBookingCalculation();
+}
+
+
+/* =========================================================
+   PRIX SERVICE
+========================================================= */
+
+function getSelectedService(){
+
+  const id =
+    document.getElementById("bookingServiceSelect").value;
+
+  return services.find(s => s.id === id);
+}
+
+function getBasePrice(){
+
+  const service =
+    getSelectedService();
+
+  if(!service) return 0;
+
+  return Number(
+    service.prices[selectedVehicle] || 0
+  );
+}
+
+function updateServicePrice(){
+
+  const service =
+    getSelectedService();
+
+  const preview =
+    document.getElementById("vehiclePricePreview");
+
+  const info =
+    document.getElementById("serviceInfo");
+
+  if(!service){
+
+    preview.innerText =
+      "Sélectionnez une prestation";
+
+    info.classList.add("hidden");
+
+    updateBookingCalculation();
+
+    return;
+  }
+
+  const price =
+    service.prices[selectedVehicle];
+
+  preview.innerText =
+    `${selectedVehicle} : ${euro(price)}`;
+
+  info.innerHTML =
+    `<strong>${escapeHTML(service.name)}</strong>` +
+    (service.duration
+      ? ` — Durée : ${escapeHTML(service.duration)}`
+      : "");
+
+  info.classList.remove("hidden");
+
+  updateBookingCalculation();
+}
+
+
+/* =========================================================
+   CALCUL
+========================================================= */
+
+function updateBookingCalculation(){
+
+  const basePrice =
+    getBasePrice();
+
+  const aboPercent =
+    parseInt(
+      document.getElementById("aboSelect").value
+    ) || 0;
+
+  const discount =
+    basePrice * aboPercent / 100;
+
+  let travel =
+    0;
+
+  if(selectedLocationMode === "domicile"){
+
+    const km =
+      parseFloat(
+        document.getElementById("distanceKm").value
+      ) || 0;
+
+    travel =
+      10 + (km * 0.35);
+
+  }
+
+  const supplement =
+    parseFloat(
+      document.getElementById("suppPrix").value
+    ) || 0;
+
+  const total =
+    basePrice -
+    discount +
+    travel +
+    supplement;
+
+  document.getElementById("summaryBasePrice")
+    .innerText = euro(basePrice);
+
+  const aboRow =
+    document.getElementById("summaryAboRow");
+
+  if(aboPercent > 0){
+
+    aboRow.style.display = "flex";
+
+    document.getElementById("summaryAboDiscount")
+      .innerText =
+      `-${euro(discount)} (${aboPercent}%)`;
+
+  }else{
+
+    aboRow.style.display = "none";
+
+  }
+
+  document.getElementById("summaryTravel")
+    .innerText = euro(travel);
+
+  document.getElementById("summarySupp")
+    .innerText = euro(supplement);
+
+  document.getElementById("summaryTotal")
+    .innerText = euro(total);
+
+}
+
+
+/* =========================================================
+   CLIENTS
+========================================================= */
+
+function populateClientSelect(){
+
+  const select =
+    document.getElementById("bookingClientSelect");
+
+  const current =
+    select.value;
+
+  select.innerHTML =
+    `<option value="">-- Sélectionner un client --</option>`;
+
+  clients.forEach(c => {
+
+    select.innerHTML += `
+      <option value="${c.id}">
+        ${escapeHTML(c.prenom)} ${escapeHTML(c.nom)}
+        — ${escapeHTML(c.tel)}
+      </option>
+    `;
+
+  });
+
+  if(current && clients.some(c => c.id === current)){
+    select.value = current;
+  }
+
+}
+
+function updateClientInformation(){
+
+  const id =
+    document.getElementById("bookingClientSelect").value;
+
+  const info =
+    document.getElementById("bookingClientInfo");
+
+  const client =
+    clients.find(c => c.id === id);
+
+  if(!client){
+
+    info.classList.add("hidden");
+    return;
+
+  }
+
+  info.innerHTML =
+    `👤 <strong>${escapeHTML(client.prenom)} ${escapeHTML(client.nom)}</strong>
+     &nbsp; • &nbsp; 📱 ${escapeHTML(client.tel)}`;
+
+  info.classList.remove("hidden");
+
+}
+
+function renderClients(){
+
+  const search =
+    document.getElementById("searchInput")
+      .value
+      .toLowerCase()
+      .trim();
+
+  const list =
+    document.getElementById("clientList");
+
+  list.innerHTML = "";
+
+  const filtered =
+    clients.filter(c =>
+
+      `${c.prenom} ${c.nom}`
+        .toLowerCase()
+        .includes(search)
+
+      ||
+
+      c.tel
+        .toLowerCase()
+        .includes(search)
+
+      ||
+
+      c.code
+        .toLowerCase()
+        .includes(search)
+
+    );
+
+  if(!filtered.length){
+
+    list.innerHTML = `
+      <div class="empty">
+        Aucun client trouvé.
+      </div>
+    `;
+
+    return;
+  }
+
+  filtered.forEach(c => {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "client-card";
+
+    const msgActif =
+      encodeURIComponent(
+`Bonjour ${c.prenom},
+
+Votre compte VIP chez L'As du Détail est maintenant actif !
+Vous profitez actuellement de ${c.discount}% de réduction cumulée.
+
+Code Parrainage : ${c.code}
+
+L'As du Détail — Plus qu’un nettoyage, une signature.`
       );
 
-      filtered.forEach(c => {
-        const card = document.createElement('div');
-        card.className = 'client-card';
-        
-        const msgActif = encodeURIComponent(`Bonjour ${c.prenom},\n\nVotre compte VIP chez L'As du Détail est maintenant actif !\nVous profitez actuellement de ${c.discount}% de réduction cumulée.\n\nCode Parrainage : ${c.code}\n\nL'As du Détail — Plus qu’un nettoyage, une signature.`);
-        const msgCredit = encodeURIComponent(`Bonjour ${c.prenom},\n\nBonne nouvelle ! Un nouveau parrainage vient d'être validé.\n\nVotre nouveau solde est de : ${c.discount}% de réduction disponible chez L'As du Détail !\n\nL'As du Détail — Plus qu’un nettoyage, une signature.`);
+    const msgCredit =
+      encodeURIComponent(
+`Bonjour ${c.prenom},
 
-        card.innerHTML = `
-          <div class="card-header" onclick="openDetailModal('${c.id}')">
-            <div>
-              <div class="client-name">${c.prenom} ${c.nom}</div>
-              <div class="client-phone">${c.tel}</div>
-              <span class="status-pill ${c.statut === 'Actif' ? 'status-actif' : 'status-inactif'}">${c.statut}</span>
-            </div>
-            <div class="discount-badge">
-              ${c.discount}%
-              <span class="discount-label">Réduction</span>
-            </div>
+Bonne nouvelle ! Un nouveau parrainage vient d'être validé.
+
+Votre nouveau solde est de : ${c.discount}% de réduction disponible chez L'As du Détail !
+
+L'As du Détail — Plus qu’un nettoyage, une signature.`
+      );
+
+    card.innerHTML = `
+
+      <div
+        class="card-header"
+        onclick="openDetailModal('${c.id}')">
+
+        <div>
+
+          <div class="client-name">
+            ${escapeHTML(c.prenom)} ${escapeHTML(c.nom)}
           </div>
-          <div class="referral-box" onclick="event.stopPropagation()">
-            <span>Code Parrain : <strong>${c.code}</strong></span>
-            <button class="copy-btn" onclick="copyCode('${c.code}')">Copier</button>
+
+          <div class="client-phone">
+            ${escapeHTML(c.tel)}
           </div>
-          <div class="actions" onclick="event.stopPropagation()">
-            ${c.statut === 'Inactif' ? `<a href="sms:${c.tel}?body=${msgActif}" class="btn-action btn-actif" onclick="activateAccount('${c.id}')"><span>1. Activer le compte</span><span>SMS ➔</span></a>` : ''}
-            ${c.parrainagesPending > 0 ? `<a href="sms:${c.tel}?body=${msgCredit}" class="btn-action btn-credit" onclick="creditReferral('${c.id}')"><span>2. Créditer (${c.parrainagesPending} en attente)</span><span>SMS ➔</span></a>` : ''}
-            ${c.discount > 0 ? `<button class="btn-action btn-apply" onclick="openUseDiscountModal('${c.id}')"><span>3. Utiliser réduc. (${c.discount}% dispo)</span><span>Choix ➔</span></button>` : ''}
-          </div>
-        `;
-        list.appendChild(card);
-      });
-    }
 
-    function copyCode(code) {
-      navigator.clipboard.writeText(code);
-      alert('Code parrain copié : ' + code);
-    }
+          <span class="status-pill ${
+            c.statut === "Actif"
+              ? "status-actif"
+              : "status-inactif"
+          }">
+            ${escapeHTML(c.statut)}
+          </span>
 
-    function activateAccount(id) {
-      const client = clients.find(c => c.id === id);
-      if (client) { client.statut = 'Actif'; saveToStorage(); }
-    }
+        </div>
 
-    function creditReferral(id) {
-      const client = clients.find(c => c.id === id);
-      if (client && client.parrainagesPending > 0) { 
-        client.parrainagesPending -= 1;
-        saveToStorage(); 
-      }
-    }
+        <div class="discount-badge">
 
-    function openUseDiscountModal(id) {
-      currentUseDiscountId = id;
-      const c = clients.find(item => item.id === id);
-      if (!c) return;
-      document.getElementById('useDiscountInfo').innerText = `${c.prenom} dispose de ${c.discount}% de réduction cumulée.`;
-      document.getElementById('useDiscountAmount').value = c.discount;
-      document.getElementById('useDiscountModal').style.display = 'flex';
-    }
+          ${c.discount}%
 
-    function closeUseDiscountModal() {
-      document.getElementById('useDiscountModal').style.display = 'none';
-      currentUseDiscountId = null;
-    }
+          <span class="discount-label">
+            Réduction
+          </span>
 
-    function confirmApplyDiscount() {
-      if (!currentUseDiscountId) return;
-      const c = clients.find(item => item.id === currentUseDiscountId);
-      const amountUsed = parseInt(document.getElementById('useDiscountAmount').value);
+        </div>
 
-      if (isNaN(amountUsed) || amountUsed <= 0 || amountUsed > c.discount) {
-        alert('Veuillez entrer une valeur valide.');
-        return;
-      }
+      </div>
 
-      c.discount -= amountUsed;
-      saveToStorage();
+      <div
+        class="referral-box"
+        onclick="event.stopPropagation()">
 
-      let msgText = `Bonjour ${c.prenom},\n\nVotre réduction de ${amountUsed}% a bien été appliquée lors de votre prestation aujourd'hui !`;
-      if (c.discount > 0) {
-        msgText += `\nIl vous reste encore ${c.discount}% de réduction disponible sur votre compte.`;
-      }
-      msgText += `\n\nMerci pour votre confiance.\nL'As du Détail — Plus qu’un nettoyage, une signature.`;
+        <span>
+          Code Parrain :
+          <strong>${escapeHTML(c.code)}</strong>
+        </span>
 
-      closeUseDiscountModal();
-      window.location.href = `sms:${c.tel}?body=${encodeURIComponent(msgText)}`;
-    }
+        <button
+          class="copy-btn"
+          onclick="copyCode('${escapeHTML(c.code)}')">
+          Copier
+        </button>
 
-    function openAddModal() {
-      const select = document.getElementById('newParrainSelect');
-      select.innerHTML = '<option value="">-- Aucun parrain --</option>';
-      clients.forEach(c => {
-        select.innerHTML += `<option value="${c.id}">${c.prenom} ${c.nom} (${c.code})</option>`;
-      });
-      document.getElementById('addModal').style.display = 'flex';
-    }
+      </div>
 
-    function closeAddModal() { document.getElementById('addModal').style.display = 'none'; }
+      <div
+        class="actions"
+        onclick="event.stopPropagation()">
 
-    function saveClient() {
-      const prenom = document.getElementById('newPrenom').value;
-      const nom = document.getElementById('newNom').value;
-      const tel = document.getElementById('newTel').value;
-      const parrainId = document.getElementById('newParrainSelect').value;
+        ${
+          c.statut === "Inactif"
+          ? `
+          <a
+            href="sms:${c.tel}?body=${msgActif}"
+            class="btn-action btn-actif"
+            onclick="activateAccount('${c.id}')">
 
-      if (!prenom || !tel) { alert('Prénom et Téléphone requis'); return; }
+            <span>1. Activer le compte</span>
+            <span>SMS ➜</span>
 
-      const code = (prenom.substring(0,3) + Math.floor(100 + Math.random() * 900)).toUpperCase();
-      const newId = Date.now().toString();
-
-      clients.push({
-        id: newId, prenom, nom, tel, code,
-        statut: 'Inactif', parrainagesPending: 0, discount: 0, filleuls: []
-      });
-
-      if (parrainId) {
-        const parrain = clients.find(c => c.id === parrainId);
-        if (parrain) {
-          parrain.discount += 10;
-          parrain.parrainagesPending += 1;
-          parrain.filleuls = parrain.filleuls || [];
-          parrain.filleuls.push(`${prenom} ${nom}`);
+          </a>
+          `
+          : ""
         }
-      }
 
-      saveToStorage();
-      closeAddModal();
-      document.getElementById('newPrenom').value = '';
-      document.getElementById('newNom').value = '';
-      document.getElementById('newTel').value = '';
-    }
+        ${
+          c.parrainagesPending > 0
+          ? `
+          <a
+            href="sms:${c.tel}?body=${msgCredit}"
+            class="btn-action btn-credit"
+            onclick="creditReferral('${c.id}')">
 
-    function openDetailModal(id) {
-      currentDetailId = id;
-      const c = clients.find(item => item.id === id);
-      if (!c) return;
+            <span>
+              2. Créditer (${c.parrainagesPending} en attente)
+            </span>
 
-      document.getElementById('detName').innerText = `${c.prenom} ${c.nom}`;
-      document.getElementById('detPhone').innerText = c.tel;
-      document.getElementById('detDiscount').innerText = `${c.discount}%`;
-      document.getElementById('detCode').innerText = c.code;
-      document.getElementById('detCopyBtn').onclick = () => copyCode(c.code);
+            <span>SMS ➜</span>
 
-      const list = document.getElementById('detFilleulsList');
-      list.innerHTML = '';
-      if (c.filleuls && c.filleuls.length > 0) {
-        c.filleuls.forEach(f => {
-          list.innerHTML += `<div class="detail-item"><span>${f}</span><span style="color:var(--gold); font-weight:700;">+10% Crédité</span></div>`;
-        });
-      } else {
-        list.innerHTML = '<div class="detail-item"><span>Aucun filleul enregistré</span></div>';
-      }
-
-      document.getElementById('deleteBtnAction').onclick = function() {
-        if (confirm(`Veux-tu vraiment supprimer définitivement ${c.prenom} ${c.nom} ?`)) {
-          clients = clients.filter(item => item.id !== id);
-          saveToStorage();
-          closeDetailModal();
+          </a>
+          `
+          : ""
         }
-      };
 
-      document.getElementById('detailModal').style.display = 'flex';
+        ${
+          c.discount > 0
+          ? `
+          <button
+            class="btn-action btn-apply"
+            onclick="openUseDiscountModal('${c.id}')">
+
+            <span>
+              3. Utiliser réduc. (${c.discount}% dispo)
+            </span>
+
+            <span>Choix ➜</span>
+
+          </button>
+          `
+          : ""
+        }
+
+      </div>
+    `;
+
+    list.appendChild(card);
+
+  });
+
+}
+
+function copyCode(code){
+
+  if(navigator.clipboard){
+
+    navigator.clipboard.writeText(code);
+
+  }
+
+  alert("Code parrain copié : " + code);
+}
+
+function activateAccount(id){
+
+  const client =
+    clients.find(c => c.id === id);
+
+  if(client){
+
+    client.statut = "Actif";
+    saveAll();
+
+  }
+
+}
+
+function creditReferral(id){
+
+  const client =
+    clients.find(c => c.id === id);
+
+  if(
+    client &&
+    client.parrainagesPending > 0
+  ){
+
+    client.parrainagesPending--;
+
+    saveAll();
+
+  }
+
+}
+
+function openAddModal(){
+
+  const select =
+    document.getElementById("newParrainSelect");
+
+  select.innerHTML =
+    `<option value="">-- Aucun parrain --</option>`;
+
+  clients.forEach(c => {
+
+    select.innerHTML += `
+      <option value="${c.id}">
+        ${escapeHTML(c.prenom)} ${escapeHTML(c.nom)}
+        (${escapeHTML(c.code)})
+      </option>
+    `;
+
+  });
+
+  document.getElementById("addModal")
+    .style.display = "flex";
+}
+
+function closeAddModal(){
+
+  document.getElementById("addModal")
+    .style.display = "none";
+
+}
+
+function saveClient(){
+
+  const prenom =
+    document.getElementById("newPrenom")
+      .value.trim();
+
+  const nom =
+    document.getElementById("newNom")
+      .value.trim();
+
+  const tel =
+    document.getElementById("newTel")
+      .value.trim();
+
+  const parrainId =
+    document.getElementById("newParrainSelect")
+      .value;
+
+  if(!prenom || !tel){
+
+    alert("Prénom et téléphone requis.");
+    return;
+
+  }
+
+  const code =
+    (
+      prenom.substring(0,3) +
+      Math.floor(100 + Math.random() * 900)
+    ).toUpperCase();
+
+  const newClient = {
+
+    id:Date.now().toString(),
+
+    prenom,
+
+    nom,
+
+    tel,
+
+    code,
+
+    statut:"Inactif",
+
+    parrainagesPending:0,
+
+    discount:0,
+
+    filleuls:[]
+
+  };
+
+  clients.push(newClient);
+
+  if(parrainId){
+
+    const parrain =
+      clients.find(c => c.id === parrainId);
+
+    if(parrain){
+
+      parrain.discount += 10;
+
+      parrain.parrainagesPending += 1;
+
+      parrain.filleuls =
+        parrain.filleuls || [];
+
+      parrain.filleuls.push(
+        `${prenom} ${nom}`
+      );
+
     }
 
-    function closeDetailModal() { document.getElementById('detailModal').style.display = 'none'; }
+  }
 
-    function addCustomDiscount() {
-      if (!currentDetailId) return;
-      const val = parseInt(document.getElementById('creditPercentSelect').value);
-      const c = clients.find(item => item.id === currentDetailId);
-      if (c) {
-        c.discount += val;
-        saveToStorage();
-        openDetailModal(currentDetailId);
+  saveAll();
+
+  closeAddModal();
+
+  document.getElementById("newPrenom").value = "";
+  document.getElementById("newNom").value = "";
+  document.getElementById("newTel").value = "";
+
+  alert("Client enregistré avec succès.");
+}
+
+
+/* =========================================================
+   DETAIL CLIENT
+========================================================= */
+
+function openDetailModal(id){
+
+  currentDetailId = id;
+
+  const c =
+    clients.find(item => item.id === id);
+
+  if(!c) return;
+
+  document.getElementById("detName")
+    .innerText =
+    `${c.prenom} ${c.nom}`;
+
+  document.getElementById("detPhone")
+    .innerText = c.tel;
+
+  document.getElementById("detDiscount")
+    .innerText = `${c.discount}%`;
+
+  document.getElementById("detCode")
+    .innerText = c.code;
+
+  document.getElementById("detCopyBtn")
+    .onclick = () => copyCode(c.code);
+
+  const list =
+    document.getElementById("detFilleulsList");
+
+  list.innerHTML = "";
+
+  if(c.filleuls && c.filleuls.length){
+
+    c.filleuls.forEach(f => {
+
+      list.innerHTML += `
+        <div class="detail-item">
+          <span>${escapeHTML(f)}</span>
+          <span style="color:var(--gold);font-weight:700;">
+            +10%
+          </span>
+        </div>
+      `;
+
+    });
+
+  }else{
+
+    list.innerHTML = `
+      <div class="detail-item">
+        <span>Aucun filleul enregistré</span>
+      </div>
+    `;
+
+  }
+
+  document.getElementById("deleteBtnAction")
+    .onclick = function(){
+
+      if(confirm(
+        `Veux-tu vraiment supprimer définitivement ${c.prenom} ${c.nom} ?`
+      )){
+
+        clients =
+          clients.filter(item => item.id !== id);
+
+        saveAll();
+        closeDetailModal();
+
       }
+
+    };
+
+  document.getElementById("detailModal")
+    .style.display = "flex";
+
+}
+
+function closeDetailModal(){
+
+  document.getElementById("detailModal")
+    .style.display = "none";
+
+}
+
+function addCustomDiscount(){
+
+  if(!currentDetailId) return;
+
+  const val =
+    parseInt(
+      document.getElementById("creditPercentSelect").value
+    );
+
+  const c =
+    clients.find(
+      item => item.id === currentDetailId
+    );
+
+  if(c){
+
+    c.discount += val;
+
+    saveAll();
+
+    openDetailModal(currentDetailId);
+
+  }
+
+}
+
+
+/* =========================================================
+   UTILISATION REDUCTION
+========================================================= */
+
+function openUseDiscountModal(id){
+
+  currentUseDiscountId = id;
+
+  const c =
+    clients.find(item => item.id === id);
+
+  if(!c) return;
+
+  document.getElementById("useDiscountInfo")
+    .innerText =
+    `${c.prenom} dispose de ${c.discount}% de réduction cumulée.`;
+
+  document.getElementById("useDiscountAmount")
+    .value = c.discount;
+
+  document.getElementById("useDiscountModal")
+    .style.display = "flex";
+
+}
+
+function closeUseDiscountModal(){
+
+  document.getElementById("useDiscountModal")
+    .style.display = "none";
+
+  currentUseDiscountId = null;
+
+}
+
+function confirmApplyDiscount(){
+
+  if(!currentUseDiscountId) return;
+
+  const c =
+    clients.find(
+      item => item.id === currentUseDiscountId
+    );
+
+  if(!c) return;
+
+  const amountUsed =
+    parseInt(
+      document.getElementById("useDiscountAmount").value
+    );
+
+  if(
+    isNaN(amountUsed) ||
+    amountUsed <= 0 ||
+    amountUsed > c.discount
+  ){
+
+    alert("Veuillez entrer une valeur valide.");
+    return;
+
+  }
+
+  c.discount -= amountUsed;
+
+  saveAll();
+
+  let msgText =
+`Bonjour ${c.prenom},
+
+Votre réduction de ${amountUsed}% a bien été appliquée lors de votre prestation aujourd'hui !`;
+
+  if(c.discount > 0){
+
+    msgText +=
+`\nIl vous reste encore ${c.discount}% de réduction disponible sur votre compte.`;
+
+  }
+
+  msgText +=
+`\n\nMerci pour votre confiance.
+L'As du Détail — Plus qu’un nettoyage, une signature.`;
+
+  closeUseDiscountModal();
+
+  window.location.href =
+    `sms:${c.tel}?body=${encodeURIComponent(msgText)}`;
+
+}
+
+
+/* =========================================================
+   RESERVATION
+========================================================= */
+
+function saveBooking(){
+
+  const clientId =
+    document.getElementById("bookingClientSelect").value;
+
+  const dateTime =
+    document.getElementById("bookingDateTime").value;
+
+  const service =
+    getSelectedService();
+
+  if(!clientId){
+
+    alert("Veuillez sélectionner un client.");
+    return;
+
+  }
+
+  if(!service){
+
+    alert("Veuillez sélectionner une prestation.");
+    return;
+
+  }
+
+  if(!dateTime){
+
+    alert("Veuillez sélectionner une date et une heure.");
+    return;
+
+  }
+
+  if(
+    selectedLocationMode === "domicile" &&
+    !document.getElementById("homeAddress").value.trim()
+  ){
+
+    alert("Veuillez renseigner l'adresse du domicile.");
+    return;
+
+  }
+
+  const client =
+    clients.find(c => c.id === clientId);
+
+  const aboPercent =
+    parseInt(
+      document.getElementById("aboSelect").value
+    ) || 0;
+
+  const basePrice =
+    getBasePrice();
+
+  const discount =
+    basePrice * aboPercent / 100;
+
+  let travel = 0;
+  let km = 0;
+
+  if(selectedLocationMode === "domicile"){
+
+    km =
+      parseFloat(
+        document.getElementById("distanceKm").value
+      ) || 0;
+
+    travel =
+      10 + km * 0.35;
+
+  }
+
+  const supplementPrice =
+    parseFloat(
+      document.getElementById("suppPrix").value
+    ) || 0;
+
+  const supplementName =
+    document.getElementById("suppNom")
+      .value.trim();
+
+  const total =
+    basePrice -
+    discount +
+    travel +
+    supplementPrice;
+
+  const booking = {
+
+    id:Date.now().toString(),
+
+    clientId,
+
+    clientName:
+      `${client.prenom} ${client.nom}`,
+
+    clientPhone:
+      client.tel,
+
+    serviceId:
+      service.id,
+
+    serviceName:
+      service.name,
+
+    vehicleSize:
+      selectedVehicle,
+
+    dateTime,
+
+    location:
+      selectedLocationMode,
+
+    homeAddress:
+      document.getElementById("homeAddress").value.trim(),
+
+    distanceKm:km,
+
+    aboPercent,
+
+    supplementName,
+
+    supplementPrice,
+
+    basePrice,
+
+    discount,
+
+    travel,
+
+    total
+
+  };
+
+  bookings.push(booking);
+
+  saveAll();
+
+  alert("Rendez-vous enregistré avec succès !");
+
+  prepareSMS();
+
+}
+
+function renderBookings(){
+
+  const list =
+    document.getElementById("bookingList");
+
+  if(!list) return;
+
+  list.innerHTML = "";
+
+  if(!bookings.length) return;
+
+  const title =
+    document.createElement("div");
+
+  title.style.cssText =
+    "font-weight:800;font-size:1rem;margin:22px 0 12px;";
+
+  title.innerText =
+    "Rendez-vous enregistrés";
+
+  list.appendChild(title);
+
+  const sorted =
+    [...bookings].sort(
+      (a,b) =>
+        new Date(a.dateTime) -
+        new Date(b.dateTime)
+    );
+
+  sorted.forEach(b => {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "booking-card";
+
+    const date =
+      formatDateTime(b.dateTime);
+
+    const location =
+      b.location === "atelier"
+      ? "Atelier — Rue de Prâle 139, 4300 Waremme"
+      : `À domicile — ${b.homeAddress || "Adresse non renseignée"}`;
+
+    card.innerHTML = `
+
+      <div class="booking-date">
+        📅 ${escapeHTML(date)}
+      </div>
+
+      <div class="booking-client">
+        ${escapeHTML(b.clientName)}
+      </div>
+
+      <div class="booking-info">
+
+        ${escapeHTML(b.serviceName)}
+        — ${escapeHTML(b.vehicleSize)}
+
+        <br>
+
+        📍 ${escapeHTML(location)}
+
+      </div>
+
+      <div class="booking-total">
+        ${euro(b.total)}
+      </div>
+
+      <div class="service-actions">
+
+        <button
+          class="small-btn"
+          onclick="sendBookingSMS('${b.id}')">
+          📱 SMS
+        </button>
+
+        <button
+          class="small-btn delete"
+          onclick="deleteBooking('${b.id}')">
+          Supprimer
+        </button>
+
+      </div>
+
+    `;
+
+    list.appendChild(card);
+
+  });
+
+}
+
+function deleteBooking(id){
+
+  if(!confirm("Supprimer ce rendez-vous ?"))
+    return;
+
+  bookings =
+    bookings.filter(b => b.id !== id);
+
+  saveAll();
+
+}
+
+function formatDateTime(value){
+
+  if(!value) return "";
+
+  const date =
+    new Date(value);
+
+  return date.toLocaleString(
+    "fr-BE",
+    {
+      day:"2-digit",
+      month:"2-digit",
+      year:"numeric",
+      hour:"2-digit",
+      minute:"2-digit"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SMS DE CONFIRMATION
+========================================================= */
+
+function buildConfirmationSMS(){
+
+  const clientId =
+    document.getElementById("bookingClientSelect").value;
+
+  const client =
+    clients.find(c => c.id === clientId);
+
+  const service =
+    getSelectedService();
+
+  const dateTime =
+    document.getElementById("bookingDateTime").value;
+
+  if(!client || !service || !dateTime){
+
+    return null;
+
+  }
+
+  const dateFormatted =
+    formatDateTime(dateTime);
+
+  const aboSelect =
+    document.getElementById("aboSelect");
+
+  const formule =
+    aboSelect.options[
+      aboSelect.selectedIndex
+    ].text;
+
+  const supplementName =
+    document.getElementById("suppNom")
+      .value.trim();
+
+  const supplementPrice =
+    parseFloat(
+      document.getElementById("suppPrix").value
+    ) || 0;
+
+  let address = "";
+
+  if(selectedLocationMode === "atelier"){
+
+    address =
+      "Atelier — Rue de Prâle 139, 4300 Waremme";
+
+  }else{
+
+    address =
+      document.getElementById("homeAddress")
+        .value.trim();
+
+    if(!address){
+      address = "À domicile";
     }
 
-    // Init
-    populateClientSelect();
-    renderClients();
-    updateBookingCalculation();
-  </script>
+  }
+
+  const total =
+    document.getElementById("summaryTotal")
+      .innerText
+      .replace(" €","")
+      .replace(",",".")
+      .trim();
+
+  const totalFormatted =
+    Number(total || 0).toFixed(2);
+
+  const message =
+`L'AS DU DÉTAIL — Confirmation d'intervention
+
+Bonjour ${client.prenom} ${client.nom},
+
+Votre réservation pour la prestation ${service.name} (${selectedVehicle}) est validée avec succès.
+
+Informations rendez-vous :
+📅 Date & Heure : ${dateFormatted}
+📍 Lieu : ${address}
+🏷️ Formule : ${formule}
+➕ Supplément : ${supplementName || "Aucun"} (${supplementPrice.toFixed(2)} €)
+💶 Montant total : ${totalFormatted} € (remise appliquée sur la prestation)
+
+📌 Préparation du véhicule & conditions :
+• Merci de mettre à disposition le véhicule libéré de tout effet personnel.
+• Pour les prestations à domicile : Veuillez prévoir un accès direct à un point d'eau et une prise électrique.
+
+Un imprévu ou une précision ? Répondez directement à ce message.
+
+Au plaisir de prendre soin de votre véhicule,
+Alex — L'As Du Détail`;
+
+  return {
+    phone:client.tel,
+    message
+  };
+
+}
+
+function prepareSMS(event){
+
+  if(event){
+    event.preventDefault();
+  }
+
+  const data =
+    buildConfirmationSMS();
+
+  if(!data){
+
+    alert(
+      "Sélectionnez un client, une prestation et une date avant d'envoyer le SMS."
+    );
+
+    return;
+
+  }
+
+  const href =
+    `sms:${data.phone}?body=${encodeURIComponent(data.message)}`;
+
+  if(event){
+
+    window.location.href = href;
+
+  }else{
+
+    window.location.href = href;
+
+  }
+
+}
+
+function sendBookingSMS(id){
+
+  const booking =
+    bookings.find(b => b.id === id);
+
+  if(!booking) return;
+
+  const client =
+    clients.find(c => c.id === booking.clientId);
+
+  if(!client) return;
+
+  const dateFormatted =
+    formatDateTime(booking.dateTime);
+
+  const formuleMap = {
+    0:"Ponctuel (0%)",
+    5:"1x / mois (-5%)",
+    10:"2x / mois (-10%)",
+    15:"3x / mois (-15%)",
+    20:"4x / mois (-20%)"
+  };
+
+  const formule =
+    formuleMap[booking.aboPercent] ||
+    "Ponctuel (0%)";
+
+  const address =
+    booking.location === "atelier"
+    ? "Atelier — Rue de Prâle 139, 4300 Waremme"
+    : (booking.homeAddress || "À domicile");
+
+  const message =
+`L'AS DU DÉTAIL — Confirmation d'intervention
+
+Bonjour ${client.prenom} ${client.nom},
+
+Votre réservation pour la prestation ${booking.serviceName} (${booking.vehicleSize}) est validée avec succès.
+
+Informations rendez-vous :
+📅 Date & Heure : ${dateFormatted}
+📍 Lieu : ${address}
+🏷️ Formule : ${formule}
+➕ Supplément : ${booking.supplementName || "Aucun"} (${Number(booking.supplementPrice || 0).toFixed(2)} €)
+💶 Montant total : ${Number(booking.total || 0).toFixed(2)} € (remise appliquée sur la prestation)
+
+📌 Préparation du véhicule & conditions :
+• Merci de mettre à disposition le véhicule libéré de tout effet personnel.
+• Pour les prestations à domicile : Veuillez prévoir un accès direct à un point d'eau et une prise électrique.
+
+Un imprévu ou une précision ? Répondez directement à ce message.
+
+Au plaisir de prendre soin de votre véhicule,
+Alex — L'As Du Détail`;
+
+  window.location.href =
+    `sms:${client.tel}?body=${encodeURIComponent(message)}`;
+
+}
+
+
+/* =========================================================
+   INITIALISATION
+========================================================= */
+
+populateClientSelect();
+
+populateServiceSelect();
+
+renderClients();
+
+renderServices();
+
+renderBookings();
+
+updateClientInformation();
+
+updateServicePrice();
+
+updateBookingCalculation();
+
+
+/* =========================================================
+   FERMETURE MODALES EN CLIQUANT A L'EXTERIEUR
+========================================================= */
+
+document.querySelectorAll(".modal")
+.forEach(modal => {
+
+  modal.addEventListener("click", function(e){
+
+    if(e.target === modal){
+
+      modal.style.display = "none";
+
+    }
+
+  });
+
+});
+
+</script>
+
 </body>
 </html>
