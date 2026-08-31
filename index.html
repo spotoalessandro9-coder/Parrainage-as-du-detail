@@ -1,7 +1,8 @@
+
 <!DOCTYPE html>
-<html lang="fr">
 <head>
 <meta charset="UTF-8">
+<html lang="fr">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>L'As du Détail — Gestion</title>
 
@@ -1207,6 +1208,13 @@ textarea{
 
       </div>
 
+    </div>
+
+    <!-- BOUTON SMS PARRAINAGE AJOUTÉ ICI -->
+    <div class="form-group" style="margin-top:10px;">
+      <a id="detReferralSmsBtn" class="action-btn" style="background:var(--green);color:white;display:none;">
+        Envoyer SMS de parrainage (+10%)
+      </a>
     </div>
 
 
@@ -4092,6 +4100,21 @@ Code Parrainage : ${c.code}
 L'As du Détail — Plus qu’un nettoyage, une signature.`
       );
 
+    // Message SMS parrainage direct avec 10% ajoutés + total
+    const smsReferralMessage =
+      encodeURIComponent(
+`L'AS DU DÉTAIL — Parrainage
+
+Bonjour ${c.prenom} ${c.nom},
+
+Suite à votre parrainage, 10 % viennent d'être rajoutés à votre compte ! 
+
+Votre solde total s'élève désormais à ${c.discount}% de réduction.
+
+Au plaisir de prendre soin de votre véhicule,
+Alex — L'As Du Détail`
+      );
+
 
     card.innerHTML = `
 
@@ -4191,6 +4214,15 @@ L'As du Détail — Plus qu’un nettoyage, une signature.`
           `
           : ""
         }
+
+        <!-- Bouton SMS Parrainage direct sur la carte client -->
+        <a
+          class="action-btn"
+          style="background:var(--green);color:white"
+          href="sms:${c.tel}?body=${smsReferralMessage}"
+        >
+          Envoyer SMS Parrainage (+10%)
+        </a>
 
 
         ${
@@ -4548,6 +4580,25 @@ function openDetailModal(id){
   document.getElementById("detCopyBtn").onclick =
     () => copyCode(c.code);
 
+  // Mise à jour du bouton SMS de parrainage dans la modale détaillée
+  const detSmsBtn = document.getElementById("detReferralSmsBtn");
+  if(detSmsBtn){
+    const messageDet = encodeURIComponent(
+`L'AS DU DÉTAIL — Parrainage
+
+Bonjour ${c.prenom} ${c.nom},
+
+Suite à votre parrainage, 10 % viennent d'être rajoutés à votre compte ! 
+
+Votre solde total s'élève désormais à ${c.discount}% de réduction.
+
+Au plaisir de prendre soin de votre véhicule,
+Alex — L'As Du Détail`
+    );
+    detSmsBtn.href = `sms:${c.tel}?body=${messageDet}`;
+    detSmsBtn.style.display = "block";
+  }
+
 
   const list =
     document.getElementById("detFilleulsList");
@@ -4786,7 +4837,7 @@ function deleteService(id){
 
     renderServices();
 
-    populateServiceSelect();
+    populateClientSelect();
 
   }
 
