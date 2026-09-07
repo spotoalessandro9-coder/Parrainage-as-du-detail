@@ -3166,29 +3166,31 @@ function prepareConfirmationSms(booking){
   };
 
 
-  const message =
-`L'AS DU DÉTAIL — Confirmation d'intervention
+  const message = 
+`✨ L'AS DU DÉTAIL – Confirmation d'intervention ✨
 
-Bonjour ${client.prenom} ${client.nom},
+Bonjour ${client.prenom} ${client.nom} 👋,
 
-Votre réservation pour la prestation ${booking.serviceName} (${vehicleNames[booking.vehicle]}) est validée avec succès.
+Votre réservation pour la prestation ${booking.serviceName} a bien été enregistrée ! 🚗💨
 
-Informations rendez-vous :
-Date & Heure : ${formatDate(booking.dateTime)}
-Lieu : ${locationText}
-Formule : ${formula}
-Parrainage utilisé : ${referralText}
-Supplément : ${supp}
-Montant total : ${money(booking.total)}
+📅 Informations rendez-vous :
+• Date & Heure : ${formatDate(booking.dateTime)} ⏰
+• Lieu : ${locationText} 📍
+• Formule : ${formula} 🧼
+• Parrainage utilisé : ${referralText} 🎁
+• Supplément : ${supp} ➕
+• Montant total : ${money(booking.total)} 💳
 
-Préparation du véhicule & conditions :
-• Merci de mettre à disposition le véhicule libéré de tout effet personnel.
-• Pour les prestations à domicile : veuillez prévoir un accès direct à un point d'eau et une prise électrique.
+📋 Préparation du véhicule & conditions :
+• Merci de mettre à disposition le véhicule vidé de ses affaires personnelles. 🧹
+• Pour les prestations à domicile : veuillez prévoir un accès à l'eau et l'électricité. 🔌💧
 
-Un imprévu ou une précision ? Répondez directement à ce message.
+Un imprévu ou une précision ? Répondez directement à ce message. 📱
 
 Au plaisir de prendre soin de votre véhicule,
-Alex — L'As Du Détail`;
+Alex — L'As Du Détail ⭐
+
+
 
 
   const link =
