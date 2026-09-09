@@ -1,309 +1,379 @@
 <!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>L'As Du Détail - Gestion & RDV</title>
+  <title>L'As Du Détail - Cockpit</title>
+  <!-- Tailwind CSS pour le style -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: '#10b981'
-          }
-        }
-      }
-    }
-  </script>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center p-4">
+<body class="bg-neutral-900 text-neutral-100 font-sans pb-24">
 
-  <div class="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-xl border border-gray-700 p-6 space-y-6 my-auto">
-    
-    <!-- En-tête -->
-    <div class="text-center space-y-1">
-      <h1 class="text-2xl font-bold tracking-tight text-white">L'As Du Détail</h1>
-      <p class="text-xs text-gray-400 italic">Plus qu’un nettoyage, une signature</p>
+  <!-- En-tête -->
+  <header class="bg-neutral-950 border-b border-neutral-800 p-4 sticky top-0 z-50">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center font-bold text-neutral-950">A</div>
+        <div>
+          <h1 class="font-bold text-lg leading-none">L'As Du Détail</h1>
+          <p class="text-xs text-neutral-400">Internal Cockpit</p>
+        </div>
+      </div>
+      <span class="text-xs px-2.5 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full font-medium">Waremme</span>
     </div>
+  </header>
 
-    <!-- Navigation par Onglets -->
-    <div class="flex border-b border-gray-700 text-sm font-medium text-center text-gray-400">
-      <button id="tab-booking-btn" onclick="switchTab('booking')" class="flex-1 py-3 border-b-2 border-emerald-500 text-emerald-400 font-semibold focus:outline-none">
-        Nouveau RDV
-      </button>
-      <button id="tab-planning-btn" onclick="switchTab('planning')" class="flex-1 py-3 border-b-2 border-transparent hover:text-gray-200 focus:outline-none">
-        Planning
-      </button>
-      <button id="tab-clients-btn" onclick="switchTab('clients')" class="flex-1 py-3 border-b-2 border-transparent hover:text-gray-200 focus:outline-none">
-        Clients
-      </button>
-    </div>
+  <!-- Notification Banner -->
+  <div id="notification" class="hidden max-w-md mx-auto m-4 p-4 bg-amber-500 text-neutral-950 font-semibold rounded-xl shadow-lg border border-amber-400 text-sm"></div>
 
-    <!-- CONTENU 1 : Formulaire Prise de RDV -->
-    <div id="tab-booking" class="space-y-4">
-      <form id="bookingForm" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-300">Nom & Prénom</label>
-          <input type="text" id="clientName" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+  <!-- Main Content Container -->
+  <main class="max-w-md mx-auto p-4 space-y-6">
+
+    <!-- SECTION 1: DEVIS / RESERVATION -->
+    <div id="tab-booking" class="space-y-5">
+      
+      <!-- Client -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">1. Client</label>
+        <select id="client-select" onchange="onClientChange()" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500">
+          <option value="">Chargement des clients...</option>
+        </select>
+        <div id="parrainage-badge" class="hidden bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex justify-between items-center mt-2">
+          <span class="text-xs text-amber-200">Cagnotte disponible :</span>
+          <span id="parrainage-val" class="font-bold text-amber-400 text-sm">0%</span>
+        </div>
+      </div>
+
+      <!-- Véhicule -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">2. Véhicule</label>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="setCategory('petite')" id="cat-petite" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
+            <div class="font-semibold text-sm">Petite</div>
+            <div class="text-[10px] text-neutral-500">Citadine</div>
+          </button>
+          <button type="button" onclick="setCategory('moyenne')" id="cat-moyenne" class="cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300">
+            <div class="font-semibold text-sm">Moyenne</div>
+            <div class="text-[10px] text-neutral-500">Berline / Compacte</div>
+          </button>
+          <button type="button" onclick="setCategory('grande')" id="cat-grande" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
+            <div class="font-semibold text-sm">Grande</div>
+            <div class="text-[10px] text-neutral-500">SUV / Break</div>
+          </button>
+          <button type="button" onclick="setCategory('camionnette')" id="cat-camionnette" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
+            <div class="font-semibold text-sm">Camionnette</div>
+            <div class="text-[10px] text-neutral-500">Utilitaire</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Prestation -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">3. Prestation</label>
+        <select id="service-select" onchange="calculateTotal()" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500"></select>
+      </div>
+
+      <!-- Suppléments -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">4. Suppléments</label>
+        
+        <span class="text-xs text-neutral-300 block">Sièges (Shampooing / Injection) :</span>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <button type="button" onclick="setSeats('none')" id="seat-none" class="seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300">Aucun (0€)</button>
+          <button type="button" onclick="setSeats('1_seat')" id="seat-1_seat" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">1 Siège (30€)</button>
+          <button type="button" onclick="setSeats('2_seats')" id="seat-2_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">2 Sièges (50€)</button>
+          <button type="button" onclick="setSeats('all_seats')" id="seat-all_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">Tous les sièges (90€)</button>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-300">Téléphone (SMS)</label>
-          <input type="tel" id="clientPhone" placeholder="04XXXXXXXX" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-300">Prestation</label>
-          <select id="serviceType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-            <option value="Nettoyage Intérieur">Nettoyage Intérieur</option>
-            <option value="Nettoyage Extérieur">Nettoyage Extérieur</option>
-            <option value="Formule Complète">Formule Complète</option>
-            <option value="Rénovation & Polissage">Rénovation & Polissage</option>
-            <option value="Protection Céramique SiO2">Protection Céramique SiO2</option>
-          </select>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-300">Abonnement</label>
-            <select id="subscriptionType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-              <option value="Unique">Prestation Unique</option>
-              <option value="Mensuel">Abonnement Mensuel</option>
-              <option value="Trimestriel">Abonnement Trimestriel</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-300">Lieu d'intervention</label>
-            <select id="locationType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-              <option value="Atelier (Waremme)">Atelier (Waremme)</option>
-              <option value="À Domicile">À Domicile</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-300">Suppléments (Optionnel)</label>
-          <input type="text" id="supplements" placeholder="ex: Traitement Ozone, Poils d'animaux..." class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-300">Code / Nom du Parrain (Optionnel)</label>
-          <input type="text" id="referralCode" placeholder="Parrain" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-300">Date et Heure du RDV</label>
-          <input type="datetime-local" id="appointmentDate" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-        </div>
-
-        <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-3 rounded-lg transition-colors">
-          Enregistrer & Envoyer SMS
+        <button type="button" onclick="toggleRoof()" id="roof-btn" class="w-full p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all bg-neutral-900 border-neutral-700 text-neutral-400 mt-2">
+          <span>Supplément Ciel de toit</span>
+          <span class="font-bold">+ 30,00 €</span>
         </button>
-      </form>
+      </div>
 
-      <div id="statusMessage" class="hidden text-center text-sm p-3 rounded-lg"></div>
+      <!-- Lieu / Déplacement -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">5. Lieu</label>
+        <div class="flex rounded-xl bg-neutral-900 p-1 border border-neutral-700">
+          <button type="button" onclick="setAtelier(true)" id="loc-atelier" class="flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950">Atelier (Waremme)</button>
+          <button type="button" onclick="setAtelier(false)" id="loc-travel" class="flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400">Déplacement</button>
+        </div>
+        <div id="travel-input" class="hidden space-y-1">
+          <input type="number" id="distance-km" placeholder="Distance en km (aller simple)" oninput="calculateTotal()" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <p class="text-[11px] text-neutral-500">Formule : 10,00 € + 0,70 € / km</p>
+        </div>
+      </div>
+
+      <!-- Réduction Parrainage -->
+      <div id="parrainage-slider-box" class="hidden bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
+        <label class="text-xs uppercase tracking-wider text-amber-400 font-bold block">Appliquer la Réduction Parrainage</label>
+        <div class="flex items-center space-x-3">
+          <input type="range" id="discount-range" min="0" max="100" step="10" value="0" oninput="onSliderChange()" class="w-full accent-amber-500" />
+          <span id="discount-val-label" class="font-bold text-amber-400 text-lg w-12 text-right">-0%</span>
+        </div>
+      </div>
+
+      <!-- Date -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">6. Date du rendez-vous</label>
+        <input type="date" id="booking-date" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+      </div>
+
+      <!-- Récapitulatif -->
+      <div class="bg-neutral-950 border border-amber-500/30 rounded-2xl p-5 space-y-3">
+        <h3 class="text-xs uppercase tracking-wider text-amber-400 font-bold">Récapitulatif</h3>
+        <div class="space-y-1 text-xs text-neutral-300">
+          <div class="flex justify-between"><span>Prestation :</span><span id="recap-service">0,00 €</span></div>
+          <div class="flex justify-between"><span>Suppléments :</span><span id="recap-supplements">0,00 €</span></div>
+          <div class="flex justify-between"><span>Déplacement :</span><span id="recap-travel">0,00 €</span></div>
+          <div id="recap-discount-row" class="hidden flex justify-between text-amber-400 font-medium"><span>Réduction :</span><span id="recap-discount">-0,00 €</span></div>
+        </div>
+        <div class="border-t border-neutral-800 pt-3 flex justify-between items-center">
+          <span class="font-bold text-sm text-white">TOTAL FINAL :</span>
+          <span id="total-price" class="font-extrabold text-2xl text-amber-400">0,00 €</span>
+        </div>
+        <button type="button" onclick="saveBooking()" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3.5 rounded-xl transition-all text-sm mt-2">
+          Enregistrer le Rendez-vous
+        </button>
+      </div>
+
     </div>
 
-    <!-- CONTENU 2 : Planning -->
-    <div id="tab-planning" class="hidden space-y-4">
-      <div class="flex justify-between items-center">
-        <h2 class="text-lg font-semibold text-white">Rendez-vous à venir</h2>
-        <button onclick="loadPlanning()" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 py-1.5 px-3 rounded-lg">Actualiser</button>
-      </div>
-      <div id="planningList" class="space-y-3">
-        <p class="text-sm text-gray-400 text-center py-4">Chargement du planning...</p>
-      </div>
-    </div>
-
-    <!-- CONTENU 3 : Clients -->
+    <!-- SECTION 2: CLIENTS & PARRAINAGE -->
     <div id="tab-clients" class="hidden space-y-4">
-      <div class="flex justify-between items-center">
-        <h2 class="text-lg font-semibold text-white">Fichier Clients</h2>
-        <button onclick="loadClients()" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 py-1.5 px-3 rounded-lg">Actualiser</button>
-      </div>
-      <div id="clientsList" class="space-y-3">
-        <p class="text-sm text-gray-400 text-center py-4">Chargement de la liste des clients...</p>
-      </div>
+      <h2 class="text-sm font-bold uppercase tracking-wider text-neutral-400">Base Clients & Parrainage</h2>
+      <div id="clients-list" class="space-y-3">Chargement...</div>
     </div>
 
-  </div>
+  </main>
 
+  <!-- Navigation Basse -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-neutral-950 border-t border-neutral-800 py-3 px-6 z-50">
+    <div class="max-w-md mx-auto flex justify-around items-center text-xs">
+      <button onclick="switchTab('booking')" id="nav-booking" class="font-bold text-amber-400">Devis / Booking</button>
+      <button onclick="switchTab('clients')" id="nav-clients" class="font-medium text-neutral-500">Clients & Parrainage</button>
+    </div>
+  </nav>
+
+  <!-- LOGIQUE JAVASCRIPT -->
   <script>
-    // Configuration Supabase
-    const SUPABASE_URL = "https://churvkmecgypblfrknyr.supabase.co";
-    const SUPABASE_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNodXJ2a21lY2d5cGJsZnJrbnlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NDEyMzUsImV4cCI6MjEwNDUxNzIzNX0.wgryFazsmV-6gMHiAb97faOeKH_p6TJ3v2dxO0-Nf1c";
-    
-    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // 1. CONFIGURATION SUPABASE (Remplace par tes vraies clés si besoin)
+    const SUPABASE_URL = "https://votre-projet.supabase.co";
+    const SUPABASE_KEY = "votre-cle-anon";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Navigation par Onglets
-    function switchTab(tabName) {
-      ['booking', 'planning', 'clients'].forEach(t => {
-        document.getElementById(`tab-${t}`).classList.add('hidden');
-        const btn = document.getElementById(`tab-${t}-btn`);
-        btn.classList.remove('border-emerald-500', 'text-emerald-400', 'font-semibold');
-        btn.classList.add('border-transparent', 'hover:text-gray-200');
-      });
+    // 2. CATALOGUE SERVICES
+    const SERVICES = [
+      { id: 'w_ess', name: 'WashDetail - Essential', prices: { petite: 19.99, moyenne: 24.99, grande: 29.99, camionnette: 34.99 } },
+      { id: 'w_sig', name: 'WashDetail - Signature', prices: { petite: 49.99, moyenne: 54.99, grande: 59.99, camionnette: 64.99 } },
+      { id: 'i_ess', name: 'InteriorDetail - Essential', prices: { petite: 59.99, moyenne: 69.99, grande: 79.99, camionnette: 64.99 } },
+      { id: 'i_pre', name: 'InteriorDetail - Prestige', prices: { petite: 109.99, moyenne: 119.99, grande: 129.99, camionnette: 109.99 } },
+      { id: 'i_sig', name: 'InteriorDetail - Signature', prices: { petite: 209.99, moyenne: 219.99, grande: 229.99, camionnette: 169.99 } },
+      { id: 'p_ess', name: 'PackDetail - Essential', prices: { petite: 79.99, moyenne: 89.99, grande: 94.99, camionnette: 99.99 } },
+      { id: 'p_pre', name: 'PackDetail - Prestige', prices: { petite: 149.99, moyenne: 159.99, grande: 169.99, camionnette: 169.99 } },
+      { id: 'p_sig', name: 'PackDetail - Signature', prices: { petite: 239.99, moyenne: 249.99, grande: 259.99, camionnette: 229.99 } },
+      { id: 'pol_1', name: 'Polissage One Step Essential', prices: { petite: 249.99, moyenne: 279.99, grande: 309.99, camionnette: 349.99 } },
+      { id: 'pol_2', name: 'Polissage 2 Step', prices: { petite: 399.99, moyenne: 449.99, grande: 499.99, camionnette: 549.99 } },
+      { id: 'c_12', name: 'Céramique 12-24 mois', prices: { petite: 249.99, moyenne: 279.99, grande: 309.99, camionnette: 349.99 } },
+      { id: 'c_48', name: 'Céramique 48-60 mois', prices: { petite: 549.99, moyenne: 649.99, grande: 749.99, camionnette: 899.99 } },
+      { id: 'cb_1_12', name: '⭐ One-Step + Céramique 12–24 mois', prices: { petite: 499.99, moyenne: 549.99, grande: 599.99, camionnette: 699.99 } },
+      { id: 'cb_1_48', name: '👑 One-Step + Céramique 48–60 mois', prices: { petite: 799.99, moyenne: 899.99, grande: 999.99, camionnette: 1199.99 } },
+      { id: 'cb_2_12', name: '🔥 Two-Step + Céramique 12–24 mois', prices: { petite: 699.99, moyenne: 749.99, grande: 849.99, camionnette: 949.99 } },
+      { id: 'cb_2_48', name: '💎 Two-Step + Céramique 48–60 mois', prices: { petite: 999.99, moyenne: 1099.99, grande: 1199.99, camionnette: 1399.99 } }
+    ];
 
-      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-      const activeBtn = document.getElementById(`tab-${tabName}-btn`);
-      activeBtn.classList.remove('border-transparent', 'hover:text-gray-200');
-      activeBtn.classList.add('border-emerald-500', 'text-emerald-400', 'font-semibold');
+    // EST ÉTATS DE L'APPLICATION
+    let clientsData = [];
+    let currentCategory = 'moyenne';
+    let currentSeats = 'none';
+    let currentRoof = false;
+    let currentIsAtelier = true;
+    let currentDiscountPct = 0;
 
-      if (tabName === 'planning') loadPlanning();
-      if (tabName === 'clients') loadClients();
+    // INIT
+    window.onload = function() {
+      loadClients();
+      renderServicesOptions();
+      calculateTotal();
+    };
+
+    function showNotification(msg) {
+      const el = document.getElementById('notification');
+      el.innerText = msg;
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 5000);
     }
 
-    // Soumission du Formulaire RDV
-    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const submitBtn = document.getElementById('submitBtn');
-      const statusMessage = document.getElementById('statusMessage');
-      
-      submitBtn.disabled = true;
-      submitBtn.innerText = "Enregistrement...";
-
-      const name = document.getElementById('clientName').value;
-      const phone = document.getElementById('clientPhone').value;
-      const service = document.getElementById('serviceType').value;
-      const subscription = document.getElementById('subscriptionType').value;
-      const location = document.getElementById('locationType').value;
-      const supplements = document.getElementById('supplements').value;
-      const referral = document.getElementById('referralCode').value;
-      const date = document.getElementById('appointmentDate').value;
-
-      try {
-        // Enregistrement / Recherche Client
-        let { data: client, error: clientErr } = await db
-          .from('clients')
-          .insert([{ name, phone, referral }])
-          .select()
-          .single();
-
-        if (clientErr) throw clientErr;
-
-        // Enregistrement Rendez-vous
-        const { error: apptErr } = await db
-          .from('appointments')
-          .insert([{
-            client_id: client.id,
-            service,
-            subscription,
-            location,
-            supplements,
-            appointment_date: date
-          }]);
-
-        if (apptErr) throw apptErr;
-
-        statusMessage.className = "text-center text-sm p-3 rounded-lg bg-emerald-900/50 text-emerald-300 border border-emerald-700";
-        statusMessage.innerText = "Rendez-vous enregistré ! Ouverture des SMS...";
-        statusMessage.classList.remove('hidden');
-
-        // Préparation du SMS
-        const formattedDate = new Date(date).toLocaleString('fr-BE', { 
-          dateStyle: 'full', 
-          timeStyle: 'short' 
-        });
-
-        const smsBody = encodeURIComponent(
-          `Bonjour ${name},\n\n` +
-          `Votre rendez-vous chez L'As Du Détail est confirmé pour le ${formattedDate}.\n\n` +
-          `Prestation : ${service}\n` +
-          `Lieu : ${location}\n\n` +
-          `Merci pour votre confiance !\n` +
-          `L'As Du Détail — Plus qu’un nettoyage, une signature`
-        );
-
-        window.location.href = `sms:${phone}?body=${smsBody}`;
-
-      } catch (err) {
-        console.error(err);
-        statusMessage.className = "text-center text-sm p-3 rounded-lg bg-red-900/50 text-red-300 border border-red-700";
-        statusMessage.innerText = "Erreur lors de l'enregistrement.";
-        statusMessage.classList.remove('hidden');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Enregistrer & Envoyer SMS";
-      }
-    });
-
-    // Chargement du Planning
-    async function loadPlanning() {
-      const planningList = document.getElementById('planningList');
-      planningList.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">Chargement du planning...</p>`;
-
-      const { data, error } = await db
-        .from('appointments')
-        .select('*, clients(name, phone)')
-        .order('appointment_date', { ascending: true });
-
-      if (error || !data || data.length === 0) {
-        planningList.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">Aucun rendez-vous à venir.</p>`;
-        return;
-      }
-
-      planningList.innerHTML = data.map(item => {
-        const dateStr = new Date(item.appointment_date).toLocaleString('fr-BE', {
-          dateStyle: 'medium',
-          timeStyle: 'short'
-        });
-        const clientName = item.clients ? item.clients.name : 'Client inconnu';
-        const clientPhone = item.clients ? item.clients.phone : '';
-
-        return `
-          <div class="bg-gray-700/50 p-4 rounded-xl border border-gray-600 space-y-2">
-            <div class="flex justify-between items-start">
-              <div>
-                <h3 class="font-bold text-white">${clientName}</h3>
-                <p class="text-xs text-emerald-400 font-medium">${dateStr}</p>
-              </div>
-              <span class="text-xs bg-emerald-900/60 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-700">${item.service}</span>
-            </div>
-            <div class="text-xs text-gray-300 space-y-1 pt-1 border-t border-gray-600/50">
-              <p><span class="text-gray-400">Lieu :</span> ${item.location} | <span class="text-gray-400">Abonnement :</span> ${item.subscription}</p>
-              ${item.supplements ? `<p><span class="text-gray-400">Suppléments :</span> ${item.supplements}</p>` : ''}
-            </div>
-            <div class="pt-2 flex justify-end">
-              <a href="sms:${clientPhone}" class="text-xs text-emerald-400 hover:underline">Envoyer un SMS</a>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // Chargement des Clients
     async function loadClients() {
-      const clientsList = document.getElementById('clientsList');
-      clientsList.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">Chargement des clients...</p>`;
-
-      const { data, error } = await db
-        .from('clients')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error || !data || data.length === 0) {
-        clientsList.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">Aucun client enregistré.</p>`;
-        return;
+      const { data, error } = await _supabase.from('clients').select('*').order('name');
+      if (data) {
+        clientsData = data;
+        renderClientsSelect();
+        renderClientsList();
       }
+    }
 
-      clientsList.innerHTML = data.map(c => `
-        <div class="bg-gray-700/50 p-4 rounded-xl border border-gray-600 flex justify-between items-center">
+    function renderClientsSelect() {
+      const sel = document.getElementById('client-select');
+      sel.innerHTML = '<option value="">-- Choisir un client --</option>' + 
+        clientsData.map(c => `<option value="${c.id}">${c.name} (${c.referral_discount_pct || 0}% parrainage)</option>`).join('');
+    }
+
+    function renderClientsList() {
+      const list = document.getElementById('clients-list');
+      if(clientsData.length === 0) { list.innerHTML = 'Aucun client.'; return; }
+      list.innerHTML = clientsData.map(c => `
+        <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 flex justify-between items-center">
           <div>
-            <h3 class="font-bold text-white">${c.name}</h3>
-            <p class="text-xs text-gray-400">${c.phone}</p>
-            ${c.referral ? `<p class="text-xs text-emerald-400 mt-0.5">Parrain : ${c.referral}</p>` : ''}
+            <div class="font-bold text-white text-sm">${c.name}</div>
+            <div class="text-xs text-neutral-400">${c.phone || 'Sans tel'}</div>
+            <div class="mt-2 text-xs text-amber-400 font-semibold">Cagnotte : ${c.referral_discount_pct || 0}%</div>
           </div>
-          <div class="flex space-x-2">
-            <a href="tel:${c.phone}" class="bg-gray-600 hover:bg-gray-500 text-white text-xs py-1.5 px-3 rounded-lg">Appeler</a>
-            <a href="sms:${c.phone}" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs py-1.5 px-3 rounded-lg">SMS</a>
-          </div>
+          <button onclick="addReferral('${c.id}')" class="px-3 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold rounded-xl">+10% Parrain</button>
         </div>
       `).join('');
+    }
+
+    async function addReferral(clientId) {
+      const c = clientsData.find(x => x.id === clientId);
+      if(!c) return;
+      const newPct = Math.min(100, (c.referral_discount_pct || 0) + 10);
+      await _supabase.from('clients').update({ referral_discount_pct: newPct }).eq('id', clientId);
+      showNotification(`10% de réduction parrainage ajoutés au compte de ${c.name}. Nouveau solde : ${newPct}%.`);
+      loadClients();
+    }
+
+    function onClientChange() {
+      const id = document.getElementById('client-select').value;
+      const c = clientsData.find(x => x.id === id);
+      const badge = document.getElementById('parrainage-badge');
+      const box = document.getElementById('parrainage-slider-box');
+      const slider = document.getElementById('discount-range');
+
+      if (c && (c.referral_discount_pct || 0) > 0) {
+        document.getElementById('parrainage-val').innerText = (c.referral_discount_pct || 0) + '%';
+        badge.classList.remove('hidden');
+        box.classList.remove('hidden');
+        slider.max = c.referral_discount_pct;
+      } else {
+        badge.classList.add('hidden');
+        box.classList.add('hidden');
+      }
+      slider.value = 0;
+      onSliderChange();
+    }
+
+    function renderServicesOptions() {
+      const sel = document.getElementById('service-select');
+      sel.innerHTML = SERVICES.map(s => `
+        <option value="${s.id}">${s.name} - ${s.prices[currentCategory]} €</option>
+      `).join('');
+    }
+
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => {
+        b.className = "cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400";
+      });
+      document.getElementById('cat-' + cat).className = "cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300";
+      renderServicesOptions();
+      calculateTotal();
+    }
+
+    function setSeats(s) {
+      currentSeats = s;
+      document.querySelectorAll('.seat-btn').forEach(b => {
+        b.className = "seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400";
+      });
+      document.getElementById('seat-' + s).className = "seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300";
+      calculateTotal();
+    }
+
+    function toggleRoof() {
+      currentRoof = !currentRoof;
+      const btn = document.getElementById('roof-btn');
+      btn.className = currentRoof 
+        ? "w-full p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all bg-amber-500/20 border-amber-500 text-amber-300 mt-2"
+        : "w-full p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all bg-neutral-900 border-neutral-700 text-neutral-400 mt-2";
+      calculateTotal();
+    }
+
+    function setAtelier(isAtelier) {
+      currentIsAtelier = isAtelier;
+      document.getElementById('loc-atelier').className = isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950" : "flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400";
+      document.getElementById('loc-travel').className = !isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950" : "flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400";
+      document.getElementById('travel-input').classList.toggle('hidden', isAtelier);
+      calculateTotal();
+    }
+
+    function onSliderChange() {
+      currentDiscountPct = parseInt(document.getElementById('discount-range').value) || 0;
+      document.getElementById('discount-val-label').innerText = '-' + currentDiscountPct + '%';
+      calculateTotal();
+    }
+
+    function calculateTotal() {
+      const sId = document.getElementById('service-select').value || SERVICES[0].id;
+      const sObj = SERVICES.find(x => x.id === sId);
+      const basePrice = sObj ? sObj.prices[currentCategory] : 0;
+
+      let supps = 0;
+      if (currentSeats === '1_seat') supps += 30;
+      if (currentSeats === '2_seats') supps += 50;
+      if (currentSeats === 'all_seats') supps += 90;
+      if (currentRoof) supps += 30;
+
+      let travel = 0;
+      if (!currentIsAtelier) {
+        const km = parseFloat(document.getElementById('distance-km').value) || 0;
+        travel = 10 + (km * 0.70);
+      }
+
+      const subtotal = basePrice + supps + travel;
+      const discount = (subtotal * currentDiscountPct) / 100;
+      const total = Math.max(0, subtotal - discount);
+
+      document.getElementById('recap-service').innerText = basePrice.toFixed(2) + ' €';
+      document.getElementById('recap-supplements').innerText = supps.toFixed(2) + ' €';
+      document.getElementById('recap-travel').innerText = travel.toFixed(2) + ' €';
+      
+      const discRow = document.getElementById('recap-discount-row');
+      if (currentDiscountPct > 0) {
+        discRow.classList.remove('hidden');
+        document.getElementById('recap-discount').innerText = '-' + discount.toFixed(2) + ' €';
+      } else {
+        discRow.classList.add('hidden');
+      }
+
+      document.getElementById('total-price').innerText = total.toFixed(2) + ' €';
+    }
+
+    async function saveBooking() {
+      const clientId = document.getElementById('client-select').value;
+      const date = document.getElementById('booking-date').value;
+      if (!clientId || !date) { alert('Veuillez choisir un client et une date.'); return; }
+
+      const c = clientsData.find(x => x.id === clientId);
+      
+      // Mettre à jour le parrainage si utilisé
+      if (currentDiscountPct > 0 && c) {
+        const remaining = Math.max(0, (c.referral_discount_pct || 0) - currentDiscountPct);
+        await _supabase.from('clients').update({ referral_discount_pct: remaining }).eq('id', clientId);
+        showNotification(`${currentDiscountPct}% de réduction retirés du compte de ${c.name}. Solde restant : ${remaining}%.`);
+      } else {
+        showNotification("Rendez-vous enregistré avec succès !");
+      }
+
+      loadClients();
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tab-booking').classList.toggle('hidden', tab !== 'booking');
+      document.getElementById('tab-clients').classList.toggle('hidden', tab !== 'clients');
+      document.getElementById('nav-booking').className = tab === 'booking' ? "font-bold text-amber-400" : "font-medium text-neutral-500";
+      document.getElementById('nav-clients').className = tab === 'clients' ? "font-bold text-amber-400" : "font-medium text-neutral-500";
     }
   </script>
 </body>
