@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>L'As Du Détail - Cockpit</title>
-  <!-- Tailwind CSS pour le style -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-neutral-900 text-neutral-100 font-sans pb-24">
@@ -75,9 +73,20 @@
         <select id="service-select" onchange="calculateTotal()" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500"></select>
       </div>
 
+      <!-- Option Abonnement (Fréquence) -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
+        <label class="text-xs uppercase tracking-wider text-amber-400 font-bold block">4. Formule Abonnement</label>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <button type="button" onclick="setSub('none')" id="sub-none" class="sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-medium">Sans abonnement</button>
+          <button type="button" onclick="setSub('1x')" id="sub-1x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">1x / mois (-5%)</button>
+          <button type="button" onclick="setSub('2x')" id="sub-2x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">2x / mois (-10%)</button>
+          <button type="button" onclick="setSub('4x')" id="sub-4x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">4x / mois (-15%)</button>
+        </div>
+      </div>
+
       <!-- Suppléments -->
       <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">4. Suppléments</label>
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">5. Suppléments</label>
         
         <span class="text-xs text-neutral-300 block">Sièges (Shampooing / Injection) :</span>
         <div class="grid grid-cols-2 gap-2 text-xs">
@@ -95,7 +104,7 @@
 
       <!-- Lieu / Déplacement -->
       <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">5. Lieu</label>
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">6. Lieu</label>
         <div class="flex rounded-xl bg-neutral-900 p-1 border border-neutral-700">
           <button type="button" onclick="setAtelier(true)" id="loc-atelier" class="flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950">Atelier (Waremme)</button>
           <button type="button" onclick="setAtelier(false)" id="loc-travel" class="flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400">Déplacement</button>
@@ -115,10 +124,13 @@
         </div>
       </div>
 
-      <!-- Date -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">6. Date du rendez-vous</label>
-        <input type="date" id="booking-date" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+      <!-- Date & Heure -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">7. Date et Heure</label>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="date" id="booking-date" class="bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="time" id="booking-time" value="09:00" class="bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
       </div>
 
       <!-- Récapitulatif -->
@@ -126,17 +138,27 @@
         <h3 class="text-xs uppercase tracking-wider text-amber-400 font-bold">Récapitulatif</h3>
         <div class="space-y-1 text-xs text-neutral-300">
           <div class="flex justify-between"><span>Prestation :</span><span id="recap-service">0,00 €</span></div>
+          <div id="recap-sub-row" class="hidden flex justify-between text-amber-400 font-medium"><span>Abonnement :</span><span id="recap-sub-discount">-0,00 €</span></div>
           <div class="flex justify-between"><span>Suppléments :</span><span id="recap-supplements">0,00 €</span></div>
           <div class="flex justify-between"><span>Déplacement :</span><span id="recap-travel">0,00 €</span></div>
-          <div id="recap-discount-row" class="hidden flex justify-between text-amber-400 font-medium"><span>Réduction :</span><span id="recap-discount">-0,00 €</span></div>
+          <div id="recap-discount-row" class="hidden flex justify-between text-amber-400 font-medium"><span>Parrainage :</span><span id="recap-discount">-0,00 €</span></div>
         </div>
         <div class="border-t border-neutral-800 pt-3 flex justify-between items-center">
           <span class="font-bold text-sm text-white">TOTAL FINAL :</span>
           <span id="total-price" class="font-extrabold text-2xl text-amber-400">0,00 €</span>
         </div>
         <button type="button" onclick="saveBooking()" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3.5 rounded-xl transition-all text-sm mt-2">
-          Enregistrer le Rendez-vous
+          Générer & Enregistrer le RDV
         </button>
+      </div>
+
+      <!-- Bloc du message généré -->
+      <div id="message-output-box" class="hidden bg-neutral-950 border border-neutral-800 rounded-2xl p-4 space-y-3">
+        <div class="flex justify-between items-center">
+          <span class="text-xs uppercase tracking-wider text-amber-400 font-bold">Message à envoyer au client</span>
+          <button type="button" onclick="copyMessage()" class="px-3 py-1 bg-amber-500 text-neutral-950 font-bold rounded-lg text-xs">Copier</button>
+        </div>
+        <textarea id="message-text" rows="12" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs text-neutral-200 font-mono focus:outline-none" readonly></textarea>
       </div>
 
     </div>
@@ -159,12 +181,10 @@
 
   <!-- LOGIQUE JAVASCRIPT -->
   <script>
-    // 1. CONFIGURATION SUPABASE (Remplace par tes vraies clés si besoin)
     const SUPABASE_URL = "https://votre-projet.supabase.co";
     const SUPABASE_KEY = "votre-cle-anon";
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // 2. CATALOGUE SERVICES
     const SERVICES = [
       { id: 'w_ess', name: 'WashDetail - Essential', prices: { petite: 19.99, moyenne: 24.99, grande: 29.99, camionnette: 34.99 } },
       { id: 'w_sig', name: 'WashDetail - Signature', prices: { petite: 49.99, moyenne: 54.99, grande: 59.99, camionnette: 64.99 } },
@@ -184,15 +204,14 @@
       { id: 'cb_2_48', name: '💎 Two-Step + Céramique 48–60 mois', prices: { petite: 999.99, moyenne: 1099.99, grande: 1199.99, camionnette: 1399.99 } }
     ];
 
-    // EST ÉTATS DE L'APPLICATION
     let clientsData = [];
     let currentCategory = 'moyenne';
     let currentSeats = 'none';
     let currentRoof = false;
     let currentIsAtelier = true;
     let currentDiscountPct = 0;
+    let currentSub = 'none'; // 'none', '1x', '2x', '4x'
 
-    // INIT
     window.onload = function() {
       loadClients();
       renderServicesOptions();
@@ -282,6 +301,15 @@
       calculateTotal();
     }
 
+    function setSub(sub) {
+      currentSub = sub;
+      document.querySelectorAll('.sub-btn').forEach(b => {
+        b.className = "sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium";
+      });
+      document.getElementById('sub-' + sub).className = "sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-medium";
+      calculateTotal();
+    }
+
     function setSeats(s) {
       currentSeats = s;
       document.querySelectorAll('.seat-btn').forEach(b => {
@@ -314,10 +342,22 @@
       calculateTotal();
     }
 
+    function getSubPct() {
+      if (currentSub === '1x') return 5;
+      if (currentSub === '2x') return 10;
+      if (currentSub === '4x') return 15;
+      return 0;
+    }
+
     function calculateTotal() {
       const sId = document.getElementById('service-select').value || SERVICES[0].id;
       const sObj = SERVICES.find(x => x.id === sId);
       const basePrice = sObj ? sObj.prices[currentCategory] : 0;
+
+      // Déduction Abonnement
+      const subPct = getSubPct();
+      const subDiscount = (basePrice * subPct) / 100;
+      const priceAfterSub = basePrice - subDiscount;
 
       let supps = 0;
       if (currentSeats === '1_seat') supps += 30;
@@ -331,18 +371,27 @@
         travel = 10 + (km * 0.70);
       }
 
-      const subtotal = basePrice + supps + travel;
-      const discount = (subtotal * currentDiscountPct) / 100;
-      const total = Math.max(0, subtotal - discount);
+      const subtotal = priceAfterSub + supps + travel;
+      const refDiscount = (subtotal * currentDiscountPct) / 100;
+      const total = Math.max(0, subtotal - refDiscount);
 
       document.getElementById('recap-service').innerText = basePrice.toFixed(2) + ' €';
+      
+      const subRow = document.getElementById('recap-sub-row');
+      if (subPct > 0) {
+        subRow.classList.remove('hidden');
+        document.getElementById('recap-sub-discount').innerText = '-' + subDiscount.toFixed(2) + ' € (' + subPct + '%)';
+      } else {
+        subRow.classList.add('hidden');
+      }
+
       document.getElementById('recap-supplements').innerText = supps.toFixed(2) + ' €';
       document.getElementById('recap-travel').innerText = travel.toFixed(2) + ' €';
       
       const discRow = document.getElementById('recap-discount-row');
       if (currentDiscountPct > 0) {
         discRow.classList.remove('hidden');
-        document.getElementById('recap-discount').innerText = '-' + discount.toFixed(2) + ' €';
+        document.getElementById('recap-discount').innerText = '-' + refDiscount.toFixed(2) + ' €';
       } else {
         discRow.classList.add('hidden');
       }
@@ -353,20 +402,68 @@
     async function saveBooking() {
       const clientId = document.getElementById('client-select').value;
       const date = document.getElementById('booking-date').value;
+      const time = document.getElementById('booking-time').value || '09:00';
       if (!clientId || !date) { alert('Veuillez choisir un client et une date.'); return; }
 
       const c = clientsData.find(x => x.id === clientId);
-      
-      // Mettre à jour le parrainage si utilisé
+      const sId = document.getElementById('service-select').value;
+      const sObj = SERVICES.find(x => x.id === sId);
+
+      // Génération du texte récapitulatif pour le client
+      let suppsList = [];
+      if (currentSeats === '1_seat') suppsList.push("Shampooing 1 siège (+30€)");
+      if (currentSeats === '2_seats') suppsList.push("Shampooing 2 sièges (+50€)");
+      if (currentSeats === 'all_seats') suppsList.push("Shampooing tous les sièges (+90€)");
+      if (currentRoof) suppsList.push("Ciel de toit (+30€)");
+
+      let subLabel = "Aucun";
+      if (currentSub === '1x') subLabel = "Abonnement 1x / mois (-5%)";
+      if (currentSub === '2x') subLabel = "Abonnement 2x / mois (-10%)";
+      if (currentSub === '4x') subLabel = "Abonnement 4x / mois (-15%)";
+
+      const lieuLabel = currentIsAtelier 
+        ? "Atelier (Rue de Prâle 139, 4300 Waremme)" 
+        : `À domicile (${document.getElementById('distance-km').value || 0} km)`;
+
+      const msgText = `Bonjour ${c ? c.name : ''},
+
+Voici la confirmation de votre rendez-vous chez L'As Du Détail :
+
+📅 Date : ${date}
+⏰ Heure : ${time}
+📍 Lieu : ${lieuLabel}
+🚘 Véhicule : ${currentCategory.toUpperCase()}
+
+🛠️ Prestation : ${sObj ? sObj.name : ''}
+🔄 Formule : ${subLabel}
+➕ Suppléments : ${suppsList.length > 0 ? suppsList.join(', ') : 'Aucun'}
+🏷️ Réduction parrainage : ${currentDiscountPct > 0 ? '-' + currentDiscountPct + '%' : 'Aucune'}
+
+💰 TOTAL : ${document.getElementById('total-price').innerText}
+
+À très bientôt !
+L'As Du Détail`;
+
+      document.getElementById('message-text').value = msgText;
+      document.getElementById('message-output-box').classList.remove('hidden');
+
+      // Déduction cagnotte
       if (currentDiscountPct > 0 && c) {
         const remaining = Math.max(0, (c.referral_discount_pct || 0) - currentDiscountPct);
         await _supabase.from('clients').update({ referral_discount_pct: remaining }).eq('id', clientId);
         showNotification(`${currentDiscountPct}% de réduction retirés du compte de ${c.name}. Solde restant : ${remaining}%.`);
       } else {
-        showNotification("Rendez-vous enregistré avec succès !");
+        showNotification("Rendez-vous enregistré et message généré !");
       }
 
       loadClients();
+    }
+
+    function copyMessage() {
+      const textarea = document.getElementById('message-text');
+      textarea.select();
+      document.execCommand('copy');
+      showNotification("Message copié dans le presse-papier !");
     }
 
     function switchTab(tab) {
