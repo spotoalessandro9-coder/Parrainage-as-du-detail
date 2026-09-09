@@ -164,7 +164,21 @@
 
     <!-- SECTION 2: CLIENTS & PARRAINAGE -->
     <div id="tab-clients" class="hidden space-y-4">
-      <h2 class="text-sm font-bold uppercase tracking-wider text-neutral-400">Base Clients & Parrainage</h2>
+      
+      <!-- Formulaire Ajouter Client -->
+      <div class="bg-neutral-800/60 border border-amber-500/30 rounded-2xl p-4 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">Nouveau Client</h3>
+        <div class="space-y-2">
+          <input type="text" id="new-client-name" placeholder="Nom Prénom *" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="tel" id="new-client-phone" placeholder="Numéro de téléphone" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="number" id="new-client-discount" placeholder="Cagnotte Parrainage initiale (%) ex: 0" value="0" step="10" min="0" max="100" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+        </div>
+        <button type="button" onclick="addNewClient()" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3 rounded-xl transition-all text-xs">
+          + Ajouter le client à Firebase
+        </button>
+      </div>
+
+      <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400 pt-2">Liste des Clients & Parrainage</h2>
       <div id="clients-list" class="space-y-3">Chargement...</div>
     </div>
 
@@ -181,9 +195,9 @@
   <!-- FIREBASE SDK & INTEGRATION -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Tes vraies clés Firebase intégrées
+    // Vraies clés Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCFhUCgo-CWzBMix8GRYmrsZ3PBtWGb3RQ",
       authDomain: "las-du-detail-rdv.firebaseapp.com",
@@ -232,15 +246,13 @@
         querySnapshot.forEach((docSnap) => {
           loaded.push({ id: docSnap.id, ...docSnap.data() });
         });
+        
+        // Trier par nom alphabétique
+        loaded.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
         window.clientsData = loaded;
 
-        if (loaded.length > 0) {
-          renderClientsSelect();
-          renderClientsList();
-        } else {
-          list.innerHTML = '<div class="text-xs text-neutral-500 italic p-2">Aucun client trouvé dans la collection "clients".</div>';
-          sel.innerHTML = '<option value="">-- Aucun client --</option>';
-        }
+        renderClientsSelect();
+        renderClientsList();
       } catch (e) {
         console.error("Erreur Firebase :", e);
         list.innerHTML = '<div class="text-xs text-red-400 p-2">Erreur de connexion à Firebase. Pensez à vérifier l\'activation de Firestore Database en Mode Test.</div>';
@@ -248,22 +260,67 @@
       }
     }
 
+    // Fonction pour ajouter un client dans Firestore
+    window.addNewClient = async function() {
+      const nameInput = document.getElementById('new-client-name');
+      const phoneInput = document.getElementById('new-client-phone');
+      const discountInput = document.getElementById('new-client-discount');
+
+      const name = nameInput.value.trim();
+      const phone = phoneInput.value.trim();
+      const discount = parseInt(discountInput.value) || 0;
+
+      if (!name) {
+        alert("Veuillez saisir au moins le nom du client.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "clients"), {
+          name: name,
+          phone: phone,
+          referral_discount_pct: discount
+        });
+
+        showNotification(`Client ${name} ajouté avec succès !`);
+        
+        // Réinitialiser les champs
+        nameInput.value = '';
+        phoneInput.value = '';
+        discountInput.value = '0';
+
+        // Recharger la liste
+        loadClients();
+      } catch (e) {
+        console.error("Erreur lors de l'ajout du client :", e);
+        alert("Erreur lors de l'enregistrement dans Firebase.");
+      }
+    };
+
     function renderClientsSelect() {
       const sel = document.getElementById('client-select');
+      if (window.clientsData.length === 0) {
+        sel.innerHTML = '<option value="">-- Aucun client (ajoutez-en un dans l\'onglet Clients) --</option>';
+        return;
+      }
       sel.innerHTML = '<option value="">-- Choisir un client --</option>' + 
         window.clientsData.map(c => `<option value="${c.id}">${c.name} (${c.referral_discount_pct || 0}% parrainage)</option>`).join('');
     }
 
     function renderClientsList() {
       const list = document.getElementById('clients-list');
+      if (window.clientsData.length === 0) {
+        list.innerHTML = '<div class="text-xs text-neutral-500 italic p-2">Aucun client enregistré pour l\'instant.</div>';
+        return;
+      }
       list.innerHTML = window.clientsData.map(c => `
         <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 flex justify-between items-center">
           <div>
             <div class="font-bold text-white text-sm">${c.name}</div>
-            <div class="text-xs text-neutral-400">${c.phone || 'Sans tel'}</div>
-            <div class="mt-2 text-xs text-amber-400 font-semibold">Cagnotte : ${c.referral_discount_pct || 0}%</div>
+            <div class="text-xs text-neutral-400">${c.phone || 'Sans téléphone'}</div>
+            <div class="mt-1 text-xs text-amber-400 font-semibold">Cagnotte : ${c.referral_discount_pct || 0}%</div>
           </div>
-          <button onclick="addReferral('${c.id}')" class="px-3 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold rounded-xl">+10% Parrain</button>
+          <button onclick="addReferral('${c.id}')" class="px-3 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold rounded-xl hover:bg-amber-500/20 transition-all">+10% Parrain</button>
         </div>
       `).join('');
     }
@@ -276,7 +333,7 @@
       const clientRef = doc(db, "clients", clientId);
       await updateDoc(clientRef, { referral_discount_pct: newPct });
       
-      showNotification(`10% de réduction parrainage ajoutés au compte de ${c.name}. Nouveau solde : ${newPct}%.`);
+      showNotification(`10% ajoutés au compte de ${c.name}. Nouveau solde : ${newPct}%.`);
       loadClients();
     };
 
