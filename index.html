@@ -1,176 +1,189 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>L'As Du Détail - Gestion RDV</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-    body { background-color: #0f1115; color: #f0f0f0; display: flex; justify-content: center; padding: 20px; }
-    .container { width: 100%; max-width: 480px; background: #181b20; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #2a2e37; }
-    
-    .header { text-align: center; margin-bottom: 25px; }
-    .header h1 { font-weight: 700; color: #d4af37; font-size: 24px; letter-spacing: 1px; }
-    .header p { font-size: 12px; color: #8a8f99; margin-top: 4px; font-style: italic; }
-
-    .form-group { margin-bottom: 18px; }
-    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #cfd3da; }
-    input, select { width: 100%; padding: 12px 14px; background: #22262f; border: 1px solid #323846; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
-    input:focus, select:focus { border-color: #d4af37; }
-
-    .checkbox-group { display: grid; gap: 8px; margin-top: 6px; }
-    .checkbox-item { display: flex; align-items: center; gap: 10px; background: #22262f; padding: 10px; border-radius: 8px; border: 1px solid #323846; }
-    .checkbox-item input { width: auto; cursor: pointer; }
-    .checkbox-item label { margin-bottom: 0; cursor: pointer; font-weight: 400; font-size: 13px; }
-
-    .actions { display: flex; gap: 12px; margin-top: 25px; }
-    .btn { flex: 1; padding: 14px; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .btn-confirm { background: #d4af37; color: #111; }
-    .btn-confirm:hover { background: #b8962d; }
-    .btn-reminder { background: #2b313d; color: #fff; border: 1px solid #404859; }
-    .btn-reminder:hover { background: #384050; }
-  </style>
+  <title>L'As Du Détail - Prise de Rendez-vous</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: '#10b981'
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
 
-<div class="container">
-  <div class="header">
-    <h1>L'AS DU DÉTAIL</h1>
-    <p>Plus qu’un nettoyage, une signature</p>
+  <div class="w-full max-w-lg bg-gray-800 rounded-2xl shadow-xl border border-gray-700 p-6 space-y-6">
+    
+    <!-- En-tête -->
+    <div class="text-center space-y-2">
+      <h1 class="text-2xl font-bold tracking-tight text-white">L'As Du Détail</h1>
+      <p class="text-xs text-gray-400 italic">Plus qu’un nettoyage, une signature</p>
+    </div>
+
+    <!-- Formulaire -->
+    <form id="bookingForm" class="space-y-4">
+      
+      <!-- Infos Client -->
+      <div>
+        <label class="block text-sm font-medium text-gray-300">Nom & Prénom</label>
+        <input type="text" id="clientName" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-300">Téléphone (SMS)</label>
+        <input type="tel" id="clientPhone" placeholder="04XXXXXXXX" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+      </div>
+
+      <!-- Service / Prestation -->
+      <div>
+        <label class="block text-sm font-medium text-gray-300">Prestation</label>
+        <select id="serviceType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+          <option value="Nettoyage Intérieur">Nettoyage Intérieur</option>
+          <option value="Nettoyage Extérieur">Nettoyage Extérieur</option>
+          <option value="Formule Complète">Formule Complète</option>
+          <option value="Rénovation & Polissage">Rénovation & Polissage</option>
+          <option value="Protection Céramique SiO2">Protection Céramique SiO2</option>
+        </select>
+      </div>
+
+      <!-- Abonnement -->
+      <div>
+        <label class="block text-sm font-medium text-gray-300">Abonnement / Fréquence</label>
+        <select id="subscriptionType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+          <option value="Unique">Prestation Unique</option>
+          <option value="Mensuel">Abonnement Mensuel</option>
+          <option value="Trimestriel">Abonnement Trimestriel</option>
+        </select>
+      </div>
+
+      <!-- Lieu -->
+      <div>
+        <label class="block text-sm font-medium text-gray-300">Lieu d'intervention</label>
+        <select id="locationType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+          <option value="Atelier (Waremme)">Atelier (Waremme)</option>
+          <option value="À Domicile">À Domicile</option>
+        </select>
+      </div>
+
+      <!-- Suppléments -->
+      <div>
+        <label class="block text-sm font-medium text-gray-300">Suppléments (Optionnel)</label>
+        <input type="text" id="supplements" placeholder="ex: Traitement Ozone, Poils d'animaux..." class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+      </div>
+
+      <!-- Code Parrainage -->
+      <div>
+        <label class="block text-sm font-medium text-gray-300">Code Parrainage (Optionnel)</label>
+        <input type="text" id="referralCode" placeholder="Code parrain" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+      </div>
+
+      <!-- Date et Heure -->
+      <div>
+        <label class="block text-sm font-medium text-gray-300">Date et Heure du RDV</label>
+        <input type="datetime-local" id="appointmentDate" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+      </div>
+
+      <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-3 rounded-lg transition-colors">
+        Enregistrer & Envoyer SMS
+      </button>
+    </form>
+
+    <!-- Zone de statut -->
+    <div id="statusMessage" class="hidden text-center text-sm p-3 rounded-lg"></div>
+
   </div>
 
-  <form id="bookingForm">
-    <div class="form-group">
-      <label>Téléphone du client</label>
-      <input type="tel" id="phone" placeholder="ex: 0612345678" required>
-    </div>
-
-    <div class="form-group">
-      <label>Nom du client</label>
-      <input type="text" id="clientName" placeholder="ex: Marc Dupont" required>
-    </div>
-
-    <div class="form-group">
-      <label>Prestation</label>
-      <select id="service">
-        <option value="Nettoyage Intérieur">Nettoyage Intérieur</option>
-        <option value="Nettoyage Extérieur">Nettoyage Extérieur</option>
-        <option value="Formule Complète">Formule Complète</option>
-        <option value="Rénovation / Polissage">Rénovation / Polissage</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Formule</label>
-      <select id="subscription">
-        <option value="Prestation à l'acte">À l'acte</option>
-        <option value="Abonnement Mensuel">Abonnement Mensuel</option>
-        <option value="Abonnement Trimestriel">Abonnement Trimestriel</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Lieu d'intervention</label>
-      <input type="text" id="location" placeholder="Adresse ou 'À l'atelier'" required>
-    </div>
-
-    <div class="form-group">
-      <label>Suppléments</label>
-      <div class="checkbox-group">
-        <div class="checkbox-item">
-          <input type="checkbox" id="supp1" value="Poils d'animaux">
-          <label for="supp1">Poils d'animaux</label>
-        </div>
-        <div class="checkbox-item">
-          <input type="checkbox" id="supp2" value="Traitement Cuir">
-          <label for="supp2">Traitement Cuir</label>
-        </div>
-        <div class="checkbox-item">
-          <input type="checkbox" id="supp3" value="Protection Céramique">
-          <label for="supp3">Protection Céramique</label>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Code / Nom du Parrain</label>
-      <input type="text" id="referral" placeholder="Optionnel">
-    </div>
-
-    <div class="form-group">
-      <label>Date & Heure du RDV</label>
-      <input type="datetime-local" id="datetime" required>
-    </div>
-
-    <div class="actions">
-      <button type="button" class="btn btn-confirm" onclick="sendSMS('confirmation')">📩 Confirmation</button>
-      <button type="button" class="btn btn-reminder" onclick="sendSMS('reminder')">🔔 Rappel</button>
-    </div>
-  </form>
-</div>
-
-<script>
-function sendSMS(type) {
-  const phone = document.getElementById('phone').value;
-  const clientName = document.getElementById('clientName').value;
-  const service = document.getElementById('service').value;
-  const location = document.getElementById('location').value;
-  
-  const rawDatetime = document.getElementById('datetime').value;
-  let formattedDatetime = rawDatetime;
-  if (rawDatetime) {
-    const [datePart, timePart] = rawDatetime.split('T');
-    const [year, month, day] = datePart.split('-');
-    formattedDatetime = `${day}/${month}/${year} à ${timePart}`;
-  }
-
-  let message = "";
-
-  if (type === 'confirmation') {
-    const subscription = document.getElementById('subscription').value;
-    const referral = document.getElementById('referral').value || 'Aucun';
+  <script>
+    // Configuration Supabase intégrée
+    const SUPABASE_URL = "https://churvkmecgypblfrknyr.supabase.co";
+    const SUPABASE_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNodXJ2a21lY2d5cGJsZnJrbnlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NDEyMzUsImV4cCI6MjEwNDUxNzIzNX0.wgryFazsmV-6gMHiAb97faOeKH_p6TJ3v2dxO0-Nf1c";
     
-    let supplements = [];
-    if (document.getElementById('supp1').checked) supplements.push("Poils d'animaux");
-    if (document.getElementById('supp2').checked) supplements.push("Traitement Cuir");
-    if (document.getElementById('supp3').checked) supplements.push("Protection Céramique");
-    const suppText = supplements.length > 0 ? supplements.join(', ') : 'Aucun';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    message = 
-`✨ CONFIRMATION DE RENDEZ-VOUS ✨\n\n` +
-`Bonjour ${clientName},\n\n` +
-`Votre rendez-vous est bien confirmé ! Voici le récapitulatif de votre réservation :\n\n` +
-`🛠️ Prestation : ${service}\n` +
-`💳 Formule : ${subscription}\n` +
-`📍 Lieu : ${location}\n` +
-`➕ Suppléments : ${suppText}\n` +
-`🎁 Parrainage : ${referral}\n\n` +
-`📅 Date & Heure : ${formattedDatetime}\n\n` +
-`Merci pour votre confiance et à très bientôt ! 👋\n\n` +
-`—\n` +
-`Alex\n` +
-`L'As Du Détail ; plus qu’un nettoyage , une signature`;
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const statusMessage = document.getElementById('statusMessage');
+      
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Enregistrement...";
 
-  } else if (type === 'reminder') {
-    message = 
-`🔔 RAPPEL DE RENDEZ-VOUS 🔔\n\n` +
-`Bonjour ${clientName},\n\n` +
-`Petit rappel pour votre rendez-vous prévu très prochainement :\n\n` +
-`🛠️ Prestation : ${service}\n` +
-`📍 Lieu : ${location}\n` +
-`📅 Date & Heure : ${formattedDatetime}\n\n` +
-`Merci de nous prévenir en cas d'imprévu. À très vite ! 👋\n\n` +
-`—\n` +
-`Alex\n` +
-`L'As Du Détail ; plus qu’un nettoyage , une signature`;
-  }
+      const name = document.getElementById('clientName').value;
+      const phone = document.getElementById('clientPhone').value;
+      const service = document.getElementById('serviceType').value;
+      const subscription = document.getElementById('subscriptionType').value;
+      const location = document.getElementById('locationType').value;
+      const supplements = document.getElementById('supplements').value;
+      const referral = document.getElementById('referralCode').value;
+      const date = document.getElementById('appointmentDate').value;
 
-  const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const separator = isiOS ? '&' : '?';
-  window.location.href = `sms:${phone}${separator}body=${encodeURIComponent(message)}`;
-}
-</script>
+      try {
+        // 1. Enregistrement / recherche du client
+        let { data: client, error: clientErr } = await db
+          .from('clients')
+          .insert([{ name, phone, referral }])
+          .select()
+          .single();
 
+        if (clientErr) throw clientErr;
+
+        // 2. Enregistrement du rendez-vous
+        const { error: apptErr } = await db
+          .from('appointments')
+          .insert([{
+            client_id: client.id,
+            service,
+            subscription,
+            location,
+            supplements,
+            appointment_date: date
+          }]);
+
+        if (apptErr) throw apptErr;
+
+        // Affichage succès
+        statusMessage.className = "text-center text-sm p-3 rounded-lg bg-emerald-900/50 text-emerald-300 border border-emerald-700";
+        statusMessage.innerText = "Rendez-vous enregistré ! Ouverture des SMS...";
+        statusMessage.classList.remove('hidden');
+
+        // 3. Préparation et ouverture du SMS automatique
+        const formattedDate = new Date(date).toLocaleString('fr-BE', { 
+          dateStyle: 'full', 
+          timeStyle: 'short' 
+        });
+
+        const smsBody = encodeURIComponent(
+          `Bonjour ${name},\n\n` +
+          `Votre rendez-vous chez L'As Du Détail est confirmé pour le ${formattedDate}.\n\n` +
+          `Prestation : ${service}\n` +
+          `Lieu : ${location}\n\n` +
+          `Merci pour votre confiance !\n` +
+          `L'As Du Détail — Plus qu’un nettoyage, une signature`
+        );
+
+        // Ouvre l'application SMS du téléphone avec le numéro et le message préremplis
+        window.location.href = `sms:${phone}?body=${smsBody}`;
+
+      } catch (err) {
+        console.error(err);
+        statusMessage.className = "text-center text-sm p-3 rounded-lg bg-red-900/50 text-red-300 border border-red-700";
+        statusMessage.innerText = "Erreur lors de l'enregistrement. Veuillez réassocier Supabase.";
+        statusMessage.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Enregistrer & Envoyer SMS";
+      }
+    });
+  </script>
 </body>
 </html>
