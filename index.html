@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>L'As Du Détail - Prise de Rendez-vous</title>
+  <title>L'As Du Détail - Gestion & RDV</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -19,96 +19,145 @@
     }
   </script>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center p-4">
 
-  <div class="w-full max-w-lg bg-gray-800 rounded-2xl shadow-xl border border-gray-700 p-6 space-y-6">
+  <div class="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-xl border border-gray-700 p-6 space-y-6 my-auto">
     
     <!-- En-tête -->
-    <div class="text-center space-y-2">
+    <div class="text-center space-y-1">
       <h1 class="text-2xl font-bold tracking-tight text-white">L'As Du Détail</h1>
       <p class="text-xs text-gray-400 italic">Plus qu’un nettoyage, une signature</p>
     </div>
 
-    <!-- Formulaire -->
-    <form id="bookingForm" class="space-y-4">
-      
-      <!-- Infos Client -->
-      <div>
-        <label class="block text-sm font-medium text-gray-300">Nom & Prénom</label>
-        <input type="text" id="clientName" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-300">Téléphone (SMS)</label>
-        <input type="tel" id="clientPhone" placeholder="04XXXXXXXX" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-      </div>
-
-      <!-- Service / Prestation -->
-      <div>
-        <label class="block text-sm font-medium text-gray-300">Prestation</label>
-        <select id="serviceType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-          <option value="Nettoyage Intérieur">Nettoyage Intérieur</option>
-          <option value="Nettoyage Extérieur">Nettoyage Extérieur</option>
-          <option value="Formule Complète">Formule Complète</option>
-          <option value="Rénovation & Polissage">Rénovation & Polissage</option>
-          <option value="Protection Céramique SiO2">Protection Céramique SiO2</option>
-        </select>
-      </div>
-
-      <!-- Abonnement -->
-      <div>
-        <label class="block text-sm font-medium text-gray-300">Abonnement / Fréquence</label>
-        <select id="subscriptionType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-          <option value="Unique">Prestation Unique</option>
-          <option value="Mensuel">Abonnement Mensuel</option>
-          <option value="Trimestriel">Abonnement Trimestriel</option>
-        </select>
-      </div>
-
-      <!-- Lieu -->
-      <div>
-        <label class="block text-sm font-medium text-gray-300">Lieu d'intervention</label>
-        <select id="locationType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-          <option value="Atelier (Waremme)">Atelier (Waremme)</option>
-          <option value="À Domicile">À Domicile</option>
-        </select>
-      </div>
-
-      <!-- Suppléments -->
-      <div>
-        <label class="block text-sm font-medium text-gray-300">Suppléments (Optionnel)</label>
-        <input type="text" id="supplements" placeholder="ex: Traitement Ozone, Poils d'animaux..." class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-      </div>
-
-      <!-- Code Parrainage -->
-      <div>
-        <label class="block text-sm font-medium text-gray-300">Code Parrainage (Optionnel)</label>
-        <input type="text" id="referralCode" placeholder="Code parrain" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-      </div>
-
-      <!-- Date et Heure -->
-      <div>
-        <label class="block text-sm font-medium text-gray-300">Date et Heure du RDV</label>
-        <input type="datetime-local" id="appointmentDate" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
-      </div>
-
-      <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-3 rounded-lg transition-colors">
-        Enregistrer & Envoyer SMS
+    <!-- Navigation par Onglets -->
+    <div class="flex border-b border-gray-700 text-sm font-medium text-center text-gray-400">
+      <button id="tab-booking-btn" onclick="switchTab('booking')" class="flex-1 py-3 border-b-2 border-emerald-500 text-emerald-400 font-semibold focus:outline-none">
+        Nouveau RDV
       </button>
-    </form>
+      <button id="tab-planning-btn" onclick="switchTab('planning')" class="flex-1 py-3 border-b-2 border-transparent hover:text-gray-200 focus:outline-none">
+        Planning
+      </button>
+      <button id="tab-clients-btn" onclick="switchTab('clients')" class="flex-1 py-3 border-b-2 border-transparent hover:text-gray-200 focus:outline-none">
+        Clients
+      </button>
+    </div>
 
-    <!-- Zone de statut -->
-    <div id="statusMessage" class="hidden text-center text-sm p-3 rounded-lg"></div>
+    <!-- CONTENU 1 : Formulaire Prise de RDV -->
+    <div id="tab-booking" class="space-y-4">
+      <form id="bookingForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-300">Nom & Prénom</label>
+          <input type="text" id="clientName" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300">Téléphone (SMS)</label>
+          <input type="tel" id="clientPhone" placeholder="04XXXXXXXX" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300">Prestation</label>
+          <select id="serviceType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+            <option value="Nettoyage Intérieur">Nettoyage Intérieur</option>
+            <option value="Nettoyage Extérieur">Nettoyage Extérieur</option>
+            <option value="Formule Complète">Formule Complète</option>
+            <option value="Rénovation & Polissage">Rénovation & Polissage</option>
+            <option value="Protection Céramique SiO2">Protection Céramique SiO2</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300">Abonnement</label>
+            <select id="subscriptionType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+              <option value="Unique">Prestation Unique</option>
+              <option value="Mensuel">Abonnement Mensuel</option>
+              <option value="Trimestriel">Abonnement Trimestriel</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-300">Lieu d'intervention</label>
+            <select id="locationType" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+              <option value="Atelier (Waremme)">Atelier (Waremme)</option>
+              <option value="À Domicile">À Domicile</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300">Suppléments (Optionnel)</label>
+          <input type="text" id="supplements" placeholder="ex: Traitement Ozone, Poils d'animaux..." class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300">Code / Nom du Parrain (Optionnel)</label>
+          <input type="text" id="referralCode" placeholder="Parrain" class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300">Date et Heure du RDV</label>
+          <input type="datetime-local" id="appointmentDate" required class="mt-1 w-full rounded-lg bg-gray-700 border-gray-600 text-white p-2.5 focus:ring-brand focus:border-brand">
+        </div>
+
+        <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-3 rounded-lg transition-colors">
+          Enregistrer & Envoyer SMS
+        </button>
+      </form>
+
+      <div id="statusMessage" class="hidden text-center text-sm p-3 rounded-lg"></div>
+    </div>
+
+    <!-- CONTENU 2 : Planning -->
+    <div id="tab-planning" class="hidden space-y-4">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-semibold text-white">Rendez-vous à venir</h2>
+        <button onclick="loadPlanning()" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 py-1.5 px-3 rounded-lg">Actualiser</button>
+      </div>
+      <div id="planningList" class="space-y-3">
+        <p class="text-sm text-gray-400 text-center py-4">Chargement du planning...</p>
+      </div>
+    </div>
+
+    <!-- CONTENU 3 : Clients -->
+    <div id="tab-clients" class="hidden space-y-4">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-semibold text-white">Fichier Clients</h2>
+        <button onclick="loadClients()" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 py-1.5 px-3 rounded-lg">Actualiser</button>
+      </div>
+      <div id="clientsList" class="space-y-3">
+        <p class="text-sm text-gray-400 text-center py-4">Chargement de la liste des clients...</p>
+      </div>
+    </div>
 
   </div>
 
   <script>
-    // Configuration Supabase intégrée
+    // Configuration Supabase
     const SUPABASE_URL = "https://churvkmecgypblfrknyr.supabase.co";
     const SUPABASE_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNodXJ2a21lY2d5cGJsZnJrbnlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NDEyMzUsImV4cCI6MjEwNDUxNzIzNX0.wgryFazsmV-6gMHiAb97faOeKH_p6TJ3v2dxO0-Nf1c";
     
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // Navigation par Onglets
+    function switchTab(tabName) {
+      ['booking', 'planning', 'clients'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`tab-${t}-btn`);
+        btn.classList.remove('border-emerald-500', 'text-emerald-400', 'font-semibold');
+        btn.classList.add('border-transparent', 'hover:text-gray-200');
+      });
+
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-${tabName}-btn`);
+      activeBtn.classList.remove('border-transparent', 'hover:text-gray-200');
+      activeBtn.classList.add('border-emerald-500', 'text-emerald-400', 'font-semibold');
+
+      if (tabName === 'planning') loadPlanning();
+      if (tabName === 'clients') loadClients();
+    }
+
+    // Soumission du Formulaire RDV
     document.getElementById('bookingForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -128,7 +177,7 @@
       const date = document.getElementById('appointmentDate').value;
 
       try {
-        // 1. Enregistrement / recherche du client
+        // Enregistrement / Recherche Client
         let { data: client, error: clientErr } = await db
           .from('clients')
           .insert([{ name, phone, referral }])
@@ -137,7 +186,7 @@
 
         if (clientErr) throw clientErr;
 
-        // 2. Enregistrement du rendez-vous
+        // Enregistrement Rendez-vous
         const { error: apptErr } = await db
           .from('appointments')
           .insert([{
@@ -151,12 +200,11 @@
 
         if (apptErr) throw apptErr;
 
-        // Affichage succès
         statusMessage.className = "text-center text-sm p-3 rounded-lg bg-emerald-900/50 text-emerald-300 border border-emerald-700";
         statusMessage.innerText = "Rendez-vous enregistré ! Ouverture des SMS...";
         statusMessage.classList.remove('hidden');
 
-        // 3. Préparation et ouverture du SMS automatique
+        // Préparation du SMS
         const formattedDate = new Date(date).toLocaleString('fr-BE', { 
           dateStyle: 'full', 
           timeStyle: 'short' 
@@ -171,19 +219,92 @@
           `L'As Du Détail — Plus qu’un nettoyage, une signature`
         );
 
-        // Ouvre l'application SMS du téléphone avec le numéro et le message préremplis
         window.location.href = `sms:${phone}?body=${smsBody}`;
 
       } catch (err) {
         console.error(err);
         statusMessage.className = "text-center text-sm p-3 rounded-lg bg-red-900/50 text-red-300 border border-red-700";
-        statusMessage.innerText = "Erreur lors de l'enregistrement. Veuillez réassocier Supabase.";
+        statusMessage.innerText = "Erreur lors de l'enregistrement.";
         statusMessage.classList.remove('hidden');
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerText = "Enregistrer & Envoyer SMS";
       }
     });
+
+    // Chargement du Planning
+    async function loadPlanning() {
+      const planningList = document.getElementById('planningList');
+      planningList.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">Chargement du planning...</p>`;
+
+      const { data, error } = await db
+        .from('appointments')
+        .select('*, clients(name, phone)')
+        .order('appointment_date', { ascending: true });
+
+      if (error || !data || data.length === 0) {
+        planningList.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">Aucun rendez-vous à venir.</p>`;
+        return;
+      }
+
+      planningList.innerHTML = data.map(item => {
+        const dateStr = new Date(item.appointment_date).toLocaleString('fr-BE', {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        });
+        const clientName = item.clients ? item.clients.name : 'Client inconnu';
+        const clientPhone = item.clients ? item.clients.phone : '';
+
+        return `
+          <div class="bg-gray-700/50 p-4 rounded-xl border border-gray-600 space-y-2">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-bold text-white">${clientName}</h3>
+                <p class="text-xs text-emerald-400 font-medium">${dateStr}</p>
+              </div>
+              <span class="text-xs bg-emerald-900/60 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-700">${item.service}</span>
+            </div>
+            <div class="text-xs text-gray-300 space-y-1 pt-1 border-t border-gray-600/50">
+              <p><span class="text-gray-400">Lieu :</span> ${item.location} | <span class="text-gray-400">Abonnement :</span> ${item.subscription}</p>
+              ${item.supplements ? `<p><span class="text-gray-400">Suppléments :</span> ${item.supplements}</p>` : ''}
+            </div>
+            <div class="pt-2 flex justify-end">
+              <a href="sms:${clientPhone}" class="text-xs text-emerald-400 hover:underline">Envoyer un SMS</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Chargement des Clients
+    async function loadClients() {
+      const clientsList = document.getElementById('clientsList');
+      clientsList.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">Chargement des clients...</p>`;
+
+      const { data, error } = await db
+        .from('clients')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error || !data || data.length === 0) {
+        clientsList.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">Aucun client enregistré.</p>`;
+        return;
+      }
+
+      clientsList.innerHTML = data.map(c => `
+        <div class="bg-gray-700/50 p-4 rounded-xl border border-gray-600 flex justify-between items-center">
+          <div>
+            <h3 class="font-bold text-white">${c.name}</h3>
+            <p class="text-xs text-gray-400">${c.phone}</p>
+            ${c.referral ? `<p class="text-xs text-emerald-400 mt-0.5">Parrain : ${c.referral}</p>` : ''}
+          </div>
+          <div class="flex space-x-2">
+            <a href="tel:${c.phone}" class="bg-gray-600 hover:bg-gray-500 text-white text-xs py-1.5 px-3 rounded-lg">Appeler</a>
+            <a href="sms:${c.phone}" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs py-1.5 px-3 rounded-lg">SMS</a>
+          </div>
+        </div>
+      `).join('');
+    }
   </script>
 </body>
 </html>
