@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -256,6 +257,16 @@
 
   <!-- SCRIPT LOGIQUE ET TRAITEMENT DES DONNEES -->
   <script>
+    // fonction utilitaire pour formater AAAA-MM-JJ vers JJ/MM/AAAA
+    function formatDateFR(dateStr) {
+      if (!dateStr) return '';
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      }
+      return dateStr;
+    }
+
     // Grille complète des prestations avec tarifs selon catégorie de véhicule
     const SERVICES = [
       { id: 'w_ess', name: 'WashDetail - Essential', prices: { petite: 19.99, moyenne: 24.99, grande: 29.99, camionnette: 34.99 } },
@@ -356,12 +367,13 @@
 
     // Générateur de messages dynamiques
     function generateMessageText(booking, type) {
+      const formattedDate = formatDateFR(booking.date);
       if (type === 'confirm') {
         return `Bonjour ${booking.client_name},
 
 Votre rendez-vous est bien confirmé chez L'As Du Détail :
 
-📅 Date et heure : ${booking.date} à ${booking.time}
+📅 Date et heure : ${formattedDate} à ${booking.time}
 📍 Lieu : ${booking.lieu}
 🚘 Véhicule : Catégorie ${booking.category.toUpperCase()}
 🛠️ Prestation : ${booking.service_name}
@@ -376,7 +388,7 @@ Alex — L’As Du Détail`;
 
 Petit rappel pour votre rendez-vous chez L'As Du Détail :
 
-📅 Date et heure : ${booking.date} à ${booking.time}
+📅 Date et heure : ${formattedDate} à ${booking.time}
 📍 Lieu : ${booking.lieu}
 
 À très bientôt !
@@ -427,7 +439,7 @@ Alex — L’As Du Détail`;
         <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 space-y-3 shadow-sm">
           <div class="flex justify-between items-start">
             <div>
-              <div class="font-extrabold text-amber-400 text-sm">📅 ${b.date} à ${b.time}</div>
+              <div class="font-extrabold text-amber-400 text-sm">📅 ${formatDateFR(b.date)} à ${b.time}</div>
               <div class="font-bold text-white text-base mt-0.5">${b.client_name}</div>
             </div>
             <span class="text-xs px-2.5 py-1 bg-amber-500 text-neutral-950 font-black rounded-lg shadow-sm">${b.total_price}</span>
