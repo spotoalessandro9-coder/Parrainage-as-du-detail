@@ -1,224 +1,259 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>L'As Du Détail - Cockpit</title>
+  <title>L'As Du Détail - Cockpit Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-neutral-900 text-neutral-100 font-sans pb-24">
+<body class="bg-neutral-900 text-neutral-100 font-sans pb-28">
 
-  <!-- En-tête -->
-  <header class="bg-neutral-950 border-b border-neutral-800 p-4 sticky top-0 z-50">
-    <div class="max-w-md mx-auto flex items-center justify-between">
-      <div class="flex items-center space-x-2">
-        <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center font-bold text-neutral-950">A</div>
+  <!-- En-tête de l'application -->
+  <header class="bg-neutral-950 border-b border-neutral-800 p-4 sticky top-0 z-50 shadow-md">
+    <div class="max-w-xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center font-black text-neutral-950 text-xl shadow-lg shadow-amber-500/20">A</div>
         <div>
-          <h1 class="font-bold text-lg leading-none">L'As Du Détail</h1>
-          <p class="text-xs text-neutral-400">Internal Cockpit</p>
+          <h1 class="font-extrabold text-lg leading-none text-white tracking-wide">L'As Du Détail</h1>
+          <p class="text-xs text-neutral-400 mt-0.5">Système de Gestion & Cockpit</p>
         </div>
       </div>
-      <span class="text-xs px-2.5 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full font-medium">Waremme</span>
+      <div class="text-right">
+        <span class="text-[11px] px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full font-bold uppercase tracking-wider block">Waremme</span>
+        <span id="sync-status" class="text-[10px] text-emerald-400 font-medium mt-1 block">● Mode Local Ultra-Rapide</span>
+      </div>
     </div>
   </header>
 
-  <!-- Notification Banner -->
-  <div id="notification" class="hidden max-w-md mx-auto m-4 p-4 bg-amber-500 text-neutral-950 font-semibold rounded-xl shadow-lg border border-amber-400 text-sm"></div>
+  <!-- Banner de notification -->
+  <div id="notification" class="hidden max-w-xl mx-auto m-4 p-4 bg-amber-500 text-neutral-950 font-bold rounded-xl shadow-xl border border-amber-400 text-sm transform transition-all duration-300"></div>
 
-  <!-- Main Content Container -->
-  <main class="max-w-md mx-auto p-4 space-y-6">
+  <!-- Conteneur Principal -->
+  <main class="max-w-xl mx-auto p-4 space-y-6">
 
-    <!-- SECTION 1: DEVIS / RESERVATION -->
+    <!-- STATS RAPIDES (DASHBOARD) -->
+    <div id="dashboard-summary" class="grid grid-cols-3 gap-3">
+      <div class="bg-neutral-800/40 border border-neutral-800 rounded-2xl p-3 text-center">
+        <div class="text-[10px] uppercase font-bold text-neutral-500">Clients</div>
+        <div id="stat-total-clients" class="text-xl font-black text-amber-400 mt-1">0</div>
+      </div>
+      <div class="bg-neutral-800/40 border border-neutral-800 rounded-2xl p-3 text-center">
+        <div class="text-[10px] uppercase font-bold text-neutral-500">RDV Total</div>
+        <div id="stat-total-rdv" class="text-xl font-black text-amber-400 mt-1">0</div>
+      </div>
+      <div class="bg-neutral-800/40 border border-neutral-800 rounded-2xl p-3 text-center">
+        <div class="text-[10px] uppercase font-bold text-neutral-500">CA Estimé</div>
+        <div id="stat-total-ca" class="text-xl font-black text-emerald-400 mt-1">0 €</div>
+      </div>
+    </div>
+
+    <!-- TAB 1: DEVIS & RESERVATION -->
     <div id="tab-booking" class="space-y-5">
       
-      <!-- Client -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">1. Client</label>
+      <!-- 1. Client -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
+        <div class="flex justify-between items-center">
+          <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">1. Client & Parrainage</label>
+          <button type="button" onclick="window.switchTab('clients')" class="text-[11px] text-amber-400 hover:underline font-semibold">+ Nouveau Client</button>
+        </div>
         <select id="client-select" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500">
-          <option value="">Chargement des clients...</option>
+          <option value="">-- Sélectionner un client --</option>
         </select>
-        <div id="parrainage-badge" class="hidden bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex justify-between items-center mt-2">
-          <span class="text-xs text-amber-200">Cagnotte disponible :</span>
-          <span id="parrainage-val" class="font-bold text-amber-400 text-sm">0%</span>
+        
+        <div id="parrainage-badge" class="hidden bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex justify-between items-center">
+          <div>
+            <span class="text-xs text-amber-200 block font-medium">Cagnotte parrainage active</span>
+            <span class="text-[10px] text-neutral-400">Disponible pour ce client</span>
+          </div>
+          <span id="parrainage-val" class="font-black text-amber-400 text-lg">0%</span>
         </div>
       </div>
 
-      <!-- Véhicule -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">2. Véhicule</label>
-        <div class="grid grid-cols-2 gap-2">
-          <button type="button" id="cat-petite" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
-            <div class="font-semibold text-sm">Petite</div>
-            <div class="text-[10px] text-neutral-500">Citadine</div>
+      <!-- 2. Catégorie Véhicule -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">2. Catégorie du véhicule</label>
+        <div class="grid grid-cols-2 gap-2.5">
+          <button type="button" id="cat-petite" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">
+            <div class="font-bold text-sm text-white">Petite</div>
+            <div class="text-[10px] text-neutral-400 mt-0.5">Citadine (ex: VW Polo, Yaris)</div>
           </button>
-          <button type="button" id="cat-moyenne" class="cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300">
-            <div class="font-semibold text-sm">Moyenne</div>
-            <div class="text-[10px] text-neutral-500">Berline / Compacte</div>
+          <button type="button" id="cat-moyenne" class="cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300 transition-all">
+            <div class="font-bold text-sm text-amber-300">Moyenne</div>
+            <div class="text-[10px] text-neutral-400 mt-0.5">Berline / Compacte (ex: Golf, A4)</div>
           </button>
-          <button type="button" id="cat-grande" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
-            <div class="font-semibold text-sm">Grande</div>
-            <div class="text-[10px] text-neutral-500">SUV / Break</div>
+          <button type="button" id="cat-grande" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">
+            <div class="font-bold text-sm text-white">Grande</div>
+            <div class="text-[10px] text-neutral-400 mt-0.5">SUV / Break (ex: X5, Q7)</div>
           </button>
-          <button type="button" id="cat-camionnette" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
-            <div class="font-semibold text-sm">Camionnette</div>
-            <div class="text-[10px] text-neutral-500">Utilitaire</div>
+          <button type="button" id="cat-camionnette" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">
+            <div class="font-bold text-sm text-white">Camionnette</div>
+            <div class="text-[10px] text-neutral-400 mt-0.5">Utilitaire / Van (ex: Transit)</div>
           </button>
         </div>
       </div>
 
-      <!-- Prestation -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">3. Prestation</label>
+      <!-- 3. Choix Prestation -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">3. Prestation principale</label>
         <select id="service-select" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500"></select>
       </div>
 
-      <!-- Option Abonnement -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
-        <label class="text-xs uppercase tracking-wider text-amber-400 font-bold block">4. Formule Abonnement</label>
+      <!-- 4. Formule Abonnement -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
+        <label class="text-xs uppercase tracking-wider text-amber-400 font-bold block">4. Recurrence / Formule Abonnement</label>
         <div class="grid grid-cols-2 gap-2 text-xs">
-          <button type="button" id="sub-none" class="sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-medium">Sans abonnement</button>
-          <button type="button" id="sub-1x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">1x / mois (-5%)</button>
-          <button type="button" id="sub-2x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">2x / mois (-10%)</button>
-          <button type="button" id="sub-4x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">4x / mois (-15%)</button>
+          <button type="button" id="sub-none" class="sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-bold transition-all">Punctuel (Sans Abo)</button>
+          <button type="button" id="sub-1x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium transition-all">1x / mois (-5%)</button>
+          <button type="button" id="sub-2x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium transition-all">2x / mois (-10%)</button>
+          <button type="button" id="sub-4x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium transition-all">4x / mois (-15%)</button>
         </div>
       </div>
 
-      <!-- Suppléments -->
+      <!-- 5. Options et Suppléments -->
       <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">5. Suppléments</label>
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">5. Options & Nettoyage Extrême</label>
         
-        <span class="text-xs text-neutral-300 block">Sièges (Shampooing / Injection) :</span>
+        <span class="text-xs text-neutral-300 block font-medium">Shampooing Sièges (Injection / Extraction) :</span>
         <div class="grid grid-cols-2 gap-2 text-xs">
-          <button type="button" id="seat-none" class="seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300">Aucun (0€)</button>
-          <button type="button" id="seat-1_seat" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">1 Siège (30€)</button>
-          <button type="button" id="seat-2_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">2 Sièges (50€)</button>
-          <button type="button" id="seat-all_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">Tous les sièges (90€)</button>
+          <button type="button" id="seat-none" class="seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300 transition-all">Aucun (0€)</button>
+          <button type="button" id="seat-1_seat" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">1 Siège (30€)</button>
+          <button type="button" id="seat-2_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">2 Sièges (50€)</button>
+          <button type="button" id="seat-all_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">Tous les sièges (90€)</button>
         </div>
 
-        <button type="button" id="roof-btn" class="w-full p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all bg-neutral-900 border-neutral-700 text-neutral-400 mt-2">
-          <span>Supplément Ciel de toit</span>
+        <button type="button" id="roof-btn" class="w-full p-3 rounded-xl border flex items-center justify-between text-xs transition-all bg-neutral-900 border-neutral-700 text-neutral-400 mt-2">
+          <span>Nettoyage Ciel de toit</span>
           <span class="font-bold">+ 30,00 €</span>
         </button>
       </div>
 
-      <!-- Lieu / Déplacement -->
+      <!-- 6. Lieu & Déplacement -->
       <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">6. Lieu</label>
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">6. Lieu de prestation</label>
         <div class="flex rounded-xl bg-neutral-900 p-1 border border-neutral-700">
-          <button type="button" id="loc-atelier" class="flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950">Atelier (Waremme)</button>
-          <button type="button" id="loc-travel" class="flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400">Déplacement</button>
+          <button type="button" id="loc-atelier" class="flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950 transition-all">Atelier (Waremme)</button>
+          <button type="button" id="loc-travel" class="flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400 transition-all">À Domicile (Déplacement)</button>
         </div>
-        <div id="travel-input" class="hidden space-y-1">
+        <div id="travel-input" class="hidden space-y-2 pt-2">
           <input type="number" id="distance-km" placeholder="Distance en km (aller simple)" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
-          <p class="text-[11px] text-neutral-500">Formule : 10,00 € + 0,70 € / km</p>
+          <p class="text-[11px] text-neutral-400">Calculateur : 10,00 € de forfait fixe + 0,70 € / km</p>
         </div>
       </div>
 
-      <!-- Réduction Parrainage -->
-      <div id="parrainage-slider-box" class="hidden bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
+      <!-- 7. Application Réduction Parrainage -->
+      <div id="parrainage-slider-box" class="hidden bg-neutral-800/50 border border-amber-500/30 rounded-2xl p-4 space-y-3">
         <label class="text-xs uppercase tracking-wider text-amber-400 font-bold block">Appliquer la Réduction Parrainage</label>
         <div class="flex items-center space-x-3">
-          <input type="range" id="discount-range" min="0" max="100" step="10" value="0" class="w-full accent-amber-500" />
-          <span id="discount-val-label" class="font-bold text-amber-400 text-lg w-12 text-right">-0%</span>
+          <input type="range" id="discount-range" min="0" max="100" step="10" value="0" class="w-full accent-amber-500 cursor-pointer" />
+          <span id="discount-val-label" class="font-black text-amber-400 text-xl w-14 text-right">-0%</span>
         </div>
       </div>
 
-      <!-- Date & Heure -->
+      <!-- 8. Date & Heure -->
       <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">7. Date et Heure</label>
+        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">7. Planification du Rendez-vous</label>
         <div class="grid grid-cols-2 gap-2">
           <input type="date" id="booking-date" class="bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
           <input type="time" id="booking-time" value="09:00" class="bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
         </div>
       </div>
 
-      <!-- Récapitulatif -->
-      <div class="bg-neutral-950 border border-amber-500/30 rounded-2xl p-5 space-y-3">
-        <h3 class="text-xs uppercase tracking-wider text-amber-400 font-bold">Récapitulatif</h3>
-        <div class="space-y-1 text-xs text-neutral-300">
-          <div class="flex justify-between"><span>Prestation :</span><span id="recap-service">0,00 €</span></div>
-          <div id="recap-sub-row" class="hidden flex justify-between text-amber-400 font-medium"><span>Abonnement :</span><span id="recap-sub-discount">-0,00 €</span></div>
-          <div class="flex justify-between"><span>Suppléments :</span><span id="recap-supplements">0,00 €</span></div>
-          <div class="flex justify-between"><span>Déplacement :</span><span id="recap-travel">0,00 €</span></div>
-          <div id="recap-discount-row" class="hidden flex justify-between text-amber-400 font-medium"><span>Parrainage :</span><span id="recap-discount">-0,00 €</span></div>
+      <!-- 9. Récapitulatif Financier -->
+      <div class="bg-neutral-950 border border-amber-500/40 rounded-2xl p-5 space-y-4 shadow-xl">
+        <h3 class="text-xs uppercase tracking-wider text-amber-400 font-bold border-b border-neutral-800 pb-2">Détail du devis</h3>
+        
+        <div class="space-y-1.5 text-xs text-neutral-300">
+          <div class="flex justify-between"><span>Tarif Base Prestation :</span><span id="recap-service" class="font-medium text-white">0,00 €</span></div>
+          <div id="recap-sub-row" class="hidden flex justify-between text-amber-400 font-medium"><span>Remise Abonnement :</span><span id="recap-sub-discount">-0,00 €</span></div>
+          <div class="flex justify-between"><span>Suppléments & Options :</span><span id="recap-supplements" class="font-medium text-white">0,00 €</span></div>
+          <div class="flex justify-between"><span>Frais de Déplacement :</span><span id="recap-travel" class="font-medium text-white">0,00 €</span></div>
+          <div id="recap-discount-row" class="hidden flex justify-between text-amber-400 font-medium"><span>Remise Cagnotte Parrainage :</span><span id="recap-discount">-0,00 €</span></div>
         </div>
+
         <div class="border-t border-neutral-800 pt-3 flex justify-between items-center">
-          <span class="font-bold text-sm text-white">TOTAL FINAL :</span>
-          <span id="total-price" class="font-extrabold text-2xl text-amber-400">0,00 €</span>
+          <span class="font-bold text-sm text-white uppercase tracking-wider">TOTAL HTVA / NET :</span>
+          <span id="total-price" class="font-black text-3xl text-amber-400">0,00 €</span>
         </div>
-        <button type="button" id="btn-save-booking" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3.5 rounded-xl transition-all text-sm mt-2">
-          Générer & Enregistrer le RDV
+
+        <button type="button" id="btn-save-booking" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-black py-4 rounded-xl transition-all text-sm uppercase tracking-wider shadow-lg shadow-amber-500/20 active:scale-98">
+          Valider & Enregistrer le RDV
         </button>
       </div>
 
-      <!-- Bloc du message généré -->
+      <!-- Bloc Message Client Généré -->
       <div id="message-output-box" class="hidden bg-neutral-950 border border-neutral-800 rounded-2xl p-4 space-y-3">
         <div class="flex justify-between items-center">
-          <span class="text-xs uppercase tracking-wider text-amber-400 font-bold">Message à envoyer au client</span>
-          <button type="button" id="btn-copy-msg" class="px-3 py-1 bg-amber-500 text-neutral-950 font-bold rounded-lg text-xs">Copier</button>
+          <span class="text-xs uppercase tracking-wider text-amber-400 font-bold">Message de confirmation prêt à envoyer</span>
+          <button type="button" id="btn-copy-msg" class="px-3 py-1 bg-amber-500 text-neutral-950 font-bold rounded-lg text-xs hover:bg-amber-400 transition-all">Copier le texte</button>
         </div>
-        <textarea id="message-text" rows="12" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs text-neutral-200 font-mono focus:outline-none" readonly></textarea>
+        <textarea id="message-text" rows="11" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs text-neutral-200 font-mono focus:outline-none focus:border-amber-500" readonly></textarea>
       </div>
 
     </div>
 
-    <!-- SECTION 2: CLIENTS & PARRAINAGE -->
-    <div id="tab-clients" class="hidden space-y-4">
+    <!-- TAB 2: CLIENTS & PARRAINAGE -->
+    <div id="tab-clients" class="hidden space-y-5">
       
-      <!-- Formulaire Ajouter Client -->
-      <div class="bg-neutral-800/60 border border-amber-500/30 rounded-2xl p-4 space-y-3">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">Nouveau Client</h3>
+      <!-- Formulaire Ajout Client -->
+      <div class="bg-neutral-800/60 border border-amber-500/30 rounded-2xl p-4 space-y-3 shadow-lg">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">Ajouter un nouveau client</h3>
         <div class="space-y-2">
-          <input type="text" id="new-client-name" placeholder="Nom Prénom *" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="text" id="new-client-name" placeholder="Nom & Prénom *" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
           <input type="tel" id="new-client-phone" placeholder="Numéro de téléphone" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
-          <input type="text" id="new-client-address" placeholder="Adresse complète (ex: Rue de Liège 10, Waremme)" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
-          <input type="number" id="new-client-distance" placeholder="Distance depuis atelier en km (aller simple)" step="0.1" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
-          <input type="number" id="new-client-discount" placeholder="Cagnotte Parrainage initiale (%) ex: 0" value="0" step="10" min="0" max="100" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="text" id="new-client-address" placeholder="Adresse (ex: Rue de la Gare 12, Waremme)" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <div class="grid grid-cols-2 gap-2">
+            <input type="number" id="new-client-distance" placeholder="Distance km (aller)" step="0.1" class="bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+            <input type="number" id="new-client-discount" placeholder="Cagnotte parrainage (%)" value="0" step="10" min="0" max="100" class="bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          </div>
         </div>
-        <button type="button" id="btn-add-client" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3 rounded-xl transition-all text-xs">
-          + Ajouter le client
+        <button type="button" id="btn-add-client" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3.5 rounded-xl transition-all text-xs uppercase tracking-wider shadow-md">
+          + Enregistrer le client
         </button>
       </div>
 
-      <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400 pt-2">Base Clients</h2>
-      <div id="clients-list" class="space-y-3">Chargement...</div>
+      <!-- Recherche & Liste Clients -->
+      <div class="space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Base Fichier Clients</h2>
+          <input type="text" id="search-client" oninput="window.filterClients()" placeholder="Rechercher..." class="bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-1 text-xs text-white focus:outline-none focus:border-amber-500 w-36" />
+        </div>
+        <div id="clients-list" class="space-y-3"></div>
+      </div>
+
     </div>
 
-    <!-- SECTION 3: PLANNING RENDEZ-VOUS -->
+    <!-- TAB 3: PLANNING RDV -->
     <div id="tab-rdv" class="hidden space-y-4">
-      <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Rendez-vous à venir</h2>
-      <div id="bookings-list" class="space-y-3">Chargement...</div>
+      <div class="flex justify-between items-center">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Planning & Rendez-vous enregistrés</h2>
+        <span id="rdv-count-badge" class="text-[10px] bg-neutral-800 border border-neutral-700 text-amber-400 font-bold px-2 py-0.5 rounded-full">0 RDV</span>
+      </div>
+      <div id="bookings-list" class="space-y-3"></div>
     </div>
 
   </main>
 
-  <!-- Navigation Basse -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-neutral-950 border-t border-neutral-800 py-3 px-4 z-50">
-    <div class="max-w-md mx-auto flex justify-around items-center text-xs">
-      <button id="nav-booking" class="font-bold text-amber-400">Devis / Booking</button>
-      <button id="nav-clients" class="font-medium text-neutral-500">Clients & Parrainage</button>
-      <button id="nav-rdv" class="font-medium text-neutral-500">Planning RDV</button>
+  <!-- Navigation fixe en bas de page -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-neutral-950/95 backdrop-blur-md border-t border-neutral-800 py-3 px-4 z-50">
+    <div class="max-w-xl mx-auto flex justify-around items-center text-xs">
+      <button id="nav-booking" class="font-bold text-amber-400 flex flex-col items-center space-y-1">
+        <span>📝</span>
+        <span>Devis / RDV</span>
+      </button>
+      <button id="nav-clients" class="font-medium text-neutral-500 flex flex-col items-center space-y-1">
+        <span>👤</span>
+        <span>Clients & Parrainage</span>
+      </button>
+      <button id="nav-rdv" class="font-medium text-neutral-500 flex flex-col items-center space-y-1">
+        <span>📅</span>
+        <span>Planning RDV</span>
+      </button>
     </div>
   </nav>
 
-  <!-- FIREBASE SDK & INTEGRATION -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCFhUCgo-CWzBMix8GRYmrsZ3PBtWGb3RQ",
-      authDomain: "las-du-detail-rdv.firebaseapp.com",
-      projectId: "las-du-detail-rdv",
-      storageBucket: "las-du-detail-rdv.firebasestorage.app",
-      messagingSenderId: "966112800698",
-      appId: "1:966112800698:web:b13de1045530ebe2be7783"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
+  <!-- SCRIPT LOGIQUE ET TRAITEMENT DES DONNEES -->
+  <script>
+    // Grille complète des prestations avec tarifs selon catégorie de véhicule
     const SERVICES = [
       { id: 'w_ess', name: 'WashDetail - Essential', prices: { petite: 19.99, moyenne: 24.99, grande: 29.99, camionnette: 34.99 } },
       { id: 'w_sig', name: 'WashDetail - Signature', prices: { petite: 49.99, moyenne: 54.99, grande: 59.99, camionnette: 64.99 } },
@@ -229,17 +264,16 @@
       { id: 'p_pre', name: 'PackDetail - Prestige', prices: { petite: 149.99, moyenne: 159.99, grande: 169.99, camionnette: 169.99 } },
       { id: 'p_sig', name: 'PackDetail - Signature', prices: { petite: 239.99, moyenne: 249.99, grande: 259.99, camionnette: 229.99 } },
       { id: 'pol_1', name: 'Polissage One Step Essential', prices: { petite: 249.99, moyenne: 279.99, grande: 309.99, camionnette: 349.99 } },
-      { id: 'pol_2', name: 'Polissage 2 Step', prices: { petite: 399.99, moyenne: 449.99, grande: 499.99, camionnette: 549.99 } },
-      { id: 'c_12', name: 'Céramique 12-24 mois', prices: { petite: 249.99, moyenne: 279.99, grande: 309.99, camionnette: 349.99 } },
-      { id: 'c_48', name: 'Céramique 48-60 mois', prices: { petite: 549.99, moyenne: 649.99, grande: 749.99, camionnette: 899.99 } },
-      { id: 'cb_1_12', name: '⭐ One-Step + Céramique 12–24 mois', prices: { petite: 499.99, moyenne: 549.99, grande: 599.99, camionnette: 699.99 } },
-      { id: 'cb_1_48', name: '👑 One-Step + Céramique 48–60 mois', prices: { petite: 799.99, moyenne: 899.99, grande: 999.99, camionnette: 1199.99 } },
-      { id: 'cb_2_12', name: '🔥 Two-Step + Céramique 12–24 mois', prices: { petite: 699.99, moyenne: 749.99, grande: 849.99, camionnette: 949.99 } },
-      { id: 'cb_2_48', name: '💎 Two-Step + Céramique 48–60 mois', prices: { petite: 999.99, moyenne: 1099.99, grande: 1199.99, camionnette: 1399.99 } }
+      { id: 'pol_2', name: 'Polissage 2 Step Correction', prices: { petite: 399.99, moyenne: 449.99, grande: 499.99, camionnette: 549.99 } },
+      { id: 'c_12', name: 'Protection Céramique 12-24 mois', prices: { petite: 249.99, moyenne: 279.99, grande: 309.99, camionnette: 349.99 } },
+      { id: 'c_48', name: 'Protection Céramique 48-60 mois', prices: { petite: 549.99, moyenne: 649.99, grande: 749.99, camionnette: 899.99 } }
     ];
 
-    window.clientsData = [];
-    window.bookingsData = [];
+    // Initialisation des données locales persistent
+    window.clientsData = JSON.parse(localStorage.getItem('ldd_clients') || '[]');
+    window.bookingsData = JSON.parse(localStorage.getItem('ldd_bookings') || '[]');
+    
+    // Etat global du formulaire devis
     window.currentCategory = 'moyenne';
     window.currentSeats = 'none';
     window.currentRoof = false;
@@ -247,287 +281,256 @@
     window.currentDiscountPct = 0;
     window.currentSub = 'none';
 
-    async function loadClients() {
-      const list = document.getElementById('clients-list');
-      const sel = document.getElementById('client-select');
-      try {
-        const querySnapshot = await getDocs(collection(db, "clients"));
-        let loaded = [];
-        querySnapshot.forEach((docSnap) => {
-          loaded.push({ id: docSnap.id, ...docSnap.data() });
-        });
-        
-        loaded.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-        window.clientsData = loaded;
-
-        renderClientsSelect();
-        renderClientsList();
-      } catch (e) {
-        console.error("Erreur Firebase Clients :", e);
-        list.innerHTML = '<div class="text-xs text-red-400 p-2">Erreur de connexion à Firebase.</div>';
-        sel.innerHTML = '<option value="">Erreur de chargement</option>';
-      }
+    function saveLocal() {
+      localStorage.setItem('ldd_clients', JSON.stringify(window.clientsData));
+      localStorage.setItem('ldd_bookings', JSON.stringify(window.bookingsData));
+      window.updateDashboardStats();
     }
 
-    async function loadBookings() {
-      const list = document.getElementById('bookings-list');
-      try {
-        const querySnapshot = await getDocs(collection(db, "bookings"));
-        let loaded = [];
-        querySnapshot.forEach((docSnap) => {
-          loaded.push({ id: docSnap.id, ...docSnap.data() });
-        });
-
-        loaded.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-        window.bookingsData = loaded;
-        renderBookingsList();
-      } catch (e) {
-        console.error("Erreur Firebase RDV :", e);
-        list.innerHTML = '<div class="text-xs text-red-400 p-2">Erreur lors du chargement des rendez-vous.</div>';
-      }
+    function showNotification(msg) {
+      const el = document.getElementById('notification');
+      el.innerText = msg;
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 3500);
     }
 
-    window.addNewClient = async function() {
-      const btn = document.getElementById('btn-add-client');
-      const nameInput = document.getElementById('new-client-name');
-      const phoneInput = document.getElementById('new-client-phone');
-      const addressInput = document.getElementById('new-client-address');
-      const distanceInput = document.getElementById('new-client-distance');
-      const discountInput = document.getElementById('new-client-discount');
-
-      const name = nameInput.value.trim();
-      const phone = phoneInput.value.trim();
-      const address = addressInput.value.trim();
-      const distance = parseFloat(distanceInput.value) || 0;
-      const discount = parseInt(discountInput.value) || 0;
-
-      if (!name) {
-        alert("Veuillez saisir au moins le nom du client.");
-        return;
-      }
-
-      btn.disabled = true;
-      btn.innerText = "Enregistrement...";
-
-      try {
-        await addDoc(collection(db, "clients"), {
-          name,
-          phone,
-          address,
-          distance_km: distance,
-          referral_discount_pct: discount,
-          created_at: new Date().toISOString()
-        });
-
-        window.showNotification(`Client ${name} ajouté avec succès !`);
-        
-        nameInput.value = '';
-        phoneInput.value = '';
-        addressInput.value = '';
-        distanceInput.value = '';
-        discountInput.value = '0';
-
-        await loadClients();
-      } catch (e) {
-        console.error("Erreur lors de l'ajout du client :", e);
-        alert("Erreur Firebase lors de l'enregistrement : " + e.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "+ Ajouter le client";
-      }
-    };
-
-    window.deleteClient = async function(clientId) {
-      const c = window.clientsData.find(x => x.id === clientId);
-      if (!c) return;
-      if (!confirm(`Voulez-vous vraiment supprimer le client ${c.name} ?`)) return;
-
-      try {
-        await deleteDoc(doc(db, "clients", clientId));
-        window.showNotification(`Client ${c.name} supprimé.`);
-        loadClients();
-      } catch (e) {
-        console.error("Erreur de suppression :", e);
-        alert("Impossible de supprimer le client.");
-      }
-    };
-
-    window.deleteBooking = async function(bookingId) {
-      if (!confirm("Voulez-vous vraiment annuler/supprimer ce rendez-vous ?")) return;
-
-      try {
-        await deleteDoc(doc(db, "bookings", bookingId));
-        window.showNotification("Rendez-vous supprimé !");
-        loadBookings();
-      } catch (e) {
-        console.error("Erreur de suppression RDV :", e);
-        alert("Erreur lors de la suppression du rendez-vous.");
-      }
+    window.updateDashboardStats = function() {
+      document.getElementById('stat-total-clients').innerText = window.clientsData.length;
+      document.getElementById('stat-total-rdv').innerText = window.bookingsData.length;
+      
+      const totalCA = window.bookingsData.reduce((acc, b) => {
+        const val = parseFloat((b.total_price || '0').replace('€', '').replace(',', '.').trim());
+        return acc + (isNaN(val) ? 0 : val);
+      }, 0);
+      
+      document.getElementById('stat-total-ca').innerText = totalCA.toFixed(0) + ' €';
+      document.getElementById('rdv-count-badge').innerText = window.bookingsData.length + ' RDV';
     };
 
     function renderClientsSelect() {
       const sel = document.getElementById('client-select');
       if (window.clientsData.length === 0) {
-        sel.innerHTML = '<option value="">-- Aucun client disponible --</option>';
+        sel.innerHTML = '<option value="">-- Aucun client enregistré --</option>';
         return;
       }
-      sel.innerHTML = '<option value="">-- Choisir un client --</option>' + 
+      sel.innerHTML = '<option value="">-- Sélectionner un client --</option>' + 
         window.clientsData.map(c => `<option value="${c.id}">${c.name} (${c.referral_discount_pct || 0}% parrainage)</option>`).join('');
     }
 
-    function renderClientsList() {
+    window.filterClients = function() {
+      const q = (document.getElementById('search-client').value || '').toLowerCase();
+      renderClientsList(q);
+    };
+
+    function renderClientsList(filterQuery = '') {
       const list = document.getElementById('clients-list');
-      if (window.clientsData.length === 0) {
-        list.innerHTML = '<div class="text-xs text-neutral-500 italic p-2">Aucun client enregistré.</div>';
+      const filtered = window.clientsData.filter(c => 
+        c.name.toLowerCase().includes(filterQuery) || 
+        (c.phone && c.phone.includes(filterQuery)) ||
+        (c.address && c.address.toLowerCase().includes(filterQuery))
+      );
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="text-xs text-neutral-500 italic p-3 text-center border border-dashed border-neutral-800 rounded-xl">Aucun client trouvé.</div>';
         return;
       }
-      list.innerHTML = window.clientsData.map(c => `
-        <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 flex justify-between items-center space-x-2">
-          <div>
+
+      list.innerHTML = filtered.map(c => `
+        <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 flex justify-between items-center space-x-2 shadow-sm">
+          <div class="space-y-1">
             <div class="font-bold text-white text-sm">${c.name}</div>
-            <div class="text-xs text-neutral-400">${c.phone || 'Sans tel'}</div>
-            ${c.address ? `<div class="text-[11px] text-neutral-500 mt-0.5">📍 ${c.address} (${c.distance_km || 0} km)</div>` : ''}
-            <div class="mt-1 text-xs text-amber-400 font-semibold">Cagnotte : ${c.referral_discount_pct || 0}%</div>
+            <div class="text-xs text-neutral-400">📞 ${c.phone || 'Non renseigné'}</div>
+            ${c.address ? `<div class="text-[11px] text-neutral-400">📍 ${c.address} (${c.distance_km || 0} km)</div>` : ''}
+            <div class="text-xs text-amber-400 font-bold pt-1">Cagnotte parrainage : ${c.referral_discount_pct || 0}%</div>
           </div>
           <div class="flex flex-col items-end space-y-2">
-            <button data-id="${c.id}" class="btn-add-ref px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold rounded-xl hover:bg-amber-500/20 transition-all">+10% Parrain</button>
-            <button data-id="${c.id}" class="btn-del-client px-3 py-1 bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold rounded-xl hover:bg-red-500/20 transition-all">Supprimer</button>
+            <button onclick="window.addReferral('${c.id}')" class="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold rounded-xl hover:bg-amber-500/20 transition-all">+10% Parrain</button>
+            <button onclick="window.deleteClient('${c.id}')" class="px-3 py-1 bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold rounded-xl hover:bg-red-500/20 transition-all">Supprimer</button>
           </div>
         </div>
       `).join('');
-
-      document.querySelectorAll('.btn-add-ref').forEach(btn => {
-        btn.onclick = () => window.addReferral(btn.getAttribute('data-id'));
-      });
-      document.querySelectorAll('.btn-del-client').forEach(btn => {
-        btn.onclick = () => window.deleteClient(btn.getAttribute('data-id'));
-      });
     }
 
     function renderBookingsList() {
       const list = document.getElementById('bookings-list');
       if (window.bookingsData.length === 0) {
-        list.innerHTML = '<div class="text-xs text-neutral-500 italic p-2">Aucun rendez-vous enregistré.</div>';
+        list.innerHTML = '<div class="text-xs text-neutral-500 italic p-4 text-center border border-dashed border-neutral-800 rounded-xl">Aucun rendez-vous dans le planning.</div>';
         return;
       }
 
       list.innerHTML = window.bookingsData.map(b => `
-        <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
+        <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 space-y-2 shadow-sm">
           <div class="flex justify-between items-start">
             <div>
-              <div class="font-bold text-amber-400 text-sm">📅 ${b.date} à ${b.time}</div>
-              <div class="font-bold text-white text-base">${b.client_name}</div>
+              <div class="font-extrabold text-amber-400 text-sm">📅 ${b.date} à ${b.time}</div>
+              <div class="font-bold text-white text-base mt-0.5">${b.client_name}</div>
             </div>
-            <span class="text-xs px-2.5 py-1 bg-amber-500 text-neutral-950 font-bold rounded-lg">${b.total_price}</span>
+            <span class="text-xs px-2.5 py-1 bg-amber-500 text-neutral-950 font-black rounded-lg shadow-sm">${b.total_price}</span>
           </div>
           <div class="text-xs text-neutral-300">🛠️ ${b.service_name} (${b.category.toUpperCase()})</div>
           <div class="text-xs text-neutral-400">📍 ${b.lieu}</div>
-          <div class="flex justify-end pt-2">
-            <button data-id="${b.id}" class="btn-del-booking px-3 py-1 bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold rounded-xl hover:bg-red-500/20 transition-all">Annuler / Supprimer</button>
+          <div class="flex justify-between items-center pt-2 border-t border-neutral-700/40">
+            <span class="text-[10px] text-emerald-400 font-semibold">● Confirmé</span>
+            <button onclick="window.deleteBooking('${b.id}')" class="px-3 py-1 bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold rounded-xl hover:bg-red-500/20 transition-all">Annuler / Supprimer</button>
           </div>
         </div>
       `).join('');
-
-      document.querySelectorAll('.btn-del-booking').forEach(btn => {
-        btn.onclick = () => window.deleteBooking(btn.getAttribute('data-id'));
-      });
     }
 
-    window.addReferral = async function(clientId) {
-      const c = window.clientsData.find(x => x.id === clientId);
-      if(!c) return;
-      const newPct = Math.min(100, (c.referral_discount_pct || 0) + 10);
-      
-      const clientRef = doc(db, "clients", clientId);
-      await updateDoc(clientRef, { referral_discount_pct: newPct });
-      
-      window.showNotification(`10% ajoutés au compte de ${c.name}. Nouveau solde : ${newPct}%.`);
-      loadClients();
+    window.addNewClient = function() {
+      const name = document.getElementById('new-client-name').value.trim();
+      if (!name) { alert("Veuillez saisir le nom du client."); return; }
+
+      const newClient = {
+        id: 'c_' + Date.now(),
+        name,
+        phone: document.getElementById('new-client-phone').value.trim(),
+        address: document.getElementById('new-client-address').value.trim(),
+        distance_km: parseFloat(document.getElementById('new-client-distance').value) || 0,
+        referral_discount_pct: parseInt(document.getElementById('new-client-discount').value) || 0
+      };
+
+      window.clientsData.push(newClient);
+      saveLocal();
+      showNotification(`Client ${name} ajouté avec succès !`);
+
+      document.getElementById('new-client-name').value = '';
+      document.getElementById('new-client-phone').value = '';
+      document.getElementById('new-client-address').value = '';
+      document.getElementById('new-client-distance').value = '';
+      document.getElementById('new-client-discount').value = '0';
+
+      renderClientsList();
+      renderClientsSelect();
     };
 
-    window.saveBooking = async function() {
+    window.deleteClient = function(id) {
+      if (!confirm("Voulez-vous supprimer ce client ?")) return;
+      window.clientsData = window.clientsData.filter(x => x.id !== id);
+      saveLocal();
+      renderClientsList();
+      renderClientsSelect();
+      showNotification("Client supprimé.");
+    };
+
+    window.addReferral = function(id) {
+      const c = window.clientsData.find(x => x.id === id);
+      if (!c) return;
+      c.referral_discount_pct = Math.min(100, (c.referral_discount_pct || 0) + 10);
+      saveLocal();
+      renderClientsList();
+      renderClientsSelect();
+      showNotification(`+10% de parrainage attribués à ${c.name}`);
+    };
+
+    window.saveBooking = function() {
       const clientId = document.getElementById('client-select').value;
       const date = document.getElementById('booking-date').value;
       const time = document.getElementById('booking-time').value || '09:00';
-      if (!clientId || !date) { alert('Veuillez choisir un client et une date.'); return; }
+      if (!clientId || !date) { alert('Veuillez sélectionner un client et une date.'); return; }
 
       const c = window.clientsData.find(x => x.id === clientId);
       const sId = document.getElementById('service-select').value;
       const sObj = SERVICES.find(x => x.id === sId);
-
-      let suppsList = [];
-      if (window.currentSeats === '1_seat') suppsList.push("Shampooing 1 siège (+30€)");
-      if (window.currentSeats === '2_seats') suppsList.push("Shampooing 2 sièges (+50€)");
-      if (window.currentSeats === 'all_seats') suppsList.push("Shampooing tous les sièges (+90€)");
-      if (window.currentRoof) suppsList.push("Ciel de toit (+30€)");
-
-      let subLabel = "Aucun";
-      if (window.currentSub === '1x') subLabel = "Abonnement 1x / mois (-5%)";
-      if (window.currentSub === '2x') subLabel = "Abonnement 2x / mois (-10%)";
-      if (window.currentSub === '4x') subLabel = "Abonnement 4x / mois (-15%)";
-
       const totalVal = document.getElementById('total-price').innerText;
+
       const lieuLabel = window.currentIsAtelier 
-        ? "Atelier (Rue de Prâle 139, 4300 Waremme)" 
+        ? "Atelier (Rue de Prâle 139, Waremme)" 
         : `À domicile (${c && c.address ? c.address + ' - ' : ''}${document.getElementById('distance-km').value || 0} km)`;
 
-      // Enregistrement dans Firestore (collection bookings)
-      try {
-        await addDoc(collection(db, "bookings"), {
-          client_id: clientId,
-          client_name: c ? c.name : 'Inconnu',
-          date,
-          time,
-          service_name: sObj ? sObj.name : '',
-          category: window.currentCategory,
-          lieu: lieuLabel,
-          total_price: totalVal,
-          created_at: new Date().toISOString()
-        });
-      } catch(e) {
-        console.error("Erreur création RDV dans Firebase :", e);
+      const newBooking = {
+        id: 'b_' + Date.now(),
+        client_name: c ? c.name : 'Inconnu',
+        date,
+        time,
+        service_name: sObj ? sObj.name : '',
+        category: window.currentCategory,
+        lieu: lieuLabel,
+        total_price: totalVal
+      };
+
+      window.bookingsData.push(newBooking);
+
+      // Déduction de la cagnotte parrainage appliquée
+      if (window.currentDiscountPct > 0 && c) {
+        c.referral_discount_pct = Math.max(0, (c.referral_discount_pct || 0) - window.currentDiscountPct);
       }
+
+      saveLocal();
+      renderBookingsList();
+      renderClientsList();
 
       const msgText = `Bonjour ${c ? c.name : ''},
 
-Voici la confirmation de votre rendez-vous chez L'As Du Détail :
+Votre rendez-vous pour votre véhicule est bien confirmé chez L'As Du Détail :
 
-📅 Date : ${date}
-⏰ Heure : ${time}
+📅 Date : ${date} à ${time}
 📍 Lieu : ${lieuLabel}
-🚘 Véhicule : ${window.currentCategory.toUpperCase()}
-
-🛠️ Prestation : ${sObj ? sObj.name : ''}
-🔄 Formule : ${subLabel}
-➕ Suppléments : ${suppsList.length > 0 ? suppsList.join(', ') : 'Aucun'}
-🏷️ Réduction parrainage : ${window.currentDiscountPct > 0 ? '-' + window.currentDiscountPct + '%' : 'Aucune'}
-
+🚘 Véhicule : Catégorie ${window.currentCategory.toUpperCase()}
+🛠️ Formule : ${sObj ? sObj.name : ''}
 💰 TOTAL : ${totalVal}
 
-À très bientôt !
-L'As Du Détail`;
+Slogan : las du détail ; plus qu’un nettoyage , une signature.
+
+À très bientôt !`;
 
       document.getElementById('message-text').value = msgText;
       document.getElementById('message-output-box').classList.remove('hidden');
-
-      if (window.currentDiscountPct > 0 && c) {
-        const remaining = Math.max(0, (c.referral_discount_pct || 0) - window.currentDiscountPct);
-        const clientRef = doc(db, "clients", clientId);
-        await updateDoc(clientRef, { referral_discount_pct: remaining });
-        window.showNotification(`${window.currentDiscountPct}% retirés du compte de ${c.name}. Solde : ${remaining}%.`);
-      } else {
-        window.showNotification("Rendez-vous enregistré dans le planning !");
-      }
-
-      loadClients();
-      loadBookings();
+      showNotification("RDV enregistré et ajouté au planning !");
     };
 
-    window.showNotification = function(msg) {
-      const el = document.getElementById('notification');
-      el.innerText = msg;
-      el.classList.remove('hidden');
-      setTimeout(() => el.classList.add('hidden'), 5000);
+    window.deleteBooking = function(id) {
+      if (!confirm("Annuler et supprimer ce rendez-vous ?")) return;
+      window.bookingsData = window.bookingsData.filter(x => x.id !== id);
+      saveLocal();
+      renderBookingsList();
+      showNotification("Rendez-vous supprimé.");
+    };
+
+    window.renderServicesOptions = function() {
+      const sel = document.getElementById('service-select');
+      sel.innerHTML = SERVICES.map(s => `
+        <option value="${s.id}">${s.name} — ${s.prices[window.currentCategory].toFixed(2)} €</option>
+      `).join('');
+    };
+
+    window.setCategory = function(cat) {
+      window.currentCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.className = "cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400 transition-all");
+      document.getElementById('cat-' + cat).className = "cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300 font-bold transition-all";
+      window.renderServicesOptions();
+      window.calculateTotal();
+    };
+
+    window.setSub = function(sub) {
+      window.currentSub = sub;
+      document.querySelectorAll('.sub-btn').forEach(b => b.className = "sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium transition-all");
+      document.getElementById('sub-' + sub).className = "sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-bold transition-all";
+      window.calculateTotal();
+    };
+
+    window.setSeats = function(s) {
+      window.currentSeats = s;
+      document.querySelectorAll('.seat-btn').forEach(b => b.className = "seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400 transition-all");
+      document.getElementById('seat-' + s).className = "seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300 transition-all";
+      window.calculateTotal();
+    };
+
+    window.toggleRoof = function() {
+      window.currentRoof = !window.currentRoof;
+      const btn = document.getElementById('roof-btn');
+      btn.className = window.currentRoof 
+        ? "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-amber-500/20 border-amber-500 text-amber-300 font-bold mt-2 transition-all"
+        : "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-neutral-900 border-neutral-700 text-neutral-400 mt-2 transition-all";
+      window.calculateTotal();
+    };
+
+    window.setAtelier = function(isAtelier) {
+      window.currentIsAtelier = isAtelier;
+      document.getElementById('loc-atelier').className = isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950 transition-all" : "flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400 transition-all";
+      document.getElementById('loc-travel').className = !isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950 transition-all" : "flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400 transition-all";
+      document.getElementById('travel-input').classList.toggle('hidden', isAtelier);
+      window.calculateTotal();
     };
 
     window.onClientChange = function() {
@@ -538,9 +541,7 @@ L'As Du Détail`;
       const slider = document.getElementById('discount-range');
 
       if (c) {
-        if (c.distance_km) {
-          document.getElementById('distance-km').value = c.distance_km;
-        }
+        if (c.distance_km) document.getElementById('distance-km').value = c.distance_km;
         if ((c.referral_discount_pct || 0) > 0) {
           document.getElementById('parrainage-val').innerText = (c.referral_discount_pct || 0) + '%';
           badge.classList.remove('hidden');
@@ -558,71 +559,22 @@ L'As Du Détail`;
       window.onSliderChange();
     };
 
-    window.renderServicesOptions = function() {
-      const sel = document.getElementById('service-select');
-      sel.innerHTML = SERVICES.map(s => `
-        <option value="${s.id}">${s.name} - ${s.prices[window.currentCategory]} €</option>
-      `).join('');
-    };
-
-    window.setCategory = function(cat) {
-      window.currentCategory = cat;
-      document.querySelectorAll('.cat-btn').forEach(b => b.className = "cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400");
-      document.getElementById('cat-' + cat).className = "cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300";
-      window.renderServicesOptions();
-      window.calculateTotal();
-    };
-
-    window.setSub = function(sub) {
-      window.currentSub = sub;
-      document.querySelectorAll('.sub-btn').forEach(b => b.className = "sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium");
-      document.getElementById('sub-' + sub).className = "sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-medium";
-      window.calculateTotal();
-    };
-
-    window.setSeats = function(s) {
-      window.currentSeats = s;
-      document.querySelectorAll('.seat-btn').forEach(b => b.className = "seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400");
-      document.getElementById('seat-' + s).className = "seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300";
-      window.calculateTotal();
-    };
-
-    window.toggleRoof = function() {
-      window.currentRoof = !window.currentRoof;
-      const btn = document.getElementById('roof-btn');
-      btn.className = window.currentRoof 
-        ? "w-full p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all bg-amber-500/20 border-amber-500 text-amber-300 mt-2"
-        : "w-full p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all bg-neutral-900 border-neutral-700 text-neutral-400 mt-2";
-      window.calculateTotal();
-    };
-
-    window.setAtelier = function(isAtelier) {
-      window.currentIsAtelier = isAtelier;
-      document.getElementById('loc-atelier').className = isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950" : "flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400";
-      document.getElementById('loc-travel').className = !isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950" : "flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400";
-      document.getElementById('travel-input').classList.toggle('hidden', isAtelier);
-      window.calculateTotal();
-    };
-
     window.onSliderChange = function() {
       window.currentDiscountPct = parseInt(document.getElementById('discount-range').value) || 0;
       document.getElementById('discount-val-label').innerText = '-' + window.currentDiscountPct + '%';
       window.calculateTotal();
     };
 
-    function getSubPct() {
-      if (window.currentSub === '1x') return 5;
-      if (window.currentSub === '2x') return 10;
-      if (window.currentSub === '4x') return 15;
-      return 0;
-    }
-
     window.calculateTotal = function() {
       const sId = document.getElementById('service-select').value || SERVICES[0].id;
       const sObj = SERVICES.find(x => x.id === sId);
       const basePrice = sObj ? sObj.prices[window.currentCategory] : 0;
 
-      const subPct = getSubPct();
+      let subPct = 0;
+      if (window.currentSub === '1x') subPct = 5;
+      if (window.currentSub === '2x') subPct = 10;
+      if (window.currentSub === '4x') subPct = 15;
+
       const subDiscount = (basePrice * subPct) / 100;
       const priceAfterSub = basePrice - subDiscount;
 
@@ -642,19 +594,19 @@ L'As Du Détail`;
       const refDiscount = (subtotal * window.currentDiscountPct) / 100;
       const total = Math.max(0, subtotal - refDiscount);
 
+      // Affichage des éléments du récapitulatif
       document.getElementById('recap-service').innerText = basePrice.toFixed(2) + ' €';
+      document.getElementById('recap-supplements').innerText = supps.toFixed(2) + ' €';
+      document.getElementById('recap-travel').innerText = travel.toFixed(2) + ' €';
       
       const subRow = document.getElementById('recap-sub-row');
       if (subPct > 0) {
         subRow.classList.remove('hidden');
-        document.getElementById('recap-sub-discount').innerText = '-' + subDiscount.toFixed(2) + ' € (' + subPct + '%)';
+        document.getElementById('recap-sub-discount').innerText = '-' + subDiscount.toFixed(2) + ' €';
       } else {
         subRow.classList.add('hidden');
       }
 
-      document.getElementById('recap-supplements').innerText = supps.toFixed(2) + ' €';
-      document.getElementById('recap-travel').innerText = travel.toFixed(2) + ' €';
-      
       const discRow = document.getElementById('recap-discount-row');
       if (window.currentDiscountPct > 0) {
         discRow.classList.remove('hidden');
@@ -666,25 +618,18 @@ L'As Du Détail`;
       document.getElementById('total-price').innerText = total.toFixed(2) + ' €';
     };
 
-    window.copyMessage = function() {
-      const textarea = document.getElementById('message-text');
-      textarea.select();
-      document.execCommand('copy');
-      window.showNotification("Message copié !");
-    };
-
     window.switchTab = function(tab) {
       document.getElementById('tab-booking').classList.toggle('hidden', tab !== 'booking');
       document.getElementById('tab-clients').classList.toggle('hidden', tab !== 'clients');
       document.getElementById('tab-rdv').classList.toggle('hidden', tab !== 'rdv');
 
-      document.getElementById('nav-booking').className = tab === 'booking' ? "font-bold text-amber-400" : "font-medium text-neutral-500";
-      document.getElementById('nav-clients').className = tab === 'clients' ? "font-bold text-amber-400" : "font-medium text-neutral-500";
-      document.getElementById('nav-rdv').className = tab === 'rdv' ? "font-bold text-amber-400" : "font-medium text-neutral-500";
+      document.getElementById('nav-booking').className = tab === 'booking' ? "font-bold text-amber-400 flex flex-col items-center space-y-1" : "font-medium text-neutral-500 flex flex-col items-center space-y-1";
+      document.getElementById('nav-clients').className = tab === 'clients' ? "font-bold text-amber-400 flex flex-col items-center space-y-1" : "font-medium text-neutral-500 flex flex-col items-center space-y-1";
+      document.getElementById('nav-rdv').className = tab === 'rdv' ? "font-bold text-amber-400 flex flex-col items-center space-y-1" : "font-medium text-neutral-500 flex flex-col items-center space-y-1";
     };
 
-    // Attach Event Listeners
     document.addEventListener('DOMContentLoaded', () => {
+      // Binding des événements
       document.getElementById('client-select').onchange = window.onClientChange;
       document.getElementById('service-select').onchange = window.calculateTotal;
       document.getElementById('distance-km').oninput = window.calculateTotal;
@@ -706,22 +651,34 @@ L'As Du Détail`;
       document.getElementById('seat-all_seats').onclick = () => window.setSeats('all_seats');
 
       document.getElementById('roof-btn').onclick = window.toggleRoof;
-
       document.getElementById('loc-atelier').onclick = () => window.setAtelier(true);
       document.getElementById('loc-travel').onclick = () => window.setAtelier(false);
 
       document.getElementById('btn-save-booking').onclick = window.saveBooking;
-      document.getElementById('btn-copy-msg').onclick = window.copyMessage;
       document.getElementById('btn-add-client').onclick = window.addNewClient;
+
+      document.getElementById('btn-copy-msg').onclick = () => {
+        const textarea = document.getElementById('message-text');
+        textarea.select();
+        document.execCommand('copy');
+        showNotification("Message copié dans le presse-papier !");
+      };
 
       document.getElementById('nav-booking').onclick = () => window.switchTab('booking');
       document.getElementById('nav-clients').onclick = () => window.switchTab('clients');
       document.getElementById('nav-rdv').onclick = () => window.switchTab('rdv');
 
-      loadClients();
-      loadBookings();
+      // Date par défaut : aujourd'hui
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('booking-date').value = today;
+
+      // Initialisation générale des vues
+      renderClientsSelect();
+      renderClientsList();
+      renderBookingsList();
       window.renderServicesOptions();
       window.calculateTotal();
+      window.updateDashboardStats();
     });
   </script>
 </body>
