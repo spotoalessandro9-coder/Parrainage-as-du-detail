@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -30,6 +31,22 @@
 
   <!-- Conteneur Principal -->
   <main class="max-w-xl mx-auto p-4 space-y-6">
+
+    <!-- RACCOURCIS D'ACTIONS RAPIDES -->
+    <div class="grid grid-cols-3 gap-2">
+      <button type="button" onclick="window.switchTab('booking')" class="p-2.5 bg-neutral-800/80 hover:bg-neutral-800 border border-neutral-700/60 rounded-xl text-center transition-all group">
+        <span class="text-base block">📝</span>
+        <span class="text-[11px] font-bold text-neutral-300 group-hover:text-amber-400">Nouveau Devis</span>
+      </button>
+      <button type="button" onclick="window.switchTab('clients')" class="p-2.5 bg-neutral-800/80 hover:bg-neutral-800 border border-neutral-700/60 rounded-xl text-center transition-all group">
+        <span class="text-base block">👤</span>
+        <span class="text-[11px] font-bold text-neutral-300 group-hover:text-amber-400">Gérer Clients</span>
+      </button>
+      <button type="button" onclick="window.switchTab('rdv')" class="p-2.5 bg-neutral-800/80 hover:bg-neutral-800 border border-neutral-700/60 rounded-xl text-center transition-all group">
+        <span class="text-base block">📅</span>
+        <span class="text-[11px] font-bold text-neutral-300 group-hover:text-amber-400">Voir Planning</span>
+      </button>
+    </div>
 
     <!-- STATS RAPIDES (DASHBOARD) -->
     <div id="dashboard-summary" class="grid grid-cols-3 gap-3">
@@ -180,16 +197,25 @@
         </button>
       </div>
 
-      <!-- Bloc Message Client Généré -->
+      <!-- Bloc Message Client Généré avec Sélecteur d'Onglets -->
       <div id="message-output-box" class="hidden bg-neutral-950 border border-neutral-800 rounded-2xl p-4 space-y-3">
+        
         <div class="flex justify-between items-center">
-          <span class="text-xs uppercase tracking-wider text-amber-400 font-bold">Message de confirmation prêt à envoyer</span>
+          <span class="text-xs uppercase tracking-wider text-amber-400 font-bold">Génération de Message Client</span>
           <div class="flex space-x-2">
             <button type="button" id="btn-copy-msg" class="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-bold rounded-lg text-xs transition-all border border-neutral-700">Copier</button>
             <a id="btn-sms-msg" href="#" class="px-3 py-1 bg-amber-500 text-neutral-950 font-bold rounded-lg text-xs hover:bg-amber-400 transition-all flex items-center space-x-1">💬 Envoyer par SMS</a>
           </div>
         </div>
-        <textarea id="message-text" rows="11" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs text-neutral-200 font-mono focus:outline-none focus:border-amber-500" readonly></textarea>
+
+        <!-- Onglets pour choisir le type de message -->
+        <div class="flex rounded-xl bg-neutral-900 p-1 border border-neutral-800 text-xs">
+          <button type="button" id="tab-msg-confirm" onclick="window.setMessageType('confirm')" class="flex-1 py-1.5 font-bold rounded-lg bg-amber-500 text-neutral-950 transition-all">Confirmation</button>
+          <button type="button" id="tab-msg-rappel" onclick="window.setMessageType('rappel')" class="flex-1 py-1.5 font-medium rounded-lg text-neutral-400 hover:text-white transition-all">Rappel</button>
+          <button type="button" id="tab-msg-avis" onclick="window.setMessageType('avis')" class="flex-1 py-1.5 font-medium rounded-lg text-neutral-400 hover:text-white transition-all">Demande Avis</button>
+        </div>
+
+        <textarea id="message-text" rows="12" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs text-neutral-200 font-mono focus:outline-none focus:border-amber-500" readonly></textarea>
       </div>
 
     </div>
@@ -283,6 +309,8 @@
     window.currentIsAtelier = true;
     window.currentDiscountPct = 0;
     window.currentSub = 'none';
+    window.currentActiveBooking = null;
+    window.currentMessageType = 'confirm';
 
     function saveLocal() {
       localStorage.setItem('ldd_clients', JSON.stringify(window.clientsData));
@@ -441,18 +469,27 @@
         ? "Atelier (Rue de Prâle 139, Waremme)" 
         : `À domicile (${c && c.address ? c.address + ' - ' : ''}${document.getElementById('distance-km').value || 0} km)`;
 
+      let subLabel = "Ponctuel";
+      if (window.currentSub === '1x') subLabel = "1x / mois (-5%)";
+      if (window.currentSub === '2x') subLabel = "2x / mois (-10%)";
+      if (window.currentSub === '4x') subLabel = "4x / mois (-15%)";
+
       const newBooking = {
         id: 'b_' + Date.now(),
+        client_id: clientId,
         client_name: c ? c.name : 'Inconnu',
+        client_phone: c ? c.phone : '',
         date,
         time,
         service_name: sObj ? sObj.name : '',
         category: window.currentCategory,
+        sub: subLabel,
         lieu: lieuLabel,
         total_price: totalVal
       };
 
       window.bookingsData.push(newBooking);
+      window.currentActiveBooking = newBooking;
 
       // Déduction de la cagnotte parrainage appliquée
       if (window.currentDiscountPct > 0 && c) {
@@ -463,29 +500,69 @@
       renderBookingsList();
       renderClientsList();
 
-      const msgText = `Bonjour ${c ? c.name : ''},
+      document.getElementById('message-output-box').classList.remove('hidden');
+      window.setMessageType('confirm');
+      showNotification("RDV enregistré et ajouté au planning !");
+    };
 
-Votre rendez-vous pour votre véhicule est bien confirmé chez L'As Du Détail :
+    window.setMessageType = function(type) {
+      window.currentMessageType = type;
 
-📅 Date : ${date} à ${time}
-📍 Lieu : ${lieuLabel}
-🚘 Véhicule : Catégorie ${window.currentCategory.toUpperCase()}
-🛠️ Formule : ${sObj ? sObj.name : ''}
-💰 TOTAL : ${totalVal}
+      // Style onglets
+      document.getElementById('tab-msg-confirm').className = type === 'confirm' ? "flex-1 py-1.5 font-bold rounded-lg bg-amber-500 text-neutral-950 transition-all" : "flex-1 py-1.5 font-medium rounded-lg text-neutral-400 hover:text-white transition-all";
+      document.getElementById('tab-msg-rappel').className = type === 'rappel' ? "flex-1 py-1.5 font-bold rounded-lg bg-amber-500 text-neutral-950 transition-all" : "flex-1 py-1.5 font-medium rounded-lg text-neutral-400 hover:text-white transition-all";
+      document.getElementById('tab-msg-avis').className = type === 'avis' ? "flex-1 py-1.5 font-bold rounded-lg bg-amber-500 text-neutral-950 transition-all" : "flex-1 py-1.5 font-medium rounded-lg text-neutral-400 hover:text-white transition-all";
 
-las du détail ; plus qu’un nettoyage , une signature.
+      const b = window.currentActiveBooking;
+      if (!b) return;
 
-À très bientôt !`;
+      let msgText = "";
+
+      if (type === 'confirm') {
+        msgText = `Bonjour ${b.client_name},
+
+Votre rendez-vous est bien confirmé chez L'As Du Détail :
+
+📅 Date et heure : ${b.date} à ${b.time}
+📍 Lieu : ${b.lieu}
+🚘 Véhicule : Catégorie ${b.category.toUpperCase()}
+🛠️ Prestation : ${b.service_name}
+🔄 Abonnement : ${b.sub}
+💰 Prix à payer le jour du rendez-vous : ${b.total_price}
+
+Merci pour votre confiance et à très bientôt !
+
+Alex — L’As Du Détail`;
+      } else if (type === 'rappel') {
+        msgText = `Bonjour ${b.client_name},
+
+Petit rappel pour votre rendez-vous chez L'As Du Détail :
+
+📅 Date et heure : ${b.date} à ${b.time}
+📍 Lieu : ${b.lieu}
+
+À très bientôt !
+
+Alex — L’As Du Détail`;
+      } else if (type === 'avis') {
+        msgText = `Bonjour ${b.client_name},
+
+Votre véhicule brille tellement qu'il va falloir sortir les lunettes de soleil ! 😎✨
+
+Si le résultat vous plaît, pourriez-vous prendre 30 secondes pour me laisser un avis Google ? Ça m'aide énormément à faire tourner l'atelier.
+
+🔗 https://g.page/r/CTt-olIItnbIEAE/review
+
+Merci pour votre confiance et à très bientôt !
+
+Alex — L’As Du Détail`;
+      }
 
       document.getElementById('message-text').value = msgText;
-      
-      // Configuration du lien SMS direct
-      const phoneClean = c && c.phone ? c.phone.replace(/\s+/g, '') : '';
+
+      const phoneClean = b.client_phone ? b.client_phone.replace(/\s+/g, '') : '';
       const smsLink = document.getElementById('btn-sms-msg');
       smsLink.href = `sms:${phoneClean}?body=${encodeURIComponent(msgText)}`;
-
-      document.getElementById('message-output-box').classList.remove('hidden');
-      showNotification("RDV enregistré et ajouté au planning !");
     };
 
     window.deleteBooking = function(id) {
