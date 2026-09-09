@@ -34,7 +34,7 @@
       <!-- Client -->
       <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
         <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">1. Client</label>
-        <select id="client-select" onchange="onClientChange()" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500">
+        <select id="client-select" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500">
           <option value="">Chargement des clients...</option>
         </select>
         <div id="parrainage-badge" class="hidden bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex justify-between items-center mt-2">
@@ -47,19 +47,19 @@
       <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
         <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">2. Véhicule</label>
         <div class="grid grid-cols-2 gap-2">
-          <button type="button" onclick="setCategory('petite')" id="cat-petite" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
+          <button type="button" id="cat-petite" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
             <div class="font-semibold text-sm">Petite</div>
             <div class="text-[10px] text-neutral-500">Citadine</div>
           </button>
-          <button type="button" onclick="setCategory('moyenne')" id="cat-moyenne" class="cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300">
+          <button type="button" id="cat-moyenne" class="cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300">
             <div class="font-semibold text-sm">Moyenne</div>
             <div class="text-[10px] text-neutral-500">Berline / Compacte</div>
           </button>
-          <button type="button" onclick="setCategory('grande')" id="cat-grande" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
+          <button type="button" id="cat-grande" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
             <div class="font-semibold text-sm">Grande</div>
             <div class="text-[10px] text-neutral-500">SUV / Break</div>
           </button>
-          <button type="button" onclick="setCategory('camionnette')" id="cat-camionnette" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
+          <button type="button" id="cat-camionnette" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400">
             <div class="font-semibold text-sm">Camionnette</div>
             <div class="text-[10px] text-neutral-500">Utilitaire</div>
           </button>
@@ -69,17 +69,17 @@
       <!-- Prestation -->
       <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
         <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">3. Prestation</label>
-        <select id="service-select" onchange="calculateTotal()" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500"></select>
+        <select id="service-select" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500"></select>
       </div>
 
       <!-- Option Abonnement -->
       <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
         <label class="text-xs uppercase tracking-wider text-amber-400 font-bold block">4. Formule Abonnement</label>
         <div class="grid grid-cols-2 gap-2 text-xs">
-          <button type="button" onclick="setSub('none')" id="sub-none" class="sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-medium">Sans abonnement</button>
-          <button type="button" onclick="setSub('1x')" id="sub-1x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">1x / mois (-5%)</button>
-          <button type="button" onclick="setSub('2x')" id="sub-2x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">2x / mois (-10%)</button>
-          <button type="button" onclick="setSub('4x')" id="sub-4x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">4x / mois (-15%)</button>
+          <button type="button" id="sub-none" class="sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-medium">Sans abonnement</button>
+          <button type="button" id="sub-1x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">1x / mois (-5%)</button>
+          <button type="button" id="sub-2x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">2x / mois (-10%)</button>
+          <button type="button" id="sub-4x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium">4x / mois (-15%)</button>
         </div>
       </div>
 
@@ -89,13 +89,13 @@
         
         <span class="text-xs text-neutral-300 block">Sièges (Shampooing / Injection) :</span>
         <div class="grid grid-cols-2 gap-2 text-xs">
-          <button type="button" onclick="setSeats('none')" id="seat-none" class="seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300">Aucun (0€)</button>
-          <button type="button" onclick="setSeats('1_seat')" id="seat-1_seat" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">1 Siège (30€)</button>
-          <button type="button" onclick="setSeats('2_seats')" id="seat-2_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">2 Sièges (50€)</button>
-          <button type="button" onclick="setSeats('all_seats')" id="seat-all_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">Tous les sièges (90€)</button>
+          <button type="button" id="seat-none" class="seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300">Aucun (0€)</button>
+          <button type="button" id="seat-1_seat" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">1 Siège (30€)</button>
+          <button type="button" id="seat-2_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">2 Sièges (50€)</button>
+          <button type="button" id="seat-all_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400">Tous les sièges (90€)</button>
         </div>
 
-        <button type="button" onclick="toggleRoof()" id="roof-btn" class="w-full p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all bg-neutral-900 border-neutral-700 text-neutral-400 mt-2">
+        <button type="button" id="roof-btn" class="w-full p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all bg-neutral-900 border-neutral-700 text-neutral-400 mt-2">
           <span>Supplément Ciel de toit</span>
           <span class="font-bold">+ 30,00 €</span>
         </button>
@@ -105,11 +105,11 @@
       <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
         <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">6. Lieu</label>
         <div class="flex rounded-xl bg-neutral-900 p-1 border border-neutral-700">
-          <button type="button" onclick="setAtelier(true)" id="loc-atelier" class="flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950">Atelier (Waremme)</button>
-          <button type="button" onclick="setAtelier(false)" id="loc-travel" class="flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400">Déplacement</button>
+          <button type="button" id="loc-atelier" class="flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950">Atelier (Waremme)</button>
+          <button type="button" id="loc-travel" class="flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400">Déplacement</button>
         </div>
         <div id="travel-input" class="hidden space-y-1">
-          <input type="number" id="distance-km" placeholder="Distance en km (aller simple)" oninput="calculateTotal()" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="number" id="distance-km" placeholder="Distance en km (aller simple)" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
           <p class="text-[11px] text-neutral-500">Formule : 10,00 € + 0,70 € / km</p>
         </div>
       </div>
@@ -118,7 +118,7 @@
       <div id="parrainage-slider-box" class="hidden bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-2">
         <label class="text-xs uppercase tracking-wider text-amber-400 font-bold block">Appliquer la Réduction Parrainage</label>
         <div class="flex items-center space-x-3">
-          <input type="range" id="discount-range" min="0" max="100" step="10" value="0" oninput="onSliderChange()" class="w-full accent-amber-500" />
+          <input type="range" id="discount-range" min="0" max="100" step="10" value="0" class="w-full accent-amber-500" />
           <span id="discount-val-label" class="font-bold text-amber-400 text-lg w-12 text-right">-0%</span>
         </div>
       </div>
@@ -146,7 +146,7 @@
           <span class="font-bold text-sm text-white">TOTAL FINAL :</span>
           <span id="total-price" class="font-extrabold text-2xl text-amber-400">0,00 €</span>
         </div>
-        <button type="button" onclick="saveBooking()" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3.5 rounded-xl transition-all text-sm mt-2">
+        <button type="button" id="btn-save-booking" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3.5 rounded-xl transition-all text-sm mt-2">
           Générer & Enregistrer le RDV
         </button>
       </div>
@@ -155,7 +155,7 @@
       <div id="message-output-box" class="hidden bg-neutral-950 border border-neutral-800 rounded-2xl p-4 space-y-3">
         <div class="flex justify-between items-center">
           <span class="text-xs uppercase tracking-wider text-amber-400 font-bold">Message à envoyer au client</span>
-          <button type="button" onclick="copyMessage()" class="px-3 py-1 bg-amber-500 text-neutral-950 font-bold rounded-lg text-xs">Copier</button>
+          <button type="button" id="btn-copy-msg" class="px-3 py-1 bg-amber-500 text-neutral-950 font-bold rounded-lg text-xs">Copier</button>
         </div>
         <textarea id="message-text" rows="12" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs text-neutral-200 font-mono focus:outline-none" readonly></textarea>
       </div>
@@ -171,14 +171,16 @@
         <div class="space-y-2">
           <input type="text" id="new-client-name" placeholder="Nom Prénom *" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
           <input type="tel" id="new-client-phone" placeholder="Numéro de téléphone" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="text" id="new-client-address" placeholder="Adresse complète (ex: Rue de Liège 10, Waremme)" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="number" id="new-client-distance" placeholder="Distance depuis atelier en km (aller simple)" step="0.1" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
           <input type="number" id="new-client-discount" placeholder="Cagnotte Parrainage initiale (%) ex: 0" value="0" step="10" min="0" max="100" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
         </div>
-        <button type="button" onclick="addNewClient()" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3 rounded-xl transition-all text-xs">
-          + Ajouter le client à Firebase
+        <button type="button" id="btn-add-client" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3 rounded-xl transition-all text-xs">
+          + Ajouter le client
         </button>
       </div>
 
-      <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400 pt-2">Liste des Clients & Parrainage</h2>
+      <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400 pt-2">Base Clients</h2>
       <div id="clients-list" class="space-y-3">Chargement...</div>
     </div>
 
@@ -187,8 +189,8 @@
   <!-- Navigation Basse -->
   <nav class="fixed bottom-0 left-0 right-0 bg-neutral-950 border-t border-neutral-800 py-3 px-6 z-50">
     <div class="max-w-md mx-auto flex justify-around items-center text-xs">
-      <button onclick="switchTab('booking')" id="nav-booking" class="font-bold text-amber-400">Devis / Booking</button>
-      <button onclick="switchTab('clients')" id="nav-clients" class="font-medium text-neutral-500">Clients & Parrainage</button>
+      <button id="nav-booking" class="font-bold text-amber-400">Devis / Booking</button>
+      <button id="nav-clients" class="font-medium text-neutral-500">Clients & Parrainage</button>
     </div>
   </nav>
 
@@ -197,7 +199,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Vraies clés Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCFhUCgo-CWzBMix8GRYmrsZ3PBtWGb3RQ",
       authDomain: "las-du-detail-rdv.firebaseapp.com",
@@ -247,7 +248,6 @@
           loaded.push({ id: docSnap.id, ...docSnap.data() });
         });
         
-        // Trier par nom alphabétique
         loaded.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
         window.clientsData = loaded;
 
@@ -255,19 +255,22 @@
         renderClientsList();
       } catch (e) {
         console.error("Erreur Firebase :", e);
-        list.innerHTML = '<div class="text-xs text-red-400 p-2">Erreur de connexion à Firebase. Pensez à vérifier l\'activation de Firestore Database en Mode Test.</div>';
+        list.innerHTML = '<div class="text-xs text-red-400 p-2">Erreur de connexion à Firebase.</div>';
         sel.innerHTML = '<option value="">Erreur de chargement</option>';
       }
     }
 
-    // Fonction pour ajouter un client dans Firestore
     window.addNewClient = async function() {
       const nameInput = document.getElementById('new-client-name');
       const phoneInput = document.getElementById('new-client-phone');
+      const addressInput = document.getElementById('new-client-address');
+      const distanceInput = document.getElementById('new-client-distance');
       const discountInput = document.getElementById('new-client-discount');
 
       const name = nameInput.value.trim();
       const phone = phoneInput.value.trim();
+      const address = addressInput.value.trim();
+      const distance = parseFloat(distanceInput.value) || 0;
       const discount = parseInt(discountInput.value) || 0;
 
       if (!name) {
@@ -277,30 +280,32 @@
 
       try {
         await addDoc(collection(db, "clients"), {
-          name: name,
-          phone: phone,
+          name,
+          phone,
+          address,
+          distance_km: distance,
           referral_discount_pct: discount
         });
 
-        showNotification(`Client ${name} ajouté avec succès !`);
+        window.showNotification(`Client ${name} ajouté avec succès !`);
         
-        // Réinitialiser les champs
         nameInput.value = '';
         phoneInput.value = '';
+        addressInput.value = '';
+        distanceInput.value = '';
         discountInput.value = '0';
 
-        // Recharger la liste
         loadClients();
       } catch (e) {
         console.error("Erreur lors de l'ajout du client :", e);
-        alert("Erreur lors de l'enregistrement dans Firebase.");
+        alert("Erreur lors de l'enregistrement.");
       }
     };
 
     function renderClientsSelect() {
       const sel = document.getElementById('client-select');
       if (window.clientsData.length === 0) {
-        sel.innerHTML = '<option value="">-- Aucun client (ajoutez-en un dans l\'onglet Clients) --</option>';
+        sel.innerHTML = '<option value="">-- Aucun client disponible --</option>';
         return;
       }
       sel.innerHTML = '<option value="">-- Choisir un client --</option>' + 
@@ -310,19 +315,24 @@
     function renderClientsList() {
       const list = document.getElementById('clients-list');
       if (window.clientsData.length === 0) {
-        list.innerHTML = '<div class="text-xs text-neutral-500 italic p-2">Aucun client enregistré pour l\'instant.</div>';
+        list.innerHTML = '<div class="text-xs text-neutral-500 italic p-2">Aucun client enregistré.</div>';
         return;
       }
       list.innerHTML = window.clientsData.map(c => `
         <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 flex justify-between items-center">
           <div>
             <div class="font-bold text-white text-sm">${c.name}</div>
-            <div class="text-xs text-neutral-400">${c.phone || 'Sans téléphone'}</div>
+            <div class="text-xs text-neutral-400">${c.phone || 'Sans tel'}</div>
+            ${c.address ? `<div class="text-[11px] text-neutral-500 mt-0.5">📍 ${c.address} (${c.distance_km || 0} km)</div>` : ''}
             <div class="mt-1 text-xs text-amber-400 font-semibold">Cagnotte : ${c.referral_discount_pct || 0}%</div>
           </div>
-          <button onclick="addReferral('${c.id}')" class="px-3 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold rounded-xl hover:bg-amber-500/20 transition-all">+10% Parrain</button>
+          <button data-id="${c.id}" class="btn-add-ref px-3 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold rounded-xl hover:bg-amber-500/20 transition-all">+10% Parrain</button>
         </div>
       `).join('');
+
+      document.querySelectorAll('.btn-add-ref').forEach(btn => {
+        btn.onclick = () => window.addReferral(btn.getAttribute('data-id'));
+      });
     }
 
     window.addReferral = async function(clientId) {
@@ -333,7 +343,7 @@
       const clientRef = doc(db, "clients", clientId);
       await updateDoc(clientRef, { referral_discount_pct: newPct });
       
-      showNotification(`10% ajoutés au compte de ${c.name}. Nouveau solde : ${newPct}%.`);
+      window.showNotification(`10% ajoutés au compte de ${c.name}. Nouveau solde : ${newPct}%.`);
       loadClients();
     };
 
@@ -360,7 +370,7 @@
 
       const lieuLabel = window.currentIsAtelier 
         ? "Atelier (Rue de Prâle 139, 4300 Waremme)" 
-        : `À domicile (${document.getElementById('distance-km').value || 0} km)`;
+        : `À domicile (${c && c.address ? c.address + ' - ' : ''}${document.getElementById('distance-km').value || 0} km)`;
 
       const msgText = `Bonjour ${c ? c.name : ''},
 
@@ -388,18 +398,12 @@ L'As Du Détail`;
         const remaining = Math.max(0, (c.referral_discount_pct || 0) - window.currentDiscountPct);
         const clientRef = doc(db, "clients", clientId);
         await updateDoc(clientRef, { referral_discount_pct: remaining });
-        showNotification(`${window.currentDiscountPct}% de réduction retirés du compte de ${c.name}. Solde restant : ${remaining}%.`);
+        window.showNotification(`${window.currentDiscountPct}% retirés du compte de ${c.name}. Solde : ${remaining}%.`);
       } else {
-        showNotification("Rendez-vous enregistré et message généré !");
+        window.showNotification("Rendez-vous enregistré !");
       }
 
       loadClients();
-    };
-
-    window.onload = function() {
-      loadClients();
-      renderServicesOptions();
-      calculateTotal();
     };
 
     window.showNotification = function(msg) {
@@ -416,17 +420,25 @@ L'As Du Détail`;
       const box = document.getElementById('parrainage-slider-box');
       const slider = document.getElementById('discount-range');
 
-      if (c && (c.referral_discount_pct || 0) > 0) {
-        document.getElementById('parrainage-val').innerText = (c.referral_discount_pct || 0) + '%';
-        badge.classList.remove('hidden');
-        box.classList.remove('hidden');
-        slider.max = c.referral_discount_pct;
+      if (c) {
+        if (c.distance_km) {
+          document.getElementById('distance-km').value = c.distance_km;
+        }
+        if ((c.referral_discount_pct || 0) > 0) {
+          document.getElementById('parrainage-val').innerText = (c.referral_discount_pct || 0) + '%';
+          badge.classList.remove('hidden');
+          box.classList.remove('hidden');
+          slider.max = c.referral_discount_pct;
+        } else {
+          badge.classList.add('hidden');
+          box.classList.add('hidden');
+        }
       } else {
         badge.classList.add('hidden');
         box.classList.add('hidden');
       }
       slider.value = 0;
-      onSliderChange();
+      window.onSliderChange();
     };
 
     window.renderServicesOptions = function() {
@@ -440,22 +452,22 @@ L'As Du Détail`;
       window.currentCategory = cat;
       document.querySelectorAll('.cat-btn').forEach(b => b.className = "cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400");
       document.getElementById('cat-' + cat).className = "cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300";
-      renderServicesOptions();
-      calculateTotal();
+      window.renderServicesOptions();
+      window.calculateTotal();
     };
 
     window.setSub = function(sub) {
       window.currentSub = sub;
       document.querySelectorAll('.sub-btn').forEach(b => b.className = "sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium");
       document.getElementById('sub-' + sub).className = "sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-medium";
-      calculateTotal();
+      window.calculateTotal();
     };
 
     window.setSeats = function(s) {
       window.currentSeats = s;
       document.querySelectorAll('.seat-btn').forEach(b => b.className = "seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400");
       document.getElementById('seat-' + s).className = "seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300";
-      calculateTotal();
+      window.calculateTotal();
     };
 
     window.toggleRoof = function() {
@@ -464,7 +476,7 @@ L'As Du Détail`;
       btn.className = window.currentRoof 
         ? "w-full p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all bg-amber-500/20 border-amber-500 text-amber-300 mt-2"
         : "w-full p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all bg-neutral-900 border-neutral-700 text-neutral-400 mt-2";
-      calculateTotal();
+      window.calculateTotal();
     };
 
     window.setAtelier = function(isAtelier) {
@@ -472,13 +484,13 @@ L'As Du Détail`;
       document.getElementById('loc-atelier').className = isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950" : "flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400";
       document.getElementById('loc-travel').className = !isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950" : "flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400";
       document.getElementById('travel-input').classList.toggle('hidden', isAtelier);
-      calculateTotal();
+      window.calculateTotal();
     };
 
     window.onSliderChange = function() {
       window.currentDiscountPct = parseInt(document.getElementById('discount-range').value) || 0;
       document.getElementById('discount-val-label').innerText = '-' + window.currentDiscountPct + '%';
-      calculateTotal();
+      window.calculateTotal();
     };
 
     function getSubPct() {
@@ -541,7 +553,7 @@ L'As Du Détail`;
       const textarea = document.getElementById('message-text');
       textarea.select();
       document.execCommand('copy');
-      showNotification("Message copié dans le presse-papier !");
+      window.showNotification("Message copié !");
     };
 
     window.switchTab = function(tab) {
@@ -550,6 +562,45 @@ L'As Du Détail`;
       document.getElementById('nav-booking').className = tab === 'booking' ? "font-bold text-amber-400" : "font-medium text-neutral-500";
       document.getElementById('nav-clients').className = tab === 'clients' ? "font-bold text-amber-400" : "font-medium text-neutral-500";
     };
+
+    // Attach Event Listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('client-select').onchange = window.onClientChange;
+      document.getElementById('service-select').onchange = window.calculateTotal;
+      document.getElementById('distance-km').oninput = window.calculateTotal;
+      document.getElementById('discount-range').oninput = window.onSliderChange;
+
+      document.getElementById('cat-petite').onclick = () => window.setCategory('petite');
+      document.getElementById('cat-moyenne').onclick = () => window.setCategory('moyenne');
+      document.getElementById('cat-grande').onclick = () => window.setCategory('grande');
+      document.getElementById('cat-camionnette').onclick = () => window.setCategory('camionnette');
+
+      document.getElementById('sub-none').onclick = () => window.setSub('none');
+      document.getElementById('sub-1x').onclick = () => window.setSub('1x');
+      document.getElementById('sub-2x').onclick = () => window.setSub('2x');
+      document.getElementById('sub-4x').onclick = () => window.setSub('4x');
+
+      document.getElementById('seat-none').onclick = () => window.setSeats('none');
+      document.getElementById('seat-1_seat').onclick = () => window.setSeats('1_seat');
+      document.getElementById('seat-2_seats').onclick = () => window.setSeats('2_seats');
+      document.getElementById('seat-all_seats').onclick = () => window.setSeats('all_seats');
+
+      document.getElementById('roof-btn').onclick = window.toggleRoof;
+
+      document.getElementById('loc-atelier').onclick = () => window.setAtelier(true);
+      document.getElementById('loc-travel').onclick = () => window.setAtelier(false);
+
+      document.getElementById('btn-save-booking').onclick = window.saveBooking;
+      document.getElementById('btn-copy-msg').onclick = window.copyMessage;
+      document.getElementById('btn-add-client').onclick = window.addNewClient;
+
+      document.getElementById('nav-booking').onclick = () => window.switchTab('booking');
+      document.getElementById('nav-clients').onclick = () => window.switchTab('clients');
+
+      loadClients();
+      window.renderServicesOptions();
+      window.calculateTotal();
+    });
   </script>
 </body>
 </html>
