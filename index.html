@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -150,12 +149,49 @@
         </div>
       </div>
 
-      <!-- 8. Date & Heure -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
+      <!-- 8. Date & Heure avec Calendrier Visuel -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-4">
         <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">7. Planification du Rendez-vous</label>
+        
+        <!-- COMPOSANT CALENDRIER -->
+        <div class="bg-neutral-900 border border-neutral-700/80 rounded-2xl p-3.5 space-y-3">
+          <div class="flex justify-between items-center px-1">
+            <button type="button" onclick="window.changeCalendarMonth(-1)" class="p-1 text-neutral-400 hover:text-amber-400 transition-all font-bold text-base">&lt;</button>
+            <span id="calendar-month-title" class="text-xs font-bold uppercase tracking-wider text-amber-400"></span>
+            <button type="button" onclick="window.changeCalendarMonth(1)" class="p-1 text-neutral-400 hover:text-amber-400 transition-all font-bold text-base">&gt;</button>
+          </div>
+
+          <!-- Entête des jours de la semaine -->
+          <div class="grid grid-cols-7 text-center text-[10px] font-bold text-neutral-400 border-b border-neutral-800 pb-2">
+            <span>Lun</span>
+            <span>Mar</span>
+            <span>Mer</span>
+            <span>Jeu</span>
+            <span>Ven</span>
+            <span>Sam</span>
+            <span>Dim</span>
+          </div>
+
+          <!-- Jours du mois -->
+          <div id="calendar-days-grid" class="grid grid-cols-7 gap-1"></div>
+
+          <!-- Légende des couleurs -->
+          <div class="flex items-center justify-between pt-2 border-t border-neutral-800 text-[10px] text-neutral-400 px-1">
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span><span>Officiel Libre (Lun/Sam)</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-white inline-block"></span><span>Hors Atelier</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span><span>Occupé (RDV)</span></span>
+          </div>
+        </div>
+
         <div class="grid grid-cols-2 gap-2">
-          <input type="date" id="booking-date" class="bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
-          <input type="time" id="booking-time" value="09:00" class="bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <div>
+            <label class="text-[10px] text-neutral-400 block mb-1">Date sélectionnée</label>
+            <input type="date" id="booking-date" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="text-[10px] text-neutral-400 block mb-1">Heure du RDV</label>
+            <input type="time" id="booking-time" value="09:00" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          </div>
         </div>
       </div>
 
@@ -281,7 +317,7 @@
       { id: 'pol_2', name: 'Polissage 2 Step Correction', prices: { petite: 399.99, moyenne: 449.99, grande: 499.99, camionnette: 549.99 } },
       { id: 'c_12', name: 'Protection Céramique 12-24 mois', prices: { petite: 249.99, moyenne: 279.99, grande: 309.99, camionnette: 349.99 } },
       { id: 'c_48', name: 'Protection Céramique 48-60 mois', prices: { petite: 549.99, moyenne: 649.99, grande: 749.99, camionnette: 899.99 } },
-      // NOUVELLES FORMULES COMBINÉES POLISSAGE + CÉRAMIQUE
+      // FORMULES COMBINÉES POLISSAGE + CÉRAMIQUE
       { id: 'pack_1s_c12', name: '⭐ One-Step + Céramique 12–24 mois', prices: { petite: 499.99, moyenne: 549.99, grande: 599.99, camionnette: 699.99 } },
       { id: 'pack_1s_c48', name: '👑 One-Step + Céramique 48–60 mois', prices: { petite: 799.99, moyenne: 899.99, grande: 999.99, camionnette: 1199.99 } },
       { id: 'pack_2s_c12', name: '🔥 Two-Step + Céramique 12–24 mois', prices: { petite: 699.99, moyenne: 749.99, grande: 849.99, camionnette: 949.99 } },
@@ -292,6 +328,9 @@
     window.clientsData = JSON.parse(localStorage.getItem('ldd_clients') || '[]');
     window.bookingsData = JSON.parse(localStorage.getItem('ldd_bookings') || '[]');
     
+    // Etat global du calendrier
+    window.calendarCurrentDate = new Date();
+
     // Etat global du formulaire devis
     window.currentCategory = 'moyenne';
     window.currentSeats = 'none';
@@ -304,6 +343,7 @@
       localStorage.setItem('ldd_clients', JSON.stringify(window.clientsData));
       localStorage.setItem('ldd_bookings', JSON.stringify(window.bookingsData));
       window.updateDashboardStats();
+      window.renderCalendar();
     }
 
     function showNotification(msg) {
@@ -324,6 +364,99 @@
       
       document.getElementById('stat-total-ca').innerText = totalCA.toFixed(0) + ' €';
       document.getElementById('rdv-count-badge').innerText = window.bookingsData.length + ' RDV';
+    };
+
+    // --- LOGIQUE DU CALENDRIER VISUEL ---
+    window.changeCalendarMonth = function(delta) {
+      window.calendarCurrentDate.setMonth(window.calendarCurrentDate.getMonth() + delta);
+      window.renderCalendar();
+    };
+
+    window.selectCalendarDate = function(dateStr) {
+      document.getElementById('booking-date').value = dateStr;
+      window.renderCalendar();
+    };
+
+    window.renderCalendar = function() {
+      const year = window.calendarCurrentDate.getFullYear();
+      const month = window.calendarCurrentDate.getMonth();
+
+      const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+      document.getElementById('calendar-month-title').innerText = `${monthNames[month]} ${year}`;
+
+      const grid = document.getElementById('calendar-days-grid');
+      grid.innerHTML = '';
+
+      const firstDayOfMonth = new Date(year, month, 1);
+      const lastDayOfMonth = new Date(year, month + 1, 0);
+
+      // Adaptation pour faire démarrer la semaine le Lundi (0=Lun, 6=Dim)
+      let startDayOfWeek = firstDayOfMonth.getDay() - 1;
+      if (startDayOfWeek === -1) startDayOfWeek = 6;
+
+      const totalDays = lastDayOfMonth.getDate();
+      const selectedDateVal = document.getElementById('booking-date').value;
+
+      // Cases vides avant le 1er du mois
+      for (let i = 0; i < startDayOfWeek; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = "h-11 rounded-xl bg-neutral-950/30";
+        grid.appendChild(emptyCell);
+      }
+
+      // Generation des jours du mois
+      for (let day = 1; day <= totalDays; day++) {
+        const currentDateObj = new Date(year, month, day);
+        const dayOfWeek = currentDateObj.getDay(); // 0=Dimanche, 1=Lundi, ..., 6=Samedi
+
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const hasBooking = window.bookingsData.some(b => b.date === dateStr);
+        const isSelected = selectedDateVal === dateStr;
+
+        const cell = document.createElement('button');
+        cell.type = 'button';
+
+        let dotColor = 'bg-white'; // Par défaut blanc (Mar, Mer, Jeu, Ven)
+        let isClickable = true;
+
+        if (hasBooking) {
+          dotColor = 'bg-red-500 shadow-sm shadow-red-500/50';
+        } else if (dayOfWeek === 1 || dayOfWeek === 6) {
+          // Lundi (1) ou Samedi (6)
+          dotColor = 'bg-emerald-400 shadow-sm shadow-emerald-400/50';
+        } else if (dayOfWeek === 0) {
+          // Dimanche
+          dotColor = '';
+          isClickable = false;
+        }
+
+        let baseClasses = "h-11 rounded-xl border flex flex-col items-center justify-between py-1.5 text-xs transition-all ";
+
+        if (!isClickable) {
+          baseClasses += "bg-neutral-950/40 border-neutral-800 text-neutral-600 cursor-not-allowed";
+        } else if (isSelected) {
+          baseClasses += "bg-amber-500/20 border-amber-500 text-amber-300 font-bold ring-1 ring-amber-500/50";
+        } else {
+          baseClasses += "bg-neutral-800/40 border-neutral-800 text-neutral-200 hover:border-neutral-600";
+        }
+
+        cell.className = baseClasses;
+
+        let htmlContent = `<span class="${isSelected ? 'font-black text-amber-400' : ''}">${day}</span>`;
+        if (dotColor) {
+          htmlContent += `<span class="w-2 h-2 rounded-full ${dotColor}"></span>`;
+        } else {
+          htmlContent += `<span class="w-2 h-2"></span>`;
+        }
+
+        cell.innerHTML = htmlContent;
+
+        if (isClickable) {
+          cell.onclick = () => window.selectCalendarDate(dateStr);
+        }
+
+        grid.appendChild(cell);
+      }
     };
 
     function renderClientsSelect() {
@@ -572,7 +705,7 @@ Alex — L’As Du Détail`;
       const phoneClean = newBooking.client_phone ? newBooking.client_phone.replace(/\s+/g, '') : '';
       document.getElementById('btn-sms-msg').href = `sms:${phoneClean}?body=${encodeURIComponent(msgConfirm)}`;
 
-      showNotification("RDV enregistré ! Retrouvez les 3 boutons de message dans l'onglet Planning.");
+      showNotification("RDV enregistré ! Le calendrier à été mis à jour.");
     };
 
     window.deleteBooking = function(id) {
@@ -731,6 +864,8 @@ Alex — L’As Du Détail`;
       document.getElementById('distance-km').oninput = window.calculateTotal;
       document.getElementById('discount-range').oninput = window.onSliderChange;
 
+      document.getElementById('booking-date').onchange = () => window.renderCalendar();
+
       document.getElementById('cat-petite').onclick = () => window.setCategory('petite');
       document.getElementById('cat-moyenne').onclick = () => window.setCategory('moyenne');
       document.getElementById('cat-grande').onclick = () => window.setCategory('grande');
@@ -782,6 +917,7 @@ Alex — L’As Du Détail`;
       window.renderServicesOptions();
       window.calculateTotal();
       window.updateDashboardStats();
+      window.renderCalendar();
     });
   </script>
 </body>
