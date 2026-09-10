@@ -196,12 +196,19 @@
           <div id="calendar-days-grid" class="grid grid-cols-7 gap-1"></div>
 
           <!-- Légende des couleurs -->
-          <div class="flex items-center justify-between pt-2 border-t border-neutral-800 text-[10px] text-neutral-400 px-1">
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span><span>Officiel Libre (Lun/Sam)</span></span>
+          <div class="grid grid-cols-2 gap-y-1.5 pt-2 border-t border-neutral-800 text-[10px] text-neutral-400 px-1">
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span><span>Libre (Lun/Sam)</span></span>
             <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-white inline-block"></span><span>Hors Atelier</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span><span>Occupé (RDV)</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span><span>Occupé (RDV)</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-red-600 inline-block"></span><span>Bloqué / Congé</span></span>
           </div>
         </div>
+
+        <!-- Bouton de blocage de journée -->
+        <button type="button" id="btn-toggle-block-day" onclick="window.toggleBlockDay()" class="w-full py-2.5 px-3 bg-red-950/40 border border-red-800/60 hover:bg-red-900/40 text-red-300 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2">
+          <span id="block-day-icon">🔒</span>
+          <span id="block-day-label">Bloquer / Débloquer la journée sélectionnée</span>
+        </button>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
@@ -271,10 +278,10 @@
         </button>
       </div>
 
-      <!-- Recherche & Liste Clients -->
+      <!-- Recherche & Liste Clients (Triés par Ordre Alphabétique A-Z) -->
       <div class="space-y-3">
         <div class="flex justify-between items-center">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Base Fichier Clients</h2>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Base Fichier Clients (A-Z)</h2>
           <input type="text" id="search-client" oninput="window.filterClients()" placeholder="Rechercher..." class="bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-1 text-xs text-white focus:outline-none focus:border-amber-500 w-36" />
         </div>
         <div id="clients-list" class="space-y-3"></div>
@@ -313,7 +320,6 @@
 
   <!-- SCRIPT LOGIQUE ET TRAITEMENT DES DONNEES -->
   <script>
-    // Utilitaires de formatage de date
     function formatDateFR(dateStr) {
       if (!dateStr) return '';
       const parts = dateStr.split('-');
@@ -323,7 +329,6 @@
       return dateStr;
     }
 
-    // Grille complète des prestations avec tarifs selon catégorie de véhicule
     const SERVICES = [
       { id: 'w_ess', name: 'WashDetail - Essential', prices: { petite: 19.99, moyenne: 24.99, grande: 29.99, camionnette: 34.99 } },
       { id: 'w_sig', name: 'WashDetail - Signature', prices: { petite: 49.99, moyenne: 54.99, grande: 59.99, camionnette: 64.99 } },
@@ -346,6 +351,7 @@
     // Initialisation des données locales
     window.clientsData = JSON.parse(localStorage.getItem('ldd_clients') || '[]');
     window.bookingsData = JSON.parse(localStorage.getItem('ldd_bookings') || '[]');
+    window.blockedDaysData = JSON.parse(localStorage.getItem('ldd_blocked_days') || '[]');
     
     // Etat global
     window.calendarCurrentDate = new Date();
@@ -359,6 +365,7 @@
     function saveLocal() {
       localStorage.setItem('ldd_clients', JSON.stringify(window.clientsData));
       localStorage.setItem('ldd_bookings', JSON.stringify(window.bookingsData));
+      localStorage.setItem('ldd_blocked_days', JSON.stringify(window.blockedDaysData));
       window.updateDashboardStats();
       window.renderCalendar();
     }
@@ -383,7 +390,7 @@
       document.getElementById('rdv-count-badge').innerText = window.bookingsData.length + ' RDV';
     };
 
-    // --- RECHERCHE CLIENTS TEMPS REEL POUR CREATION DE RDV ---
+    // --- RECHERCHE ET SELECTION CLIENT TEMPS REEL ---
     window.searchBookingClient = function() {
       const q = (document.getElementById('booking-client-search').value || '').toLowerCase().trim();
       const resultsBox = document.getElementById('booking-client-results');
@@ -393,10 +400,10 @@
         return;
       }
 
-      const matches = window.clientsData.filter(c => 
-        c.name.toLowerCase().includes(q) || 
-        (c.phone && c.phone.includes(q))
-      );
+      // Tri alphabétique des correspondances
+      const matches = window.clientsData
+        .filter(c => c.name.toLowerCase().includes(q) || (c.phone && c.phone.includes(q)))
+        .sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
 
       if (matches.length === 0) {
         resultsBox.innerHTML = '<div class="p-2 text-xs text-neutral-500 italic">Aucun client trouvé</div>';
@@ -439,6 +446,23 @@
       window.onClientChange();
     };
 
+    // --- BLOQUER OU DEBLOQUER UNE JOURNEE ---
+    window.toggleBlockDay = function() {
+      const selectedDate = document.getElementById('booking-date').value;
+      if (!selectedDate) { alert('Veuillez sélectionner une date dans le calendrier.'); return; }
+
+      const idx = window.blockedDaysData.indexOf(selectedDate);
+      if (idx > -1) {
+        window.blockedDaysData.splice(idx, 1);
+        showNotification(`Journée du ${formatDateFR(selectedDate)} débloquée !`);
+      } else {
+        window.blockedDaysData.push(selectedDate);
+        showNotification(`Journée du ${formatDateFR(selectedDate)} bloquée ! 🔒`);
+      }
+
+      saveLocal();
+    };
+
     // --- LOGIQUE CALENDRIER ---
     window.changeCalendarMonth = function(delta) {
       window.calendarCurrentDate.setMonth(window.calendarCurrentDate.getMonth() + delta);
@@ -469,6 +493,18 @@
       const totalDays = lastDayOfMonth.getDate();
       const selectedDateVal = document.getElementById('booking-date').value;
 
+      // Mise à jour de l'état du bouton de blocage pour la date active
+      const isBlocked = window.blockedDaysData.includes(selectedDateVal);
+      const btnBlock = document.getElementById('btn-toggle-block-day');
+      const labelBlock = document.getElementById('block-day-label');
+      if (isBlocked) {
+        btnBlock.className = "w-full py-2.5 px-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2 shadow-lg shadow-red-600/30";
+        labelBlock.innerText = `Débloquer la journée du ${formatDateFR(selectedDateVal)}`;
+      } else {
+        btnBlock.className = "w-full py-2.5 px-3 bg-red-950/40 border border-red-800/60 hover:bg-red-900/40 text-red-300 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2";
+        labelBlock.innerText = `Bloquer la journée du ${formatDateFR(selectedDateVal)}`;
+      }
+
       for (let i = 0; i < startDayOfWeek; i++) {
         const emptyCell = document.createElement('div');
         emptyCell.className = "h-11 rounded-xl bg-neutral-950/30";
@@ -481,6 +517,7 @@
 
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const hasBooking = window.bookingsData.some(b => b.date === dateStr);
+        const dayIsBlocked = window.blockedDaysData.includes(dateStr);
         const isSelected = selectedDateVal === dateStr;
 
         const cell = document.createElement('button');
@@ -489,8 +526,10 @@
         let dotColor = 'bg-white';
         let isClickable = true;
 
-        if (hasBooking) {
-          dotColor = 'bg-red-500 shadow-sm shadow-red-500/50';
+        if (dayIsBlocked) {
+          dotColor = 'bg-red-600 shadow-sm shadow-red-600/50';
+        } else if (hasBooking) {
+          dotColor = 'bg-amber-500 shadow-sm shadow-amber-500/50';
         } else if (dayOfWeek === 1 || dayOfWeek === 6) {
           dotColor = 'bg-emerald-400 shadow-sm shadow-emerald-400/50';
         } else if (dayOfWeek === 0) {
@@ -500,7 +539,9 @@
 
         let baseClasses = "h-11 rounded-xl border flex flex-col items-center justify-between py-1.5 text-xs transition-all ";
 
-        if (!isClickable) {
+        if (dayIsBlocked) {
+          baseClasses += "bg-red-950/40 border-red-800/80 text-red-300";
+        } else if (!isClickable) {
           baseClasses += "bg-neutral-950/40 border-neutral-800 text-neutral-600 cursor-not-allowed";
         } else if (isSelected) {
           baseClasses += "bg-amber-500/20 border-amber-500 text-amber-300 font-bold ring-1 ring-amber-500/50";
@@ -511,7 +552,9 @@
         cell.className = baseClasses;
 
         let htmlContent = `<span class="${isSelected ? 'font-black text-amber-400' : ''}">${day}</span>`;
-        if (dotColor) {
+        if (dayIsBlocked) {
+          htmlContent += `<span class="text-[9px] font-bold text-red-400">🔒</span>`;
+        } else if (dotColor) {
           htmlContent += `<span class="w-2 h-2 rounded-full ${dotColor}"></span>`;
         } else {
           htmlContent += `<span class="w-2 h-2"></span>`;
@@ -533,8 +576,12 @@
         sel.innerHTML = '<option value="">-- Aucun client enregistré --</option>';
         return;
       }
+      
+      // Tri Alphabétique (A-Z)
+      const sortedClients = [...window.clientsData].sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
+
       sel.innerHTML = '<option value="">-- Sélectionner un client --</option>' + 
-        window.clientsData.map(c => `<option value="${c.id}">${c.name} (${c.referral_discount_pct || 0}% parrainage)</option>`).join('');
+        sortedClients.map(c => `<option value="${c.id}">${c.name} (${c.referral_discount_pct || 0}% parrainage)</option>`).join('');
     }
 
     window.filterClients = function() {
@@ -544,7 +591,11 @@
 
     function renderClientsList(filterQuery = '') {
       const list = document.getElementById('clients-list');
-      const filtered = window.clientsData.filter(c => 
+      
+      // Tri Alphabétique (A-Z)
+      const sortedClients = [...window.clientsData].sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
+
+      const filtered = sortedClients.filter(c => 
         c.name.toLowerCase().includes(filterQuery) || 
         (c.phone && c.phone.includes(filterQuery)) ||
         (c.address && c.address.toLowerCase().includes(filterQuery))
@@ -727,7 +778,14 @@ Alex — L’As Du Détail`;
       const clientId = document.getElementById('selected-client-id').value || document.getElementById('client-select').value;
       const date = document.getElementById('booking-date').value;
       const time = document.getElementById('booking-time').value || '09:00';
+      
       if (!clientId || !date) { alert('Veuillez sélectionner un client et une date.'); return; }
+
+      // Vérification si la journée est bloquée
+      if (window.blockedDaysData.includes(date)) {
+        alert("⚠️ Cette journée est bloquée. Débloquez-la d'abord si vous souhaitez enregistrer un RDV.");
+        return;
+      }
 
       const c = window.clientsData.find(x => x.id === clientId);
       const sId = document.getElementById('service-select').value;
