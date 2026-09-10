@@ -8,7 +8,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans pb-28 selection:bg-blue-600 selection:text-white">
 
-  <!-- En-tête de l'application (Nouveau Style Bleu Nuit) -->
+  <!-- En-tête de l'application -->
   <header class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md">
     <div class="max-w-xl mx-auto flex items-center justify-between">
       <div class="flex items-center space-x-3">
@@ -393,6 +393,9 @@
       document.getElementById('selected-client-name').innerText = c.name;
       document.getElementById('selected-client-info').innerText = `📞 ${c.phone || 'Non renseigné'} ${c.address ? '• 📍 ' + c.address : ''}`;
       document.getElementById('selected-client-display').classList.remove('hidden');
+      if (c.distance_km && c.distance_km > 0) {
+        document.getElementById('distance-km').value = c.distance_km;
+      }
       window.onClientChange();
     };
 
@@ -477,10 +480,10 @@
           dotColor = 'bg-rose-600';
         } else if (hasBooking) {
           dotColor = 'bg-blue-600';
-        } else if (dayOfWeek === 1 || dayOfWeek === 6) {
+        } else if (dayOfWeek >= 1 && dayOfWeek <= 6) {
           dotColor = 'bg-emerald-500';
         } else if (dayOfWeek === 0) {
-          dotColor = '';
+          dotColor = 'bg-slate-300';
           isClickable = false;
         }
 
@@ -560,8 +563,10 @@
       const msgText = generateMessageText(b, type);
       document.getElementById('message-output-box').classList.remove('hidden');
       document.getElementById('message-text').value = msgText;
-      const phoneClean = b.client_phone ? b.client_phone.replace(/\s+/g, '') : '';
-      window.location.href = `sms:${phoneClean}?body=${encodeURIComponent(msgText)}`;
+      
+      const phoneClean = b.client_phone ? b.client_phone.replace(/\D/g, '') : '';
+      const btnSms = document.getElementById('btn-sms-msg');
+      btnSms.href = `sms:${phoneClean}?body=${encodeURIComponent(msgText)}`;
     };
 
     function renderBookingsList() {
@@ -783,8 +788,25 @@
       const total = Math.max(0, subtotal - refDiscount);
 
       document.getElementById('recap-service').innerText = basePrice.toFixed(2) + ' €';
+      
+      const recapSubRow = document.getElementById('recap-sub-row');
+      if (subDiscount > 0) {
+        document.getElementById('recap-sub-discount').innerText = '-' + subDiscount.toFixed(2) + ' €';
+        recapSubRow.classList.remove('hidden');
+      } else {
+        recapSubRow.classList.add('hidden');
+      }
+
       document.getElementById('recap-supplements').innerText = supps.toFixed(2) + ' €';
       document.getElementById('recap-travel').innerText = travel.toFixed(2) + ' €';
+
+      const recapDiscRow = document.getElementById('recap-discount-row');
+      if (refDiscount > 0) {
+        document.getElementById('recap-discount').innerText = '-' + refDiscount.toFixed(2) + ' €';
+        recapDiscRow.classList.remove('hidden');
+      } else {
+        recapDiscRow.classList.add('hidden');
+      }
 
       document.getElementById('total-price').innerText = total.toFixed(2) + ' €';
     };
