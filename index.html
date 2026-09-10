@@ -76,10 +76,11 @@
 
         <select id="client-select" class="hidden"></select>
         
+        <!-- Badge de parrainage dynamique -->
         <div id="parrainage-badge" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex justify-between items-center">
           <div>
-            <span class="text-xs text-emerald-900 block font-medium">Cagnotte parrainage active</span>
-            <span class="text-[10px] text-emerald-700">Disponible pour ce client</span>
+            <span class="text-xs text-emerald-900 block font-medium">Cagnotte parrainage disponible</span>
+            <span class="text-[10px] text-emerald-700">Déductible sur ce devis</span>
           </div>
           <span id="parrainage-val" class="font-black text-emerald-600 text-lg">0%</span>
         </div>
@@ -155,9 +156,9 @@
         </div>
       </div>
 
-      <!-- 7. Réduction Parrainage -->
+      <!-- 7. Réduction Parrainage (Slider affiché automatiquement si points > 0) -->
       <div id="parrainage-slider-box" class="hidden bg-white border border-blue-200 rounded-2xl p-4 space-y-3 shadow-sm">
-        <label class="text-xs uppercase tracking-wider text-blue-600 font-bold block">Réduction Parrainage</label>
+        <label class="text-xs uppercase tracking-wider text-blue-600 font-bold block">Moduler la Réduction Parrainage (%)</label>
         <div class="flex items-center space-x-3">
           <input type="range" id="discount-range" min="0" max="100" step="10" value="0" class="w-full accent-blue-600 cursor-pointer" />
           <span id="discount-val-label" class="font-black text-blue-600 text-xl w-14 text-right">-0%</span>
@@ -182,8 +183,8 @@
           <div id="calendar-days-grid" class="grid grid-cols-7 gap-1"></div>
 
           <div class="grid grid-cols-2 gap-y-1.5 pt-2 border-t border-slate-200 text-[10px] text-slate-500 px-1">
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Disponible</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-slate-300"></span><span>Fermé</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-white border border-slate-300"></span><span>Libre (Mar-Ven)</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-slate-300"></span><span>Fermé (Dimanche)</span></span>
             <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-blue-600"></span><span>Occupé (RDV)</span></span>
             <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-rose-600"></span><span>Journée Bloquée</span></span>
           </div>
@@ -465,7 +466,7 @@
 
       for (let day = 1; day <= totalDays; day++) {
         const currentDateObj = new Date(year, month, day);
-        const dayOfWeek = currentDateObj.getDay();
+        const dayOfWeek = currentDateObj.getDay(); // 0: Dimanche, 1: Lundi, 2-5: Mar-Ven, 6: Samedi
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const hasBooking = window.bookingsData.some(b => b.date === dateStr);
         const dayIsBlocked = window.blockedDaysData.includes(dateStr);
@@ -473,16 +474,22 @@
 
         const cell = document.createElement('button');
         cell.type = 'button';
-        let dotColor = 'bg-slate-300';
         let isClickable = true;
+        let dotColor = '';
+        let dotShapeClass = 'w-2 h-2 rounded-full';
 
         if (dayIsBlocked) {
           dotColor = 'bg-rose-600';
         } else if (hasBooking) {
           dotColor = 'bg-blue-600';
-        } else if (dayOfWeek >= 1 && dayOfWeek <= 6) {
+        } else if (dayOfWeek >= 2 && dayOfWeek <= 5) {
+          // Mardi au Vendredi (Semaine) : pastille blanche bordée si libre
+          dotColor = 'bg-white border border-slate-300';
+        } else if (dayOfWeek === 1 || dayOfWeek === 6) {
+          // Lundi et Samedi : pastille verte si libre
           dotColor = 'bg-emerald-500';
         } else if (dayOfWeek === 0) {
+          // Dimanche : Fermé (pastille grise)
           dotColor = 'bg-slate-300';
           isClickable = false;
         }
@@ -499,7 +506,7 @@
         }
 
         cell.className = baseClasses;
-        cell.innerHTML = `<span>${day}</span>${dayIsBlocked ? '🔒' : (dotColor ? `<span class="w-2 h-2 rounded-full ${dotColor}"></span>` : '')}`;
+        cell.innerHTML = `<span>${day}</span>${dayIsBlocked ? '🔒' : (dotColor ? `<span class="${dotShapeClass} ${dotColor}"></span>` : '')}`;
         if (isClickable) cell.onclick = () => window.selectCalendarDate(dateStr);
         grid.appendChild(cell);
       }
@@ -744,11 +751,12 @@
         badge.classList.remove('hidden');
         box.classList.remove('hidden');
         slider.max = c.referral_discount_pct;
+        slider.value = c.referral_discount_pct; // Pré-sélection max ou ajustable par le slider
       } else {
         badge.classList.add('hidden');
         box.classList.add('hidden');
+        slider.value = 0;
       }
-      slider.value = 0;
       window.onSliderChange();
     };
 
