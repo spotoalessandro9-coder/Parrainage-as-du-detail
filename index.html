@@ -185,8 +185,8 @@
           <div class="grid grid-cols-2 gap-y-1.5 pt-2 border-t border-slate-200 text-[10px] text-slate-500 px-1">
             <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-white border border-slate-300"></span><span>Libre (Mar-Ven)</span></span>
             <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-slate-300"></span><span>Fermé (Dimanche)</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-blue-600"></span><span>Occupé (RDV)</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-rose-600"></span><span>Journée Bloquée</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-rose-600"></span><span>Occupé (RDV)</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-slate-200 border border-slate-300"></span><span>Journée Bloquée</span></span>
           </div>
         </div>
 
@@ -417,7 +417,7 @@
         showNotification(`Journée du ${formatDateFR(selectedDate)} débloquée !`);
       } else {
         window.blockedDaysData.push(selectedDate);
-        showNotification(`Journée du ${formatDateFR(selectedDate)} bloquée 🔒`);
+        showNotification(`Journée du ${formatDateFR(selectedDate)} bloquée`);
       }
       saveLocal();
     };
@@ -470,7 +470,7 @@
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const hasBooking = window.bookingsData.some(b => b.date === dateStr);
         const dayIsBlocked = window.blockedDaysData.includes(dateStr);
-        const isSelected = selectedDateVal === dateStr;
+        const cantonSelected = selectedDateVal === dateStr;
 
         const cell = document.createElement('button');
         cell.type = 'button';
@@ -479,9 +479,11 @@
         let dotShapeClass = 'w-2 h-2 rounded-full';
 
         if (dayIsBlocked) {
-          dotColor = 'bg-rose-600';
+          // Journée bloquée grisée (identique au dimanche)
+          dotColor = 'bg-slate-300';
         } else if (hasBooking) {
-          dotColor = 'bg-blue-600';
+          // Journée occupée en rouge
+          dotColor = 'bg-rose-600';
         } else if (dayOfWeek >= 2 && dayOfWeek <= 5) {
           // Mardi au Vendredi (Semaine) : pastille blanche bordée si libre
           dotColor = 'bg-white border border-slate-300';
@@ -496,17 +498,17 @@
 
         let baseClasses = "h-11 rounded-xl border flex flex-col items-center justify-between py-1.5 text-xs transition-all ";
         if (dayIsBlocked) {
-          baseClasses += "bg-rose-50 border-rose-200 text-rose-700";
+          baseClasses += "bg-slate-200 border-slate-300 text-slate-400 font-semibold cursor-not-allowed";
         } else if (!isClickable) {
           baseClasses += "bg-slate-100 border-slate-200 text-slate-300 cursor-not-allowed";
-        } else if (isSelected) {
+        } else if (cantonSelected) {
           baseClasses += "bg-blue-50 border-blue-600 text-blue-900 font-bold ring-1 ring-blue-600";
         } else {
           baseClasses += "bg-white border-slate-200 text-slate-700 hover:border-slate-300";
         }
 
         cell.className = baseClasses;
-        cell.innerHTML = `<span>${day}</span>${dayIsBlocked ? '🔒' : (dotColor ? `<span class="${dotShapeClass} ${dotColor}"></span>` : '')}`;
+        cell.innerHTML = `<span>${day}</span>${dotColor ? `<span class="${dotShapeClass} ${dotColor}"></span>` : ''}`;
         if (isClickable) cell.onclick = () => window.selectCalendarDate(dateStr);
         grid.appendChild(cell);
       }
@@ -751,7 +753,7 @@
         badge.classList.remove('hidden');
         box.classList.remove('hidden');
         slider.max = c.referral_discount_pct;
-        slider.value = c.referral_discount_pct; // Pré-sélection max ou ajustable par le slider
+        slider.value = c.referral_discount_pct;
       } else {
         badge.classList.add('hidden');
         box.classList.add('hidden');
