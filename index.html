@@ -50,15 +50,35 @@
     <!-- TAB 1: DEVIS & RESERVATION -->
     <div id="tab-booking" class="space-y-5">
       
-      <!-- 1. Client -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
+      <!-- 1. Client avec Recherche en Temps Réel -->
+      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3 relative">
         <div class="flex justify-between items-center">
           <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">1. Client & Parrainage</label>
           <button type="button" onclick="window.switchTab('clients')" class="text-[11px] text-amber-400 hover:underline font-semibold">+ Nouveau Client</button>
         </div>
-        <select id="client-select" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500">
-          <option value="">-- Sélectionner un client --</option>
-        </select>
+
+        <!-- Recherche dynamique temps réel -->
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span class="text-neutral-400 text-sm">🔍</span>
+          </div>
+          <input type="text" id="booking-client-search" oninput="window.searchBookingClient()" placeholder="Rechercher un client (nom, téléphone)..." class="w-full pl-9 pr-3 py-3 bg-neutral-900 border border-neutral-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500" />
+          
+          <!-- Liste déroulante des résultats de recherche -->
+          <div id="booking-client-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-neutral-900 border border-neutral-700 rounded-xl max-h-48 overflow-y-auto z-30 shadow-2xl space-y-1 p-1"></div>
+        </div>
+
+        <!-- Sélection classique / Client sélectionné -->
+        <input type="hidden" id="selected-client-id" value="" />
+        <div id="selected-client-display" class="hidden bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl flex justify-between items-center">
+          <div>
+            <span class="text-xs font-bold text-amber-400 block" id="selected-client-name">Nom du client</span>
+            <span class="text-[10px] text-neutral-400 block" id="selected-client-info">Détails client</span>
+          </div>
+          <button type="button" onclick="window.clearSelectedBookingClient()" class="text-neutral-400 hover:text-white text-xs font-bold px-2 py-1">✕ Changer</button>
+        </div>
+
+        <select id="client-select" class="hidden"></select>
         
         <div id="parrainage-badge" class="hidden bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex justify-between items-center">
           <div>
@@ -265,7 +285,7 @@
     <!-- TAB 3: PLANNING RDV -->
     <div id="tab-rdv" class="hidden space-y-4">
       <div class="flex justify-between items-center">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Planning & Rendez-vous enregistrés</h2>
+        <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Planning Chronologique des RDV</h2>
         <span id="rdv-count-badge" class="text-[10px] bg-neutral-800 border border-neutral-700 text-amber-400 font-bold px-2 py-0.5 rounded-full">0 RDV</span>
       </div>
       <div id="bookings-list" class="space-y-3"></div>
@@ -293,7 +313,7 @@
 
   <!-- SCRIPT LOGIQUE ET TRAITEMENT DES DONNEES -->
   <script>
-    // fonction utilitaire pour formater AAAA-MM-JJ vers JJ/MM/AAAA
+    // Utilitaires de formatage de date
     function formatDateFR(dateStr) {
       if (!dateStr) return '';
       const parts = dateStr.split('-');
@@ -317,7 +337,6 @@
       { id: 'pol_2', name: 'Polissage 2 Step Correction', prices: { petite: 399.99, moyenne: 449.99, grande: 499.99, camionnette: 549.99 } },
       { id: 'c_12', name: 'Protection Céramique 12-24 mois', prices: { petite: 249.99, moyenne: 279.99, grande: 309.99, camionnette: 349.99 } },
       { id: 'c_48', name: 'Protection Céramique 48-60 mois', prices: { petite: 549.99, moyenne: 649.99, grande: 749.99, camionnette: 899.99 } },
-      // FORMULES COMBINÉES POLISSAGE + CÉRAMIQUE
       { id: 'pack_1s_c12', name: '⭐ One-Step + Céramique 12–24 mois', prices: { petite: 499.99, moyenne: 549.99, grande: 599.99, camionnette: 699.99 } },
       { id: 'pack_1s_c48', name: '👑 One-Step + Céramique 48–60 mois', prices: { petite: 799.99, moyenne: 899.99, grande: 999.99, camionnette: 1199.99 } },
       { id: 'pack_2s_c12', name: '🔥 Two-Step + Céramique 12–24 mois', prices: { petite: 699.99, moyenne: 749.99, grande: 849.99, camionnette: 949.99 } },
@@ -328,10 +347,8 @@
     window.clientsData = JSON.parse(localStorage.getItem('ldd_clients') || '[]');
     window.bookingsData = JSON.parse(localStorage.getItem('ldd_bookings') || '[]');
     
-    // Etat global du calendrier
+    // Etat global
     window.calendarCurrentDate = new Date();
-
-    // Etat global du formulaire devis
     window.currentCategory = 'moyenne';
     window.currentSeats = 'none';
     window.currentRoof = false;
@@ -366,7 +383,63 @@
       document.getElementById('rdv-count-badge').innerText = window.bookingsData.length + ' RDV';
     };
 
-    // --- LOGIQUE DU CALENDRIER VISUEL ---
+    // --- RECHERCHE CLIENTS TEMPS REEL POUR CREATION DE RDV ---
+    window.searchBookingClient = function() {
+      const q = (document.getElementById('booking-client-search').value || '').toLowerCase().trim();
+      const resultsBox = document.getElementById('booking-client-results');
+
+      if (!q) {
+        resultsBox.classList.add('hidden');
+        return;
+      }
+
+      const matches = window.clientsData.filter(c => 
+        c.name.toLowerCase().includes(q) || 
+        (c.phone && c.phone.includes(q))
+      );
+
+      if (matches.length === 0) {
+        resultsBox.innerHTML = '<div class="p-2 text-xs text-neutral-500 italic">Aucun client trouvé</div>';
+      } else {
+        resultsBox.innerHTML = matches.map(c => `
+          <div onclick="window.selectBookingClient('${c.id}')" class="p-2.5 rounded-lg hover:bg-amber-500/20 cursor-pointer flex justify-between items-center transition-all border border-transparent hover:border-amber-500/40">
+            <div>
+              <div class="text-xs font-bold text-white">${c.name}</div>
+              <div class="text-[10px] text-neutral-400">📞 ${c.phone || 'Sans tel'} ${c.address ? '• 📍 ' + c.address : ''}</div>
+            </div>
+            ${(c.referral_discount_pct || 0) > 0 ? `<span class="text-[10px] font-black bg-amber-500 text-neutral-950 px-2 py-0.5 rounded-full">${c.referral_discount_pct}% parrainage</span>` : ''}
+          </div>
+        `).join('');
+      }
+
+      resultsBox.classList.remove('hidden');
+    };
+
+    window.selectBookingClient = function(clientId) {
+      const c = window.clientsData.find(x => x.id === clientId);
+      if (!c) return;
+
+      document.getElementById('selected-client-id').value = c.id;
+      document.getElementById('client-select').value = c.id;
+      document.getElementById('booking-client-search').value = '';
+      document.getElementById('booking-client-results').classList.add('hidden');
+
+      document.getElementById('selected-client-name').innerText = c.name;
+      document.getElementById('selected-client-info').innerText = `📞 ${c.phone || 'Non renseigné'} ${c.address ? '• 📍 ' + c.address : ''}`;
+      document.getElementById('selected-client-display').classList.remove('hidden');
+
+      window.onClientChange();
+    };
+
+    window.clearSelectedBookingClient = function() {
+      document.getElementById('selected-client-id').value = '';
+      document.getElementById('client-select').value = '';
+      document.getElementById('selected-client-display').classList.add('hidden');
+      document.getElementById('booking-client-search').value = '';
+      window.onClientChange();
+    };
+
+    // --- LOGIQUE CALENDRIER ---
     window.changeCalendarMonth = function(delta) {
       window.calendarCurrentDate.setMonth(window.calendarCurrentDate.getMonth() + delta);
       window.renderCalendar();
@@ -390,24 +463,21 @@
       const firstDayOfMonth = new Date(year, month, 1);
       const lastDayOfMonth = new Date(year, month + 1, 0);
 
-      // Adaptation pour faire démarrer la semaine le Lundi (0=Lun, 6=Dim)
       let startDayOfWeek = firstDayOfMonth.getDay() - 1;
       if (startDayOfWeek === -1) startDayOfWeek = 6;
 
       const totalDays = lastDayOfMonth.getDate();
       const selectedDateVal = document.getElementById('booking-date').value;
 
-      // Cases vides avant le 1er du mois
       for (let i = 0; i < startDayOfWeek; i++) {
         const emptyCell = document.createElement('div');
         emptyCell.className = "h-11 rounded-xl bg-neutral-950/30";
         grid.appendChild(emptyCell);
       }
 
-      // Generation des jours du mois
       for (let day = 1; day <= totalDays; day++) {
         const currentDateObj = new Date(year, month, day);
-        const dayOfWeek = currentDateObj.getDay(); // 0=Dimanche, 1=Lundi, ..., 6=Samedi
+        const dayOfWeek = currentDateObj.getDay();
 
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const hasBooking = window.bookingsData.some(b => b.date === dateStr);
@@ -416,16 +486,14 @@
         const cell = document.createElement('button');
         cell.type = 'button';
 
-        let dotColor = 'bg-white'; // Par défaut blanc (Mar, Mer, Jeu, Ven)
+        let dotColor = 'bg-white';
         let isClickable = true;
 
         if (hasBooking) {
           dotColor = 'bg-red-500 shadow-sm shadow-red-500/50';
         } else if (dayOfWeek === 1 || dayOfWeek === 6) {
-          // Lundi (1) ou Samedi (6)
           dotColor = 'bg-emerald-400 shadow-sm shadow-emerald-400/50';
         } else if (dayOfWeek === 0) {
-          // Dimanche
           dotColor = '';
           isClickable = false;
         }
@@ -503,7 +571,7 @@
       `).join('');
     }
 
-    // Générateur de messages dynamiques
+    // --- GENERATION DES MESSAGES CLIENTS ---
     function generateMessageText(booking, type) {
       const formattedDate = formatDateFR(booking.date);
       if (type === 'confirm') {
@@ -548,24 +616,21 @@ Alex — L’As Du Détail`;
       return '';
     }
 
-    // Envoi de SMS directement depuis la carte du RDV
     window.sendBookingMessage = function(bookingId, type) {
       const b = window.bookingsData.find(x => x.id === bookingId);
       if (!b) return;
 
       const msgText = generateMessageText(b, type);
       
-      // Mise à jour de la zone d'aperçu dans l'onglet Devis
       document.getElementById('message-output-box').classList.remove('hidden');
       document.getElementById('message-text').value = msgText;
 
       const phoneClean = b.client_phone ? b.client_phone.replace(/\s+/g, '') : '';
       const smsUrl = `sms:${phoneClean}?body=${encodeURIComponent(msgText)}`;
-      
-      // Ouverture directe de l'application SMS du téléphone
       window.location.href = smsUrl;
     };
 
+    // --- AFFICHAGE CHRONOLOGIQUE DES RENDEZ-VOUS ---
     function renderBookingsList() {
       const list = document.getElementById('bookings-list');
       if (window.bookingsData.length === 0) {
@@ -573,7 +638,14 @@ Alex — L’As Du Détail`;
         return;
       }
 
-      list.innerHTML = window.bookingsData.map(b => `
+      // TRI CHRONOLOGIQUE : Par Date puis par Heure
+      const sortedBookings = [...window.bookingsData].sort((a, b) => {
+        const dateTimeA = `${a.date}T${a.time || '00:00'}`;
+        const dateTimeB = `${b.date}T${b.time || '00:00'}`;
+        return dateTimeA.localeCompare(dateTimeB);
+      });
+
+      list.innerHTML = sortedBookings.map(b => `
         <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 space-y-3 shadow-sm">
           <div class="flex justify-between items-start">
             <div>
@@ -585,7 +657,6 @@ Alex — L’As Du Détail`;
           <div class="text-xs text-neutral-300">🛠️ ${b.service_name} (${b.category.toUpperCase()})</div>
           <div class="text-xs text-neutral-400">📍 ${b.lieu}</div>
           
-          <!-- BOUTONS D'ACTIONS DE MESSAGES SOUS LE RDV -->
           <div class="grid grid-cols-3 gap-2 pt-2 border-t border-neutral-700/50">
             <button onclick="window.sendBookingMessage('${b.id}', 'confirm')" class="py-2 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 text-amber-400 text-[11px] font-bold rounded-xl transition-all flex items-center justify-center space-x-1">
               <span>💬 Confirm.</span>
@@ -653,7 +724,7 @@ Alex — L’As Du Détail`;
     };
 
     window.saveBooking = function() {
-      const clientId = document.getElementById('client-select').value;
+      const clientId = document.getElementById('selected-client-id').value || document.getElementById('client-select').value;
       const date = document.getElementById('booking-date').value;
       const time = document.getElementById('booking-time').value || '09:00';
       if (!clientId || !date) { alert('Veuillez sélectionner un client et une date.'); return; }
@@ -688,7 +759,6 @@ Alex — L’As Du Détail`;
 
       window.bookingsData.push(newBooking);
 
-      // Déduction de la cagnotte parrainage appliquée
       if (window.currentDiscountPct > 0 && c) {
         c.referral_discount_pct = Math.max(0, (c.referral_discount_pct || 0) - window.currentDiscountPct);
       }
@@ -697,7 +767,6 @@ Alex — L’As Du Détail`;
       renderBookingsList();
       renderClientsList();
 
-      // Aperçu initial de la confirmation
       document.getElementById('message-output-box').classList.remove('hidden');
       const msgConfirm = generateMessageText(newBooking, 'confirm');
       document.getElementById('message-text').value = msgConfirm;
@@ -705,7 +774,8 @@ Alex — L’As Du Détail`;
       const phoneClean = newBooking.client_phone ? newBooking.client_phone.replace(/\s+/g, '') : '';
       document.getElementById('btn-sms-msg').href = `sms:${phoneClean}?body=${encodeURIComponent(msgConfirm)}`;
 
-      showNotification("RDV enregistré ! Le calendrier à été mis à jour.");
+      window.clearSelectedBookingClient();
+      showNotification("RDV enregistré et classé dans le planning !");
     };
 
     window.deleteBooking = function(id) {
@@ -763,7 +833,7 @@ Alex — L’As Du Détail`;
     };
 
     window.onClientChange = function() {
-      const id = document.getElementById('client-select').value;
+      const id = document.getElementById('selected-client-id').value || document.getElementById('client-select').value;
       const c = window.clientsData.find(x => x.id === id);
       const badge = document.getElementById('parrainage-badge');
       const box = document.getElementById('parrainage-slider-box');
@@ -823,7 +893,6 @@ Alex — L’As Du Détail`;
       const refDiscount = (subtotal * window.currentDiscountPct) / 100;
       const total = Math.max(0, subtotal - refDiscount);
 
-      // Affichage des éléments du récapitulatif
       document.getElementById('recap-service').innerText = basePrice.toFixed(2) + ' €';
       document.getElementById('recap-supplements').innerText = supps.toFixed(2) + ' €';
       document.getElementById('recap-travel').innerText = travel.toFixed(2) + ' €';
@@ -858,8 +927,6 @@ Alex — L’As Du Détail`;
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Binding des événements
-      document.getElementById('client-select').onchange = window.onClientChange;
       document.getElementById('service-select').onchange = window.calculateTotal;
       document.getElementById('distance-km').oninput = window.calculateTotal;
       document.getElementById('discount-range').oninput = window.onSliderChange;
@@ -906,11 +973,16 @@ Alex — L’As Du Détail`;
       document.getElementById('nav-clients').onclick = () => window.switchTab('clients');
       document.getElementById('nav-rdv').onclick = () => window.switchTab('rdv');
 
-      // Date par défaut : aujourd'hui
+      // Masquer la recherche si clic dehors
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#tab-booking')) {
+          document.getElementById('booking-client-results').classList.add('hidden');
+        }
+      });
+
       const today = new Date().toISOString().split('T')[0];
       document.getElementById('booking-date').value = today;
 
-      // Initialisation générale des vues
       renderClientsSelect();
       renderClientsList();
       renderBookingsList();
