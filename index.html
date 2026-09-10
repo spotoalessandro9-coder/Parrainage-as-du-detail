@@ -6,44 +6,44 @@
   <title>L'As Du Détail - Cockpit Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-neutral-900 text-neutral-100 font-sans pb-28 selection:bg-amber-500 selection:text-neutral-950">
+<body class="bg-slate-50 text-slate-800 font-sans pb-28 selection:bg-blue-500 selection:text-white">
 
   <!-- En-tête de l'application -->
-  <header class="bg-neutral-950 border-b border-neutral-800 p-4 sticky top-0 z-50 shadow-md">
+  <header class="bg-white border-b border-slate-200 p-4 sticky top-0 z-50 shadow-sm">
     <div class="max-w-xl mx-auto flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center font-black text-neutral-950 text-xl shadow-lg shadow-amber-500/20">A</div>
+        <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-black text-white text-xl shadow-md shadow-blue-500/20">A</div>
         <div>
-          <h1 class="font-extrabold text-lg leading-none text-white tracking-wide">L'As Du Détail</h1>
-          <p class="text-xs text-neutral-400 mt-0.5">Système de Gestion & Cockpit</p>
+          <h1 class="font-extrabold text-lg leading-none text-slate-900 tracking-wide">L'As Du Détail</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Système de Gestion & Cockpit</p>
         </div>
       </div>
       <div class="text-right">
-        <span class="text-[11px] px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full font-bold uppercase tracking-wider block">Waremme</span>
-        <span id="sync-status" class="text-[10px] text-emerald-400 font-medium mt-1 block">● Mode Local Ultra-Rapide</span>
+        <span class="text-[11px] px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-full font-bold uppercase tracking-wider block">Waremme</span>
+        <span id="sync-status" class="text-[10px] text-emerald-600 font-medium mt-1 block">● Mode Local Ultra-Rapide</span>
       </div>
     </div>
   </header>
 
   <!-- Banner de notification -->
-  <div id="notification" class="hidden max-w-xl mx-auto m-4 p-4 bg-amber-500 text-neutral-950 font-bold rounded-xl shadow-xl border border-amber-400 text-sm transform transition-all duration-300"></div>
+  <div id="notification" class="hidden max-w-xl mx-auto m-4 p-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg border border-blue-500 text-sm transform transition-all duration-300"></div>
 
   <!-- Conteneur Principal -->
   <main class="max-w-xl mx-auto p-4 space-y-6">
 
     <!-- STATS RAPIDES (DASHBOARD) -->
     <div id="dashboard-summary" class="grid grid-cols-3 gap-3">
-      <div class="bg-neutral-800/40 border border-neutral-800 rounded-2xl p-3 text-center">
-        <div class="text-[10px] uppercase font-bold text-neutral-500">Clients</div>
-        <div id="stat-total-clients" class="text-xl font-black text-amber-400 mt-1">0</div>
+      <div class="bg-white border border-slate-200 rounded-2xl p-3 text-center shadow-sm">
+        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Clients</div>
+        <div id="stat-total-clients" class="text-xl font-black text-blue-600 mt-1">0</div>
       </div>
-      <div class="bg-neutral-800/40 border border-neutral-800 rounded-2xl p-3 text-center">
-        <div class="text-[10px] uppercase font-bold text-neutral-500">RDV Total</div>
-        <div id="stat-total-rdv" class="text-xl font-black text-amber-400 mt-1">0</div>
+      <div class="bg-white border border-slate-200 rounded-2xl p-3 text-center shadow-sm">
+        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">RDV Total</div>
+        <div id="stat-total-rdv" class="text-xl font-black text-blue-600 mt-1">0</div>
       </div>
-      <div class="bg-neutral-800/40 border border-neutral-800 rounded-2xl p-3 text-center">
-        <div class="text-[10px] uppercase font-bold text-neutral-500">CA Estimé</div>
-        <div id="stat-total-ca" class="text-xl font-black text-emerald-400 mt-1">0 €</div>
+      <div class="bg-white border border-slate-200 rounded-2xl p-3 text-center shadow-sm">
+        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">CA Estimé</div>
+        <div id="stat-total-ca" class="text-xl font-black text-emerald-600 mt-1">0 €</div>
       </div>
     </div>
 
@@ -51,138 +51,138 @@
     <div id="tab-booking" class="space-y-5">
       
       <!-- 1. Client avec Recherche en Temps Réel -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3 relative">
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 relative shadow-sm">
         <div class="flex justify-between items-center">
-          <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">1. Client & Parrainage</label>
-          <button type="button" onclick="window.switchTab('clients')" class="text-[11px] text-amber-400 hover:underline font-semibold">+ Nouveau Client</button>
+          <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">1. Client & Parrainage</label>
+          <button type="button" onclick="window.switchTab('clients')" class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold transition-all">+ Nouveau Client</button>
         </div>
 
         <!-- Recherche dynamique temps réel -->
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span class="text-neutral-400 text-sm">🔍</span>
+            <span class="text-slate-400 text-sm">🔍</span>
           </div>
-          <input type="text" id="booking-client-search" oninput="window.searchBookingClient()" placeholder="Rechercher un client (nom, téléphone)..." class="w-full pl-9 pr-3 py-3 bg-neutral-900 border border-neutral-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="text" id="booking-client-search" oninput="window.searchBookingClient()" placeholder="Rechercher un client (nom, téléphone)..." class="w-full pl-9 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
           
           <!-- Liste déroulante des résultats de recherche -->
-          <div id="booking-client-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-neutral-900 border border-neutral-700 rounded-xl max-h-48 overflow-y-auto z-30 shadow-2xl space-y-1 p-1"></div>
+          <div id="booking-client-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl max-h-48 overflow-y-auto z-30 shadow-xl space-y-1 p-1"></div>
         </div>
 
         <!-- Sélection classique / Client sélectionné -->
         <input type="hidden" id="selected-client-id" value="" />
-        <div id="selected-client-display" class="hidden bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl flex justify-between items-center">
+        <div id="selected-client-display" class="hidden bg-blue-50 border border-blue-200 p-3 rounded-xl flex justify-between items-center">
           <div>
-            <span class="text-xs font-bold text-amber-400 block" id="selected-client-name">Nom du client</span>
-            <span class="text-[10px] text-neutral-400 block" id="selected-client-info">Détails client</span>
+            <span class="text-xs font-bold text-blue-900 block" id="selected-client-name">Nom du client</span>
+            <span class="text-[10px] text-blue-700 block" id="selected-client-info">Détails client</span>
           </div>
-          <button type="button" onclick="window.clearSelectedBookingClient()" class="text-neutral-400 hover:text-white text-xs font-bold px-2 py-1">✕ Changer</button>
+          <button type="button" onclick="window.clearSelectedBookingClient()" class="text-slate-400 hover:text-slate-600 text-xs font-bold px-2 py-1">✕ Changer</button>
         </div>
 
         <select id="client-select" class="hidden"></select>
         
-        <div id="parrainage-badge" class="hidden bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex justify-between items-center">
+        <div id="parrainage-badge" class="hidden bg-blue-50 border border-blue-200 rounded-xl p-3 flex justify-between items-center">
           <div>
-            <span class="text-xs text-amber-200 block font-medium">Cagnotte parrainage active</span>
-            <span class="text-[10px] text-neutral-400">Disponible pour ce client</span>
+            <span class="text-xs text-blue-900 block font-medium">Cagnotte parrainage active</span>
+            <span class="text-[10px] text-blue-600">Disponible pour ce client</span>
           </div>
-          <span id="parrainage-val" class="font-black text-amber-400 text-lg">0%</span>
+          <span id="parrainage-val" class="font-black text-blue-600 text-lg">0%</span>
         </div>
       </div>
 
       <!-- 2. Catégorie Véhicule -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">2. Catégorie du véhicule</label>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">2. Catégorie du véhicule</label>
         <div class="grid grid-cols-2 gap-2.5">
-          <button type="button" id="cat-petite" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">
-            <div class="font-bold text-sm text-white">Petite</div>
-            <div class="text-[10px] text-neutral-400 mt-0.5">Citadine (ex: VW Polo, Yaris)</div>
+          <button type="button" id="cat-petite" class="cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
+            <div class="font-bold text-sm text-slate-900">Petite</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">Citadine (ex: VW Polo, Yaris)</div>
           </button>
-          <button type="button" id="cat-moyenne" class="cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300 transition-all">
-            <div class="font-bold text-sm text-amber-300">Moyenne</div>
-            <div class="text-[10px] text-neutral-400 mt-0.5">Berline / Compacte (ex: Golf, A4)</div>
+          <button type="button" id="cat-moyenne" class="cat-btn p-3 rounded-xl border text-left bg-blue-50 border-blue-600 text-blue-900 font-bold shadow-sm transition-all">
+            <div class="font-bold text-sm text-blue-900">Moyenne</div>
+            <div class="text-[10px] text-blue-700 mt-0.5">Berline / Compacte (ex: Golf, A4)</div>
           </button>
-          <button type="button" id="cat-grande" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">
-            <div class="font-bold text-sm text-white">Grande</div>
-            <div class="text-[10px] text-neutral-400 mt-0.5">SUV / Break (ex: X5, Q7)</div>
+          <button type="button" id="cat-grande" class="cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
+            <div class="font-bold text-sm text-slate-900">Grande</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">SUV / Break (ex: X5, Q7)</div>
           </button>
-          <button type="button" id="cat-camionnette" class="cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">
-            <div class="font-bold text-sm text-white">Camionnette</div>
-            <div class="text-[10px] text-neutral-400 mt-0.5">Utilitaire / Van (ex: Transit)</div>
+          <button type="button" id="cat-camionnette" class="cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
+            <div class="font-bold text-sm text-slate-900">Camionnette</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">Utilitaire / Van (ex: Transit)</div>
           </button>
         </div>
       </div>
 
       <!-- 3. Choix Prestation -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">3. Prestation principale</label>
-        <select id="service-select" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500"></select>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">3. Prestation principale</label>
+        <select id="service-select" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"></select>
       </div>
 
       <!-- 4. Formule Abonnement -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-amber-400 font-bold block">4. Recurrence / Formule Abonnement</label>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+        <label class="text-xs uppercase tracking-wider text-blue-600 font-bold block">4. Recurrence / Formule Abonnement</label>
         <div class="grid grid-cols-2 gap-2 text-xs">
-          <button type="button" id="sub-none" class="sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-bold transition-all">Ponctuel (Sans Abo)</button>
-          <button type="button" id="sub-1x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium transition-all">1x / mois (-5%)</button>
-          <button type="button" id="sub-2x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium transition-all">2x / mois (-10%)</button>
-          <button type="button" id="sub-4x" class="sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium transition-all">4x / mois (-15%)</button>
+          <button type="button" id="sub-none" class="sub-btn p-2.5 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all">Ponctuel (Sans Abo)</button>
+          <button type="button" id="sub-1x" class="sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all">1x / mois (-5%)</button>
+          <button type="button" id="sub-2x" class="sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all">2x / mois (-10%)</button>
+          <button type="button" id="sub-4x" class="sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all">4x / mois (-15%)</button>
         </div>
       </div>
 
       <!-- 5. Options et Suppléments -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">5. Options & Nettoyage Extrême</label>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">5. Options & Nettoyage Extrême</label>
         
-        <span class="text-xs text-neutral-300 block font-medium">Shampooing Sièges (Injection / Extraction) :</span>
+        <span class="text-xs text-slate-700 block font-medium">Shampooing Sièges (Injection / Extraction) :</span>
         <div class="grid grid-cols-2 gap-2 text-xs">
-          <button type="button" id="seat-none" class="seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300 transition-all">Aucun (0€)</button>
-          <button type="button" id="seat-1_seat" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">1 Siège (30€)</button>
-          <button type="button" id="seat-2_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">2 Sièges (50€)</button>
-          <button type="button" id="seat-all_seats" class="seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400 transition-all">Tous les sièges (90€)</button>
+          <button type="button" id="seat-none" class="seat-btn p-2 rounded-lg border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all">Aucun (0€)</button>
+          <button type="button" id="seat-1_seat" class="seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all">1 Siège (30€)</button>
+          <button type="button" id="seat-2_seats" class="seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all">2 Sièges (50€)</button>
+          <button type="button" id="seat-all_seats" class="seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all">Tous les sièges (90€)</button>
         </div>
 
-        <button type="button" id="roof-btn" class="w-full p-3 rounded-xl border flex items-center justify-between text-xs transition-all bg-neutral-900 border-neutral-700 text-neutral-400 mt-2">
+        <button type="button" id="roof-btn" class="w-full p-3 rounded-xl border flex items-center justify-between text-xs transition-all bg-slate-50 border-slate-200 text-slate-600 mt-2">
           <span>Nettoyage Ciel de toit</span>
           <span class="font-bold">+ 30,00 €</span>
         </button>
       </div>
 
       <!-- 6. Lieu & Déplacement -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">6. Lieu de prestation</label>
-        <div class="flex rounded-xl bg-neutral-900 p-1 border border-neutral-700">
-          <button type="button" id="loc-atelier" class="flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950 transition-all">Atelier (Waremme)</button>
-          <button type="button" id="loc-travel" class="flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400 transition-all">À Domicile (Déplacement)</button>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">6. Lieu de prestation</label>
+        <div class="flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+          <button type="button" id="loc-atelier" class="flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all">Atelier (Waremme)</button>
+          <button type="button" id="loc-travel" class="flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all">À Domicile (Déplacement)</button>
         </div>
         <div id="travel-input" class="hidden space-y-2 pt-2">
-          <input type="number" id="distance-km" placeholder="Distance en km (aller simple)" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
-          <p class="text-[11px] text-neutral-400">Calculateur : 10,00 € de forfait fixe + 0,70 € / km</p>
+          <input type="number" id="distance-km" placeholder="Distance en km (aller simple)" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
+          <p class="text-[11px] text-slate-500">Calculateur : 10,00 € de forfait fixe + 0,70 € / km</p>
         </div>
       </div>
 
       <!-- 7. Application Réduction Parrainage -->
-      <div id="parrainage-slider-box" class="hidden bg-neutral-800/50 border border-amber-500/30 rounded-2xl p-4 space-y-3">
-        <label class="text-xs uppercase tracking-wider text-amber-400 font-bold block">Appliquer la Réduction Parrainage</label>
+      <div id="parrainage-slider-box" class="hidden bg-white border border-blue-200 rounded-2xl p-4 space-y-3 shadow-sm">
+        <label class="text-xs uppercase tracking-wider text-blue-600 font-bold block">Appliquer la Réduction Parrainage</label>
         <div class="flex items-center space-x-3">
-          <input type="range" id="discount-range" min="0" max="100" step="10" value="0" class="w-full accent-amber-500 cursor-pointer" />
-          <span id="discount-val-label" class="font-black text-amber-400 text-xl w-14 text-right">-0%</span>
+          <input type="range" id="discount-range" min="0" max="100" step="10" value="0" class="w-full accent-blue-600 cursor-pointer" />
+          <span id="discount-val-label" class="font-black text-blue-600 text-xl w-14 text-right">-0%</span>
         </div>
       </div>
 
       <!-- 8. Date & Heure avec Calendrier Visuel -->
-      <div class="bg-neutral-800/50 border border-neutral-700/60 rounded-2xl p-4 space-y-4">
-        <label class="text-xs uppercase tracking-wider text-neutral-400 font-bold block">7. Planification du Rendez-vous</label>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-4 shadow-sm">
+        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">7. Planification du Rendez-vous</label>
         
         <!-- COMPOSANT CALENDRIER -->
-        <div class="bg-neutral-900 border border-neutral-700/80 rounded-2xl p-3.5 space-y-3">
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-3">
           <div class="flex justify-between items-center px-1">
-            <button type="button" onclick="window.changeCalendarMonth(-1)" class="p-1 text-neutral-400 hover:text-amber-400 transition-all font-bold text-base">&lt;</button>
-            <span id="calendar-month-title" class="text-xs font-bold uppercase tracking-wider text-amber-400"></span>
-            <button type="button" onclick="window.changeCalendarMonth(1)" class="p-1 text-neutral-400 hover:text-amber-400 transition-all font-bold text-base">&gt;</button>
+            <button type="button" onclick="window.changeCalendarMonth(-1)" class="p-1 text-slate-500 hover:text-blue-600 transition-all font-bold text-base">&lt;</button>
+            <span id="calendar-month-title" class="text-xs font-bold uppercase tracking-wider text-blue-600"></span>
+            <button type="button" onclick="window.changeCalendarMonth(1)" class="p-1 text-slate-500 hover:text-blue-600 transition-all font-bold text-base">&gt;</button>
           </div>
 
           <!-- Entête des jours de la semaine -->
-          <div class="grid grid-cols-7 text-center text-[10px] font-bold text-neutral-400 border-b border-neutral-800 pb-2">
+          <div class="grid grid-cols-7 text-center text-[10px] font-bold text-slate-400 border-b border-slate-200 pb-2">
             <span>Lun</span>
             <span>Mar</span>
             <span>Mer</span>
@@ -196,64 +196,64 @@
           <div id="calendar-days-grid" class="grid grid-cols-7 gap-1"></div>
 
           <!-- Légende des couleurs -->
-          <div class="grid grid-cols-2 gap-y-1.5 pt-2 border-t border-neutral-800 text-[10px] text-neutral-400 px-1">
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span><span>Libre (Lun/Sam)</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-white inline-block"></span><span>Hors Atelier</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span><span>Occupé (RDV)</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-red-600 inline-block"></span><span>Bloqué / Congé</span></span>
+          <div class="grid grid-cols-2 gap-y-1.5 pt-2 border-t border-slate-200 text-[10px] text-slate-500 px-1">
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span><span>Libre (Lun/Sam)</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-slate-300 inline-block"></span><span>Hors Atelier</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-blue-600 inline-block"></span><span>Occupé (RDV)</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-rose-600 inline-block"></span><span>Bloqué / Congé</span></span>
           </div>
         </div>
 
         <!-- Bouton de blocage de journée -->
-        <button type="button" id="btn-toggle-block-day" onclick="window.toggleBlockDay()" class="w-full py-2.5 px-3 bg-red-950/40 border border-red-800/60 hover:bg-red-900/40 text-red-300 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2">
+        <button type="button" id="btn-toggle-block-day" onclick="window.toggleBlockDay()" class="w-full py-2.5 px-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2">
           <span id="block-day-icon">🔒</span>
           <span id="block-day-label">Bloquer / Débloquer la journée sélectionnée</span>
         </button>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="text-[10px] text-neutral-400 block mb-1">Date sélectionnée</label>
-            <input type="date" id="booking-date" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+            <label class="text-[10px] text-slate-500 block mb-1">Date sélectionnée</label>
+            <input type="date" id="booking-date" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
           </div>
           <div>
-            <label class="text-[10px] text-neutral-400 block mb-1">Heure du RDV</label>
-            <input type="time" id="booking-time" value="09:00" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+            <label class="text-[10px] text-slate-500 block mb-1">Heure du RDV</label>
+            <input type="time" id="booking-time" value="09:00" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
           </div>
         </div>
       </div>
 
       <!-- 9. Récapitulatif Financier -->
-      <div class="bg-neutral-950 border border-amber-500/40 rounded-2xl p-5 space-y-4 shadow-xl">
-        <h3 class="text-xs uppercase tracking-wider text-amber-400 font-bold border-b border-neutral-800 pb-2">Détail du devis</h3>
+      <div class="bg-white border border-blue-200 rounded-2xl p-5 space-y-4 shadow-lg">
+        <h3 class="text-xs uppercase tracking-wider text-blue-600 font-bold border-b border-slate-100 pb-2">Détail du devis</h3>
         
-        <div class="space-y-1.5 text-xs text-neutral-300">
-          <div class="flex justify-between"><span>Tarif Base Prestation :</span><span id="recap-service" class="font-medium text-white">0,00 €</span></div>
-          <div id="recap-sub-row" class="hidden flex justify-between text-amber-400 font-medium"><span>Remise Abonnement :</span><span id="recap-sub-discount">-0,00 €</span></div>
-          <div class="flex justify-between"><span>Suppléments & Options :</span><span id="recap-supplements" class="font-medium text-white">0,00 €</span></div>
-          <div class="flex justify-between"><span>Frais de Déplacement :</span><span id="recap-travel" class="font-medium text-white">0,00 €</span></div>
-          <div id="recap-discount-row" class="hidden flex justify-between text-amber-400 font-medium"><span>Remise Cagnotte Parrainage :</span><span id="recap-discount">-0,00 €</span></div>
+        <div class="space-y-1.5 text-xs text-slate-600">
+          <div class="flex justify-between"><span>Tarif Base Prestation :</span><span id="recap-service" class="font-medium text-slate-900">0,00 €</span></div>
+          <div id="recap-sub-row" class="hidden flex justify-between text-blue-600 font-medium"><span>Remise Abonnement :</span><span id="recap-sub-discount">-0,00 €</span></div>
+          <div class="flex justify-between"><span>Suppléments & Options :</span><span id="recap-supplements" class="font-medium text-slate-900">0,00 €</span></div>
+          <div class="flex justify-between"><span>Frais de Déplacement :</span><span id="recap-travel" class="font-medium text-slate-900">0,00 €</span></div>
+          <div id="recap-discount-row" class="hidden flex justify-between text-blue-600 font-medium"><span>Remise Cagnotte Parrainage :</span><span id="recap-discount">-0,00 €</span></div>
         </div>
 
-        <div class="border-t border-neutral-800 pt-3 flex justify-between items-center">
-          <span class="font-bold text-sm text-white uppercase tracking-wider">TOTAL HTVA / NET :</span>
-          <span id="total-price" class="font-black text-3xl text-amber-400">0,00 €</span>
+        <div class="border-t border-slate-100 pt-3 flex justify-between items-center">
+          <span class="font-bold text-sm text-slate-900 uppercase tracking-wider">TOTAL HTVA / NET :</span>
+          <span id="total-price" class="font-black text-3xl text-blue-600">0,00 €</span>
         </div>
 
-        <button type="button" id="btn-save-booking" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-black py-4 rounded-xl transition-all text-sm uppercase tracking-wider shadow-lg shadow-amber-500/20 active:scale-95">
+        <button type="button" id="btn-save-booking" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl transition-all text-sm uppercase tracking-wider shadow-lg shadow-blue-500/25 active:scale-95">
           Valider & Enregistrer le RDV
         </button>
       </div>
 
       <!-- Bloc Message Client Généré -->
-      <div id="message-output-box" class="hidden bg-neutral-950 border border-neutral-800 rounded-2xl p-4 space-y-3">
+      <div id="message-output-box" class="hidden bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-md">
         <div class="flex justify-between items-center">
-          <span class="text-xs uppercase tracking-wider text-amber-400 font-bold">Aperçu du message</span>
+          <span class="text-xs uppercase tracking-wider text-blue-600 font-bold">Aperçu du message</span>
           <div class="flex space-x-2">
-            <button type="button" id="btn-copy-msg" class="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-bold rounded-lg text-xs transition-all border border-neutral-700">Copier</button>
-            <a id="btn-sms-msg" href="#" class="px-3 py-1 bg-amber-500 text-neutral-950 font-bold rounded-lg text-xs hover:bg-amber-400 transition-all flex items-center space-x-1">💬 Envoyer par SMS</a>
+            <button type="button" id="btn-copy-msg" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition-all border border-slate-200">Copier</button>
+            <a id="btn-sms-msg" href="#" class="px-3 py-1 bg-blue-600 text-white font-bold rounded-lg text-xs hover:bg-blue-700 transition-all flex items-center space-x-1 shadow-sm">💬 Envoyer par SMS</a>
           </div>
         </div>
-        <textarea id="message-text" rows="10" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs text-neutral-200 font-mono focus:outline-none focus:border-amber-500" readonly></textarea>
+        <textarea id="message-text" rows="10" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 font-mono focus:outline-none focus:border-blue-600" readonly></textarea>
       </div>
 
     </div>
@@ -262,18 +262,18 @@
     <div id="tab-clients" class="hidden space-y-5">
       
       <!-- Formulaire Ajout Client -->
-      <div class="bg-neutral-800/60 border border-amber-500/30 rounded-2xl p-4 space-y-3 shadow-lg">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">Ajouter un nouveau client</h3>
+      <div class="bg-white border border-blue-200 rounded-2xl p-4 space-y-3 shadow-md">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-blue-600">Ajouter un nouveau client</h3>
         <div class="space-y-2">
-          <input type="text" id="new-client-name" placeholder="Nom & Prénom *" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
-          <input type="tel" id="new-client-phone" placeholder="Numéro de téléphone (ex: 0470...)" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
-          <input type="text" id="new-client-address" placeholder="Adresse (ex: Rue de la Gare 12, Waremme)" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input type="text" id="new-client-name" placeholder="Nom & Prénom *" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
+          <input type="tel" id="new-client-phone" placeholder="Numéro de téléphone (ex: 0470...)" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
+          <input type="text" id="new-client-address" placeholder="Adresse (ex: Rue de la Gare 12, Waremme)" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
           <div class="grid grid-cols-2 gap-2">
-            <input type="number" id="new-client-distance" placeholder="Distance km (aller)" step="0.1" class="bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
-            <input type="number" id="new-client-discount" placeholder="Cagnotte parrainage (%)" value="0" step="10" min="0" max="100" class="bg-neutral-900 border border-neutral-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500" />
+            <input type="number" id="new-client-distance" placeholder="Distance km (aller)" step="0.1" class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
+            <input type="number" id="new-client-discount" placeholder="Cagnotte parrainage (%)" value="0" step="10" min="0" max="100" class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
           </div>
         </div>
-        <button type="button" id="btn-add-client" class="w-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold py-3.5 rounded-xl transition-all text-xs uppercase tracking-wider shadow-md">
+        <button type="button" id="btn-add-client" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all text-xs uppercase tracking-wider shadow-md shadow-blue-500/20">
           + Enregistrer le client
         </button>
       </div>
@@ -281,8 +281,8 @@
       <!-- Recherche & Liste Clients (Triés par Ordre Alphabétique A-Z) -->
       <div class="space-y-3">
         <div class="flex justify-between items-center">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Base Fichier Clients (A-Z)</h2>
-          <input type="text" id="search-client" oninput="window.filterClients()" placeholder="Rechercher..." class="bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-1 text-xs text-white focus:outline-none focus:border-amber-500 w-36" />
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Base Fichier Clients (A-Z)</h2>
+          <input type="text" id="search-client" oninput="window.filterClients()" placeholder="Rechercher..." class="bg-white border border-slate-200 rounded-lg px-3 py-1 text-xs text-slate-800 focus:outline-none focus:border-blue-600 w-36 shadow-sm" />
         </div>
         <div id="clients-list" class="space-y-3"></div>
       </div>
@@ -292,8 +292,8 @@
     <!-- TAB 3: PLANNING RDV -->
     <div id="tab-rdv" class="hidden space-y-4">
       <div class="flex justify-between items-center">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Planning Chronologique des RDV</h2>
-        <span id="rdv-count-badge" class="text-[10px] bg-neutral-800 border border-neutral-700 text-amber-400 font-bold px-2 py-0.5 rounded-full">0 RDV</span>
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Planning Chronologique des RDV</h2>
+        <span id="rdv-count-badge" class="text-[10px] bg-blue-50 border border-blue-200 text-blue-700 font-bold px-2 py-0.5 rounded-full">0 RDV</span>
       </div>
       <div id="bookings-list" class="space-y-3"></div>
     </div>
@@ -301,17 +301,17 @@
   </main>
 
   <!-- Navigation fixe en bas de page -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-neutral-950/95 backdrop-blur-md border-t border-neutral-800 py-3 px-4 z-50">
+  <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 py-3 px-4 z-50 shadow-lg">
     <div class="max-w-xl mx-auto flex justify-around items-center text-xs">
-      <button id="nav-booking" class="font-bold text-amber-400 flex flex-col items-center space-y-1">
+      <button id="nav-booking" class="font-bold text-blue-600 flex flex-col items-center space-y-1">
         <span>📝</span>
         <span>Devis / RDV</span>
       </button>
-      <button id="nav-clients" class="font-medium text-neutral-500 flex flex-col items-center space-y-1">
+      <button id="nav-clients" class="font-medium text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-1">
         <span>👤</span>
         <span>Clients & Parrainage</span>
       </button>
-      <button id="nav-rdv" class="font-medium text-neutral-500 flex flex-col items-center space-y-1">
+      <button id="nav-rdv" class="font-medium text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-1">
         <span>📅</span>
         <span>Planning RDV</span>
       </button>
@@ -406,15 +406,15 @@
         .sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
 
       if (matches.length === 0) {
-        resultsBox.innerHTML = '<div class="p-2 text-xs text-neutral-500 italic">Aucun client trouvé</div>';
+        resultsBox.innerHTML = '<div class="p-2 text-xs text-slate-400 italic">Aucun client trouvé</div>';
       } else {
         resultsBox.innerHTML = matches.map(c => `
-          <div onclick="window.selectBookingClient('${c.id}')" class="p-2.5 rounded-lg hover:bg-amber-500/20 cursor-pointer flex justify-between items-center transition-all border border-transparent hover:border-amber-500/40">
+          <div onclick="window.selectBookingClient('${c.id}')" class="p-2.5 rounded-lg hover:bg-blue-50 cursor-pointer flex justify-between items-center transition-all border border-transparent hover:border-blue-100">
             <div>
-              <div class="text-xs font-bold text-white">${c.name}</div>
-              <div class="text-[10px] text-neutral-400">📞 ${c.phone || 'Sans tel'} ${c.address ? '• 📍 ' + c.address : ''}</div>
+              <div class="text-xs font-bold text-slate-800">${c.name}</div>
+              <div class="text-[10px] text-slate-500">📞 ${c.phone || 'Sans tel'} ${c.address ? '• 📍 ' + c.address : ''}</div>
             </div>
-            ${(c.referral_discount_pct || 0) > 0 ? `<span class="text-[10px] font-black bg-amber-500 text-neutral-950 px-2 py-0.5 rounded-full">${c.referral_discount_pct}% parrainage</span>` : ''}
+            ${(c.referral_discount_pct || 0) > 0 ? `<span class="text-[10px] font-black bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">${c.referral_discount_pct}% parrainage</span>` : ''}
           </div>
         `).join('');
       }
@@ -498,16 +498,16 @@
       const btnBlock = document.getElementById('btn-toggle-block-day');
       const labelBlock = document.getElementById('block-day-label');
       if (isBlocked) {
-        btnBlock.className = "w-full py-2.5 px-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2 shadow-lg shadow-red-600/30";
+        btnBlock.className = "w-full py-2.5 px-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2 shadow-md shadow-rose-500/20";
         labelBlock.innerText = `Débloquer la journée du ${formatDateFR(selectedDateVal)}`;
       } else {
-        btnBlock.className = "w-full py-2.5 px-3 bg-red-950/40 border border-red-800/60 hover:bg-red-900/40 text-red-300 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2";
+        btnBlock.className = "w-full py-2.5 px-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2";
         labelBlock.innerText = `Bloquer la journée du ${formatDateFR(selectedDateVal)}`;
       }
 
       for (let i = 0; i < startDayOfWeek; i++) {
         const emptyCell = document.createElement('div');
-        emptyCell.className = "h-11 rounded-xl bg-neutral-950/30";
+        emptyCell.className = "h-11 rounded-xl bg-slate-100/50";
         grid.appendChild(emptyCell);
       }
 
@@ -523,15 +523,15 @@
         const cell = document.createElement('button');
         cell.type = 'button';
 
-        let dotColor = 'bg-white';
+        let dotColor = 'bg-slate-300';
         let isClickable = true;
 
         if (dayIsBlocked) {
-          dotColor = 'bg-red-600 shadow-sm shadow-red-600/50';
+          dotColor = 'bg-rose-600 shadow-sm shadow-rose-600/50';
         } else if (hasBooking) {
-          dotColor = 'bg-amber-500 shadow-sm shadow-amber-500/50';
+          dotColor = 'bg-blue-600 shadow-sm shadow-blue-600/50';
         } else if (dayOfWeek === 1 || dayOfWeek === 6) {
-          dotColor = 'bg-emerald-400 shadow-sm shadow-emerald-400/50';
+          dotColor = 'bg-emerald-500 shadow-sm shadow-emerald-500/50';
         } else if (dayOfWeek === 0) {
           dotColor = '';
           isClickable = false;
@@ -540,20 +540,20 @@
         let baseClasses = "h-11 rounded-xl border flex flex-col items-center justify-between py-1.5 text-xs transition-all ";
 
         if (dayIsBlocked) {
-          baseClasses += "bg-red-950/40 border-red-800/80 text-red-300";
+          baseClasses += "bg-rose-50 border-rose-200 text-rose-700";
         } else if (!isClickable) {
-          baseClasses += "bg-neutral-950/40 border-neutral-800 text-neutral-600 cursor-not-allowed";
+          baseClasses += "bg-slate-100/60 border-slate-200 text-slate-300 cursor-not-allowed";
         } else if (isSelected) {
-          baseClasses += "bg-amber-500/20 border-amber-500 text-amber-300 font-bold ring-1 ring-amber-500/50";
+          baseClasses += "bg-blue-50 border-blue-600 text-blue-900 font-bold ring-1 ring-blue-600";
         } else {
-          baseClasses += "bg-neutral-800/40 border-neutral-800 text-neutral-200 hover:border-neutral-600";
+          baseClasses += "bg-white border-slate-200 text-slate-700 hover:border-slate-300";
         }
 
         cell.className = baseClasses;
 
-        let htmlContent = `<span class="${isSelected ? 'font-black text-amber-400' : ''}">${day}</span>`;
+        let htmlContent = `<span class="${isSelected ? 'font-black text-blue-600' : ''}">${day}</span>`;
         if (dayIsBlocked) {
-          htmlContent += `<span class="text-[9px] font-bold text-red-400">🔒</span>`;
+          htmlContent += `<span class="text-[9px] font-bold text-rose-600">🔒</span>`;
         } else if (dotColor) {
           htmlContent += `<span class="w-2 h-2 rounded-full ${dotColor}"></span>`;
         } else {
@@ -602,21 +602,21 @@
       );
 
       if (filtered.length === 0) {
-        list.innerHTML = '<div class="text-xs text-neutral-500 italic p-3 text-center border border-dashed border-neutral-800 rounded-xl">Aucun client trouvé.</div>';
+        list.innerHTML = '<div class="text-xs text-slate-400 italic p-3 text-center border border-dashed border-slate-200 rounded-xl">Aucun client trouvé.</div>';
         return;
       }
 
       list.innerHTML = filtered.map(c => `
-        <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 flex justify-between items-center space-x-2 shadow-sm">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex justify-between items-center space-x-2 shadow-sm">
           <div class="space-y-1">
-            <div class="font-bold text-white text-sm">${c.name}</div>
-            <div class="text-xs text-neutral-400">📞 ${c.phone || 'Non renseigné'}</div>
-            ${c.address ? `<div class="text-[11px] text-neutral-400">📍 ${c.address} (${c.distance_km || 0} km)</div>` : ''}
-            <div class="text-xs text-amber-400 font-bold pt-1">Cagnotte parrainage : ${c.referral_discount_pct || 0}%</div>
+            <div class="font-bold text-slate-900 text-sm">${c.name}</div>
+            <div class="text-xs text-slate-500">📞 ${c.phone || 'Non renseigné'}</div>
+            ${c.address ? `<div class="text-[11px] text-slate-500">📍 ${c.address} (${c.distance_km || 0} km)</div>` : ''}
+            <div class="text-xs text-blue-600 font-bold pt-1">Cagnotte parrainage : ${c.referral_discount_pct || 0}%</div>
           </div>
           <div class="flex flex-col items-end space-y-2">
-            <button onclick="window.addReferral('${c.id}')" class="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold rounded-xl hover:bg-amber-500/25 transition-all">+10% Parrain</button>
-            <button onclick="window.deleteClient('${c.id}')" class="px-3 py-1 bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold rounded-xl hover:bg-red-500/25 transition-all">Supprimer</button>
+            <button onclick="window.addReferral('${c.id}')" class="px-3 py-1.5 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold rounded-xl hover:bg-blue-100 transition-all">+10% Parrain</button>
+            <button onclick="window.deleteClient('${c.id}')" class="px-3 py-1 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold rounded-xl hover:bg-rose-100 transition-all">Supprimer</button>
           </div>
         </div>
       `).join('');
@@ -685,7 +685,7 @@ Alex — L’As Du Détail`;
     function renderBookingsList() {
       const list = document.getElementById('bookings-list');
       if (window.bookingsData.length === 0) {
-        list.innerHTML = '<div class="text-xs text-neutral-500 italic p-4 text-center border border-dashed border-neutral-800 rounded-xl">Aucun rendez-vous dans le planning.</div>';
+        list.innerHTML = '<div class="text-xs text-slate-400 italic p-4 text-center border border-dashed border-slate-200 rounded-xl">Aucun rendez-vous dans le planning.</div>';
         return;
       }
 
@@ -697,32 +697,32 @@ Alex — L’As Du Détail`;
       });
 
       list.innerHTML = sortedBookings.map(b => `
-        <div class="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl p-4 space-y-3 shadow-sm">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
           <div class="flex justify-between items-start">
             <div>
-              <div class="font-extrabold text-amber-400 text-sm">📅 ${formatDateFR(b.date)} à ${b.time}</div>
-              <div class="font-bold text-white text-base mt-0.5">${b.client_name}</div>
+              <div class="font-extrabold text-blue-600 text-sm">📅 ${formatDateFR(b.date)} à ${b.time}</div>
+              <div class="font-bold text-slate-900 text-base mt-0.5">${b.client_name}</div>
             </div>
-            <span class="text-xs px-2.5 py-1 bg-amber-500 text-neutral-950 font-black rounded-lg shadow-sm">${b.total_price}</span>
+            <span class="text-xs px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg shadow-sm">${b.total_price}</span>
           </div>
-          <div class="text-xs text-neutral-300">🛠️ ${b.service_name} (${b.category.toUpperCase()})</div>
-          <div class="text-xs text-neutral-400">📍 ${b.lieu}</div>
+          <div class="text-xs text-slate-700">🛠️ ${b.service_name} (${b.category.toUpperCase()})</div>
+          <div class="text-xs text-slate-500">📍 ${b.lieu}</div>
           
-          <div class="grid grid-cols-3 gap-2 pt-2 border-t border-neutral-700/50">
-            <button onclick="window.sendBookingMessage('${b.id}', 'confirm')" class="py-2 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 text-amber-400 text-[11px] font-bold rounded-xl transition-all flex items-center justify-center space-x-1">
+          <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
+            <button onclick="window.sendBookingMessage('${b.id}', 'confirm')" class="py-2 bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 text-[11px] font-bold rounded-xl transition-all flex items-center justify-center space-x-1">
               <span>💬 Confirm.</span>
             </button>
-            <button onclick="window.sendBookingMessage('${b.id}', 'rappel')" class="py-2 bg-neutral-700/50 border border-neutral-600/50 hover:bg-neutral-700 text-neutral-200 text-[11px] font-bold rounded-xl transition-all flex items-center justify-center space-x-1">
+            <button onclick="window.sendBookingMessage('${b.id}', 'rappel')" class="py-2 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 text-[11px] font-bold rounded-xl transition-all flex items-center justify-center space-x-1">
               <span>⏰ Rappel</span>
             </button>
-            <button onclick="window.sendBookingMessage('${b.id}', 'avis')" class="py-2 bg-neutral-700/50 border border-neutral-600/50 hover:bg-neutral-700 text-neutral-200 text-[11px] font-bold rounded-xl transition-all flex items-center justify-center space-x-1">
+            <button onclick="window.sendBookingMessage('${b.id}', 'avis')" class="py-2 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 text-[11px] font-bold rounded-xl transition-all flex items-center justify-center space-x-1">
               <span>⭐ Avis</span>
             </button>
           </div>
 
           <div class="flex justify-between items-center pt-1">
-            <span class="text-[10px] text-emerald-400 font-semibold">● Confirmé</span>
-            <button onclick="window.deleteBooking('${b.id}')" class="text-[11px] text-red-400 hover:underline font-bold">Annuler / Supprimer</button>
+            <span class="text-[10px] text-emerald-600 font-semibold">● Confirmé</span>
+            <button onclick="window.deleteBooking('${b.id}')" class="text-[11px] text-rose-600 hover:underline font-bold">Annuler / Supprimer</button>
           </div>
         </div>
       `).join('');
@@ -853,23 +853,23 @@ Alex — L’As Du Détail`;
 
     window.setCategory = function(cat) {
       window.currentCategory = cat;
-      document.querySelectorAll('.cat-btn').forEach(b => b.className = "cat-btn p-3 rounded-xl border text-left bg-neutral-900 border-neutral-700 text-neutral-400 transition-all");
-      document.getElementById('cat-' + cat).className = "cat-btn p-3 rounded-xl border text-left bg-amber-500/20 border-amber-500 text-amber-300 font-bold transition-all";
+      document.querySelectorAll('.cat-btn').forEach(b => b.className = "cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all");
+      document.getElementById('cat-' + cat).className = "cat-btn p-3 rounded-xl border text-left bg-blue-50 border-blue-600 text-blue-900 font-bold shadow-sm transition-all";
       window.renderServicesOptions();
       window.calculateTotal();
     };
 
     window.setSub = function(sub) {
       window.currentSub = sub;
-      document.querySelectorAll('.sub-btn').forEach(b => b.className = "sub-btn p-2.5 rounded-xl border bg-neutral-900 border-neutral-700 text-neutral-400 font-medium transition-all");
-      document.getElementById('sub-' + sub).className = "sub-btn p-2.5 rounded-xl border bg-amber-500/20 border-amber-500 text-amber-300 font-bold transition-all";
+      document.querySelectorAll('.sub-btn').forEach(b => b.className = "sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all");
+      document.getElementById('sub-' + sub).className = "sub-btn p-2.5 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all";
       window.calculateTotal();
     };
 
     window.setSeats = function(s) {
       window.currentSeats = s;
-      document.querySelectorAll('.seat-btn').forEach(b => b.className = "seat-btn p-2 rounded-lg border bg-neutral-900 border-neutral-700 text-neutral-400 transition-all");
-      document.getElementById('seat-' + s).className = "seat-btn p-2 rounded-lg border bg-amber-500/20 border-amber-500 text-amber-300 transition-all";
+      document.querySelectorAll('.seat-btn').forEach(b => b.className = "seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all");
+      document.getElementById('seat-' + s).className = "seat-btn p-2 rounded-lg border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all";
       window.calculateTotal();
     };
 
@@ -877,15 +877,15 @@ Alex — L’As Du Détail`;
       window.currentRoof = !window.currentRoof;
       const btn = document.getElementById('roof-btn');
       btn.className = window.currentRoof 
-        ? "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-amber-500/20 border-amber-500 text-amber-300 font-bold mt-2 transition-all"
-        : "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-neutral-900 border-neutral-700 text-neutral-400 mt-2 transition-all";
+        ? "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-blue-50 border-blue-600 text-blue-900 font-bold mt-2 transition-all"
+        : "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-slate-50 border-slate-200 text-slate-600 mt-2 transition-all";
       window.calculateTotal();
     };
 
     window.setAtelier = function(isAtelier) {
       window.currentIsAtelier = isAtelier;
-      document.getElementById('loc-atelier').className = isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950 transition-all" : "flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400 transition-all";
-      document.getElementById('loc-travel').className = !isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-amber-500 text-neutral-950 transition-all" : "flex-1 py-2 text-xs rounded-lg font-medium text-neutral-400 transition-all";
+      document.getElementById('loc-atelier').className = isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all" : "flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all";
+      document.getElementById('loc-travel').className = !isAtelier ? "flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all" : "flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all";
       document.getElementById('travel-input').classList.toggle('hidden', isAtelier);
       window.calculateTotal();
     };
@@ -979,9 +979,9 @@ Alex — L’As Du Détail`;
       document.getElementById('tab-clients').classList.toggle('hidden', tab !== 'clients');
       document.getElementById('tab-rdv').classList.toggle('hidden', tab !== 'rdv');
 
-      document.getElementById('nav-booking').className = tab === 'booking' ? "font-bold text-amber-400 flex flex-col items-center space-y-1" : "font-medium text-neutral-500 flex flex-col items-center space-y-1";
-      document.getElementById('nav-clients').className = tab === 'clients' ? "font-bold text-amber-400 flex flex-col items-center space-y-1" : "font-medium text-neutral-500 flex flex-col items-center space-y-1";
-      document.getElementById('nav-rdv').className = tab === 'rdv' ? "font-bold text-amber-400 flex flex-col items-center space-y-1" : "font-medium text-neutral-500 flex flex-col items-center space-y-1";
+      document.getElementById('nav-booking').className = tab === 'booking' ? "font-bold text-blue-600 flex flex-col items-center space-y-1" : "font-medium text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-1";
+      document.getElementById('nav-clients').className = tab === 'clients' ? "font-bold text-blue-600 flex flex-col items-center space-y-1" : "font-medium text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-1";
+      document.getElementById('nav-rdv').className = tab === 'rdv' ? "font-bold text-blue-600 flex flex-col items-center space-y-1" : "font-medium text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-1";
     };
 
     document.addEventListener('DOMContentLoaded', () => {
