@@ -952,19 +952,6 @@
     }
 
 
-    /*
-     * Nettoyage du numéro de téléphone.
-     *
-     * Exemple :
-     * 0470 12 34 56
-     * devient :
-     * +32470123456
-     *
-     * +32470123456
-     * reste :
-     * +32470123456
-     */
-
     function normalizePhone(phone) {
 
       if (!phone) return '';
@@ -986,6 +973,87 @@
       }
 
       return value;
+    }
+
+
+    /* =========================================================
+       ABONNEMENT — LIBELLÉ COMPLET
+    ========================================================= */
+
+    function getSubscriptionLabel(sub) {
+
+      const labels = {
+
+        none:
+          'Ponctuel',
+
+        '1x':
+          '1x / mois (-5%)',
+
+        '2x':
+          '2x / mois (-10%)',
+
+        '4x':
+          '4x / mois (-15%)'
+
+      };
+
+      return labels[sub] || sub || 'Ponctuel';
+    }
+
+
+    /* =========================================================
+       ADRESSE DU RENDEZ-VOUS
+    ========================================================= */
+
+    function getBookingAddress(booking) {
+
+      /*
+       * Si le rendez-vous est à l'atelier,
+       * on affiche TOUJOURS l'adresse exacte.
+       */
+
+      if (
+        booking.lieu &&
+        booking.lieu.toLowerCase().includes('atelier')
+      ) {
+
+        return 'Rue de Prâle 139, 4300 Waremme';
+      }
+
+
+      /*
+       * Pour un rendez-vous à domicile,
+       * on utilise d'abord l'adresse enregistrée
+       * dans le rendez-vous.
+       */
+
+      if (booking.client_address) {
+
+        return booking.client_address;
+      }
+
+
+      /*
+       * Sécurité pour les anciens rendez-vous :
+       * récupération de l'adresse actuelle du client.
+       */
+
+      const client =
+        window.clientsData.find(
+          c => c.id === booking.client_id
+        );
+
+      if (
+        client &&
+        client.address
+      ) {
+
+        return client.address;
+      }
+
+
+      return 'Adresse client non renseignée';
     }
 
 
@@ -1179,26 +1247,47 @@
     ========================================================= */
 
     window.clientsData =
-      JSON.parse(localStorage.getItem('ldd_clients') || '[]');
+      JSON.parse(
+        localStorage.getItem('ldd_clients') || '[]'
+      );
 
     window.bookingsData =
-      JSON.parse(localStorage.getItem('ldd_bookings') || '[]');
+      JSON.parse(
+        localStorage.getItem('ldd_bookings') || '[]'
+      );
 
     window.blockedDaysData =
-      JSON.parse(localStorage.getItem('ldd_blocked_days') || '[]');
+      JSON.parse(
+        localStorage.getItem('ldd_blocked_days') || '[]'
+      );
 
 
-    window.calendarCurrentDate = new Date();
+    window.calendarCurrentDate =
+      new Date();
 
-    window.currentCategory = 'moyenne';
-    window.currentSeats = 'none';
-    window.currentRoof = false;
-    window.currentIsAtelier = true;
-    window.currentDiscountPct = 0;
-    window.currentSub = 'none';
+    window.currentCategory =
+      'moyenne';
 
-    window.currentWheelProtection = 'none';
-    window.currentGlassProtection = 'none';
+    window.currentSeats =
+      'none';
+
+    window.currentRoof =
+      false;
+
+    window.currentIsAtelier =
+      true;
+
+    window.currentDiscountPct =
+      0;
+
+    window.currentSub =
+      'none';
+
+    window.currentWheelProtection =
+      'none';
+
+    window.currentGlassProtection =
+      'none';
 
 
     /* =========================================================
@@ -1223,6 +1312,7 @@
       );
 
       window.updateDashboardStats();
+
       window.renderCalendar();
     }
 
@@ -1233,14 +1323,18 @@
 
     function showNotification(msg) {
 
-      const el = document.getElementById('notification');
+      const el =
+        document.getElementById('notification');
 
-      el.innerText = msg;
+      el.innerText =
+        msg;
 
       el.classList.remove('hidden');
 
       setTimeout(() => {
+
         el.classList.add('hidden');
+
       }, 3500);
     }
 
@@ -1249,423 +1343,658 @@
        DASHBOARD
     ========================================================= */
 
-    window.updateDashboardStats = function() {
+    window.updateDashboardStats =
+      function() {
 
-      document.getElementById('stat-total-clients').innerText =
-        window.clientsData.length;
+        document.getElementById(
+          'stat-total-clients'
+        ).innerText =
+          window.clientsData.length;
 
-      document.getElementById('stat-total-rdv').innerText =
-        window.bookingsData.length;
 
-      const totalCA =
-        window.bookingsData.reduce((acc, b) => {
+        document.getElementById(
+          'stat-total-rdv'
+        ).innerText =
+          window.bookingsData.length;
 
-          const val =
-            parseFloat(
-              String(b.total_price || '0')
-                .replace('€', '')
-                .replace(',', '.')
-                .trim()
-            );
 
-          return acc + (isNaN(val) ? 0 : val);
+        const totalCA =
+          window.bookingsData.reduce(
+            (acc, b) => {
 
-        }, 0);
+              const val =
+                parseFloat(
+                  String(
+                    b.total_price || '0'
+                  )
+                  .replace('€', '')
+                  .replace(',', '.')
+                  .trim()
+                );
 
-      document.getElementById('stat-total-ca').innerText =
-        totalCA.toFixed(0) + ' €';
+              return acc +
+                (
+                  isNaN(val)
+                    ? 0
+                    : val
+                );
 
-      document.getElementById('rdv-count-badge').innerText =
-        window.bookingsData.length + ' RDV';
-    };
+            },
+            0
+          );
+
+
+        document.getElementById(
+          'stat-total-ca'
+        ).innerText =
+          totalCA.toFixed(0) + ' €';
+
+
+        document.getElementById(
+          'rdv-count-badge'
+        ).innerText =
+          window.bookingsData.length +
+          ' RDV';
+      };
 
 
     /* =========================================================
        RECHERCHE CLIENT
     ========================================================= */
 
-    window.searchBookingClient = function() {
+    window.searchBookingClient =
+      function() {
 
-      const q =
-        (document.getElementById('booking-client-search').value || '')
+        const q =
+          (
+            document.getElementById(
+              'booking-client-search'
+            ).value || ''
+          )
           .toLowerCase()
           .trim();
 
-      const resultsBox =
-        document.getElementById('booking-client-results');
 
-      if (!q) {
-
-        resultsBox.classList.add('hidden');
-
-        return;
-      }
-
-      const matches =
-        window.clientsData
-          .filter(c =>
-            c.name.toLowerCase().includes(q) ||
-            (c.phone && c.phone.includes(q))
-          )
-          .sort((a, b) =>
-            a.name.localeCompare(
-              b.name,
-              'fr',
-              { sensitivity: 'base' }
-            )
+        const resultsBox =
+          document.getElementById(
+            'booking-client-results'
           );
 
-      if (matches.length === 0) {
 
-        resultsBox.innerHTML =
-          '<div class="p-2 text-xs text-slate-400 italic">Aucun client trouvé</div>';
+        if (!q) {
 
-      } else {
+          resultsBox.classList.add(
+            'hidden'
+          );
 
-        resultsBox.innerHTML =
-          matches.map(c => `
+          return;
+        }
 
-            <div
-              onclick="window.selectBookingClient('${c.id}')"
-              class="p-2.5 rounded-lg hover:bg-blue-50 cursor-pointer flex justify-between items-center border border-transparent hover:border-blue-100">
 
-              <div>
+        const matches =
+          window.clientsData
+            .filter(
+              c =>
+                c.name
+                  .toLowerCase()
+                  .includes(q) ||
 
-                <div class="text-xs font-bold text-slate-800">
-                  ${c.name}
-                </div>
+                (
+                  c.phone &&
+                  c.phone.includes(q)
+                )
+            )
+            .sort(
+              (a, b) =>
+                a.name.localeCompare(
+                  b.name,
+                  'fr',
+                  {
+                    sensitivity: 'base'
+                  }
+                )
+            );
 
-                <div class="text-[10px] text-slate-500">
-                  📞 ${c.phone || 'Sans tel'}
-                </div>
 
-              </div>
+        if (matches.length === 0) {
 
-              ${
-                (c.referral_discount_pct || 0) > 0
-                ? `
-                  <span class="text-[10px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
-                    ${c.referral_discount_pct}%
-                  </span>
+          resultsBox.innerHTML =
+            '<div class="p-2 text-xs text-slate-400 italic">Aucun client trouvé</div>';
+
+        } else {
+
+          resultsBox.innerHTML =
+            matches
+              .map(
+                c => `
+
+                  <div
+                    onclick="window.selectBookingClient('${c.id}')"
+                    class="p-2.5 rounded-lg hover:bg-blue-50 cursor-pointer flex justify-between items-center border border-transparent hover:border-blue-100">
+
+                    <div>
+
+                      <div class="text-xs font-bold text-slate-800">
+                        ${c.name}
+                      </div>
+
+                      <div class="text-[10px] text-slate-500">
+                        📞 ${c.phone || 'Sans tel'}
+                      </div>
+
+                    </div>
+
+                    ${
+                      (c.referral_discount_pct || 0) > 0
+                      ? `
+                        <span class="text-[10px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                          ${c.referral_discount_pct}%
+                        </span>
+                      `
+                      : ''
+                    }
+
+                  </div>
+
                 `
-                : ''
-              }
+              )
+              .join('');
+        }
 
-            </div>
 
-          `).join('');
-      }
-
-      resultsBox.classList.remove('hidden');
-    };
+        resultsBox.classList.remove(
+          'hidden'
+        );
+      };
 
 
     /* =========================================================
        SELECTION CLIENT
     ========================================================= */
 
-    window.selectBookingClient = function(clientId) {
+    window.selectBookingClient =
+      function(clientId) {
 
-      const c =
-        window.clientsData.find(x => x.id === clientId);
-
-      if (!c) return;
-
-      document.getElementById('selected-client-id').value =
-        c.id;
-
-      document.getElementById('client-select').value =
-        c.id;
-
-      document.getElementById('booking-client-search').value =
-        '';
-
-      document.getElementById('booking-client-results')
-        .classList.add('hidden');
-
-      document.getElementById('selected-client-name').innerText =
-        c.name;
-
-      document.getElementById('selected-client-info').innerText =
-        `📞 ${c.phone || 'Non renseigné'} ${
-          c.address ? '• 📍 ' + c.address : ''
-        }`;
-
-      document.getElementById('selected-client-display')
-        .classList.remove('hidden');
-
-      if (c.distance_km && c.distance_km > 0) {
-
-        document.getElementById('distance-km').value =
-          c.distance_km;
-      }
-
-      window.onClientChange();
-    };
+        const c =
+          window.clientsData.find(
+            x => x.id === clientId
+          );
 
 
-    window.clearSelectedBookingClient = function() {
+        if (!c) return;
 
-      document.getElementById('selected-client-id').value =
-        '';
 
-      document.getElementById('client-select').value =
-        '';
+        document.getElementById(
+          'selected-client-id'
+        ).value =
+          c.id;
 
-      document.getElementById('selected-client-display')
-        .classList.add('hidden');
 
-      document.getElementById('booking-client-search').value =
-        '';
+        document.getElementById(
+          'client-select'
+        ).value =
+          c.id;
 
-      window.onClientChange();
-    };
+
+        document.getElementById(
+          'booking-client-search'
+        ).value =
+          '';
+
+
+        document.getElementById(
+          'booking-client-results'
+        )
+        .classList.add(
+          'hidden'
+        );
+
+
+        document.getElementById(
+          'selected-client-name'
+        ).innerText =
+          c.name;
+
+
+        document.getElementById(
+          'selected-client-info'
+        ).innerText =
+          `📞 ${c.phone || 'Non renseigné'} ${
+            c.address
+              ? '• 📍 ' + c.address
+              : ''
+          }`;
+
+
+        document.getElementById(
+          'selected-client-display'
+        )
+        .classList.remove(
+          'hidden'
+        );
+
+
+        /*
+         * On récupère automatiquement
+         * la distance enregistrée pour le client.
+         */
+
+        if (
+          c.distance_km &&
+          c.distance_km > 0
+        ) {
+
+          document.getElementById(
+            'distance-km'
+          ).value =
+            c.distance_km;
+        }
+
+
+        window.onClientChange();
+      };
+
+
+    window.clearSelectedBookingClient =
+      function() {
+
+        document.getElementById(
+          'selected-client-id'
+        ).value =
+          '';
+
+
+        document.getElementById(
+          'client-select'
+        ).value =
+          '';
+
+
+        document.getElementById(
+          'selected-client-display'
+        )
+        .classList.add(
+          'hidden'
+        );
+
+
+        document.getElementById(
+          'booking-client-search'
+        ).value =
+          '';
+
+
+        window.onClientChange();
+      };
 
 
     /* =========================================================
        JOURS BLOQUES
     ========================================================= */
 
-    window.toggleBlockDay = function() {
+    window.toggleBlockDay =
+      function() {
 
-      const selectedDate =
-        document.getElementById('booking-date').value;
+        const selectedDate =
+          document.getElementById(
+            'booking-date'
+          ).value;
 
-      if (!selectedDate) {
 
-        alert('Veuillez sélectionner une date.');
+        if (!selectedDate) {
 
-        return;
-      }
+          alert(
+            'Veuillez sélectionner une date.'
+          );
 
-      const idx =
-        window.blockedDaysData.indexOf(selectedDate);
+          return;
+        }
 
-      if (idx > -1) {
 
-        window.blockedDaysData.splice(idx, 1);
+        const idx =
+          window.blockedDaysData.indexOf(
+            selectedDate
+          );
 
-        showNotification(
-          `Journée du ${formatDateFR(selectedDate)} débloquée !`
-        );
 
-      } else {
+        if (idx > -1) {
 
-        window.blockedDaysData.push(selectedDate);
+          window.blockedDaysData.splice(
+            idx,
+            1
+          );
 
-        showNotification(
-          `Journée du ${formatDateFR(selectedDate)} bloquée`
-        );
-      }
+          showNotification(
+            `Journée du ${formatDateFR(selectedDate)} débloquée !`
+          );
 
-      saveLocal();
-    };
+        } else {
+
+          window.blockedDaysData.push(
+            selectedDate
+          );
+
+          showNotification(
+            `Journée du ${formatDateFR(selectedDate)} bloquée`
+          );
+        }
+
+
+        saveLocal();
+      };
 
 
     /* =========================================================
        CALENDRIER
     ========================================================= */
 
-    window.changeCalendarMonth = function(delta) {
+    window.changeCalendarMonth =
+      function(delta) {
 
-      window.calendarCurrentDate.setMonth(
-        window.calendarCurrentDate.getMonth() + delta
-      );
-
-      window.renderCalendar();
-    };
-
-
-    window.selectCalendarDate = function(dateStr) {
-
-      document.getElementById('booking-date').value =
-        dateStr;
-
-      window.renderCalendar();
-    };
-
-
-    window.renderCalendar = function() {
-
-      const year =
-        window.calendarCurrentDate.getFullYear();
-
-      const month =
-        window.calendarCurrentDate.getMonth();
-
-      const monthNames = [
-        "Janvier",
-        "Février",
-        "Mars",
-        "Avril",
-        "Mai",
-        "Juin",
-        "Juillet",
-        "Août",
-        "Septembre",
-        "Octobre",
-        "Novembre",
-        "Décembre"
-      ];
-
-      document.getElementById('calendar-month-title').innerText =
-        `${monthNames[month]} ${year}`;
-
-      const grid =
-        document.getElementById('calendar-days-grid');
-
-      grid.innerHTML = '';
-
-      const firstDay =
-        new Date(year, month, 1);
-
-      const lastDay =
-        new Date(year, month + 1, 0);
-
-      let startDay =
-        firstDay.getDay() - 1;
-
-      if (startDay === -1) {
-        startDay = 6;
-      }
-
-      const totalDays =
-        lastDay.getDate();
-
-      const selectedDateVal =
-        document.getElementById('booking-date').value;
-
-      const isBlocked =
-        window.blockedDaysData.includes(selectedDateVal);
-
-      const btnBlock =
-        document.getElementById('btn-toggle-block-day');
-
-      const labelBlock =
-        document.getElementById('block-day-label');
-
-      if (isBlocked) {
-
-        btnBlock.className =
-          "w-full py-2.5 px-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2 shadow-md";
-
-        labelBlock.innerText =
-          `Débloquer la journée du ${formatDateFR(selectedDateVal)}`;
-
-      } else {
-
-        btnBlock.className =
-          "w-full py-2.5 px-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2";
-
-        labelBlock.innerText =
-          `Bloquer la journée du ${formatDateFR(selectedDateVal)}`;
-      }
-
-
-      for (let i = 0; i < startDay; i++) {
-
-        grid.appendChild(
-          document.createElement('div')
+        window.calendarCurrentDate.setMonth(
+          window.calendarCurrentDate.getMonth() +
+          delta
         );
-      }
+
+        window.renderCalendar();
+      };
 
 
-      for (let day = 1; day <= totalDays; day++) {
+    window.selectCalendarDate =
+      function(dateStr) {
 
-        const currentDateObj =
-          new Date(year, month, day);
+        document.getElementById(
+          'booking-date'
+        ).value =
+          dateStr;
 
-        const dayOfWeek =
-          currentDateObj.getDay();
+        window.renderCalendar();
+      };
 
-        const dateStr =
-          `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-        const hasBooking =
-          window.bookingsData.some(
-            b => b.date === dateStr
+    window.renderCalendar =
+      function() {
+
+        const year =
+          window.calendarCurrentDate
+            .getFullYear();
+
+
+        const month =
+          window.calendarCurrentDate
+            .getMonth();
+
+
+        const monthNames = [
+          "Janvier",
+          "Février",
+          "Mars",
+          "Avril",
+          "Mai",
+          "Juin",
+          "Juillet",
+          "Août",
+          "Septembre",
+          "Octobre",
+          "Novembre",
+          "Décembre"
+        ];
+
+
+        document.getElementById(
+          'calendar-month-title'
+        ).innerText =
+          `${monthNames[month]} ${year}`;
+
+
+        const grid =
+          document.getElementById(
+            'calendar-days-grid'
           );
 
-        const dayIsBlocked =
-          window.blockedDaysData.includes(dateStr);
 
-        const cantonSelected =
-          selectedDateVal === dateStr;
+        grid.innerHTML =
+          '';
 
-        const cell =
-          document.createElement('button');
 
-        cell.type = 'button';
+        const firstDay =
+          new Date(
+            year,
+            month,
+            1
+          );
 
-        let isClickable = true;
-        let dotColor = '';
-        let dotShapeClass = 'w-2 h-2 rounded-full';
 
-        if (dayIsBlocked) {
+        const lastDay =
+          new Date(
+            year,
+            month + 1,
+            0
+          );
 
-          dotColor = 'bg-slate-300';
 
-        } else if (hasBooking) {
+        let startDay =
+          firstDay.getDay() - 1;
 
-          dotColor = 'bg-rose-600';
 
-        } else if (dayOfWeek >= 2 && dayOfWeek <= 5) {
-
-          dotColor = 'bg-white border border-slate-300';
-
-        } else if (dayOfWeek === 1 || dayOfWeek === 6) {
-
-          dotColor = 'bg-emerald-500';
-
-        } else if (dayOfWeek === 0) {
-
-          dotColor = 'bg-slate-300';
-
-          isClickable = false;
+        if (startDay === -1) {
+          startDay = 6;
         }
 
-        let baseClasses =
-          "h-11 rounded-xl border flex flex-col items-center justify-between py-1.5 text-xs transition-all ";
 
-        if (dayIsBlocked) {
+        const totalDays =
+          lastDay.getDate();
 
-          baseClasses +=
-            "bg-slate-200 border-slate-300 text-slate-400 font-semibold cursor-not-allowed";
 
-        } else if (!isClickable) {
+        const selectedDateVal =
+          document.getElementById(
+            'booking-date'
+          ).value;
 
-          baseClasses +=
-            "bg-slate-100 border-slate-200 text-slate-300 cursor-not-allowed";
 
-        } else if (cantonSelected) {
+        const isBlocked =
+          window.blockedDaysData.includes(
+            selectedDateVal
+          );
 
-          baseClasses +=
-            "bg-blue-50 border-blue-600 text-blue-900 font-bold ring-1 ring-blue-600";
+
+        const btnBlock =
+          document.getElementById(
+            'btn-toggle-block-day'
+          );
+
+
+        const labelBlock =
+          document.getElementById(
+            'block-day-label'
+          );
+
+
+        if (isBlocked) {
+
+          btnBlock.className =
+            "w-full py-2.5 px-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2 shadow-md";
+
+          labelBlock.innerText =
+            `Débloquer la journée du ${formatDateFR(selectedDateVal)}`;
 
         } else {
 
-          baseClasses +=
-            "bg-white border-slate-200 text-slate-700 hover:border-slate-300";
+          btnBlock.className =
+            "w-full py-2.5 px-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2";
+
+          labelBlock.innerText =
+            `Bloquer la journée du ${formatDateFR(selectedDateVal)}`;
         }
 
-        cell.className = baseClasses;
 
-        cell.innerHTML =
-          `<span>${day}</span>${
-            dotColor
-            ? `<span class="${dotShapeClass} ${dotColor}"></span>`
-            : ''
-          }`;
+        for (
+          let i = 0;
+          i < startDay;
+          i++
+        ) {
 
-        if (isClickable) {
-
-          cell.onclick =
-            () => window.selectCalendarDate(dateStr);
+          grid.appendChild(
+            document.createElement(
+              'div'
+            )
+          );
         }
 
-        grid.appendChild(cell);
-      }
-    };
+
+        for (
+          let day = 1;
+          day <= totalDays;
+          day++
+        ) {
+
+          const currentDateObj =
+            new Date(
+              year,
+              month,
+              day
+            );
+
+
+          const dayOfWeek =
+            currentDateObj.getDay();
+
+
+          const dateStr =
+            `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+
+          const hasBooking =
+            window.bookingsData.some(
+              b =>
+                b.date === dateStr
+            );
+
+
+          const dayIsBlocked =
+            window.blockedDaysData.includes(
+              dateStr
+            );
+
+
+          const cantonSelected =
+            selectedDateVal ===
+            dateStr;
+
+
+          const cell =
+            document.createElement(
+              'button'
+            );
+
+
+          cell.type =
+            'button';
+
+
+          let isClickable =
+            true;
+
+
+          let dotColor =
+            '';
+
+
+          let dotShapeClass =
+            'w-2 h-2 rounded-full';
+
+
+          if (dayIsBlocked) {
+
+            dotColor =
+              'bg-slate-300';
+
+          } else if (hasBooking) {
+
+            dotColor =
+              'bg-rose-600';
+
+          } else if (
+            dayOfWeek >= 2 &&
+            dayOfWeek <= 5
+          ) {
+
+            dotColor =
+              'bg-white border border-slate-300';
+
+          } else if (
+            dayOfWeek === 1 ||
+            dayOfWeek === 6
+          ) {
+
+            dotColor =
+              'bg-emerald-500';
+
+          } else if (
+            dayOfWeek === 0
+          ) {
+
+            dotColor =
+              'bg-slate-300';
+
+            isClickable =
+              false;
+          }
+
+
+          let baseClasses =
+            "h-11 rounded-xl border flex flex-col items-center justify-between py-1.5 text-xs transition-all ";
+
+
+          if (dayIsBlocked) {
+
+            baseClasses +=
+              "bg-slate-200 border-slate-300 text-slate-400 font-semibold cursor-not-allowed";
+
+          } else if (!isClickable) {
+
+            baseClasses +=
+              "bg-slate-100 border-slate-200 text-slate-300 cursor-not-allowed";
+
+          } else if (cantonSelected) {
+
+            baseClasses +=
+              "bg-blue-50 border-blue-600 text-blue-900 font-bold ring-1 ring-blue-600";
+
+          } else {
+
+            baseClasses +=
+              "bg-white border-slate-200 text-slate-700 hover:border-slate-300";
+          }
+
+
+          cell.className =
+            baseClasses;
+
+
+          cell.innerHTML =
+            `<span>${day}</span>${
+              dotColor
+              ? `<span class="${dotShapeClass} ${dotColor}"></span>`
+              : ''
+            }`;
+
+
+          if (isClickable) {
+
+            cell.onclick =
+              () =>
+                window.selectCalendarDate(
+                  dateStr
+                );
+          }
+
+
+          grid.appendChild(
+            cell
+          );
+        }
+      };
 
 
     /* =========================================================
@@ -1675,7 +2004,10 @@
     function renderClientsSelect() {
 
       const sel =
-        document.getElementById('client-select');
+        document.getElementById(
+          'client-select'
+        );
+
 
       const sorted =
         [...window.clientsData].sort(
@@ -1683,15 +2015,22 @@
             a.name.localeCompare(
               b.name,
               'fr',
-              { sensitivity: 'base' }
+              {
+                sensitivity: 'base'
+              }
             )
         );
 
+
       sel.innerHTML =
         '<option value="">-- Client --</option>' +
-        sorted.map(c =>
-          `<option value="${c.id}">${c.name}</option>`
-        ).join('');
+
+        sorted
+          .map(
+            c =>
+              `<option value="${c.id}">${c.name}</option>`
+          )
+          .join('');
     }
 
 
@@ -1699,20 +2038,31 @@
        LISTE CLIENTS
     ========================================================= */
 
-    window.filterClients = function() {
+    window.filterClients =
+      function() {
 
-      const q =
-        (document.getElementById('search-client').value || '')
+        const q =
+          (
+            document.getElementById(
+              'search-client'
+            ).value || ''
+          )
           .toLowerCase();
 
-      renderClientsList(q);
-    };
+
+        renderClientsList(q);
+      };
 
 
-    function renderClientsList(filterQuery = '') {
+    function renderClientsList(
+      filterQuery = ''
+    ) {
 
       const list =
-        document.getElementById('clients-list');
+        document.getElementById(
+          'clients-list'
+        );
+
 
       const sorted =
         [...window.clientsData].sort(
@@ -1720,16 +2070,26 @@
             a.name.localeCompare(
               b.name,
               'fr',
-              { sensitivity: 'base' }
+              {
+                sensitivity: 'base'
+              }
             )
         );
+
 
       const filtered =
         sorted.filter(
           c =>
-            c.name.toLowerCase().includes(filterQuery) ||
-            (c.phone && c.phone.includes(filterQuery))
+            c.name
+              .toLowerCase()
+              .includes(filterQuery) ||
+
+            (
+              c.phone &&
+              c.phone.includes(filterQuery)
+            )
         );
+
 
       if (filtered.length === 0) {
 
@@ -1739,58 +2099,68 @@
         return;
       }
 
+
       list.innerHTML =
-        filtered.map(c => `
+        filtered
+          .map(
+            c => `
 
-          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex justify-between items-center space-x-2 shadow-sm">
+              <div class="bg-white border border-slate-200 rounded-2xl p-4 flex justify-between items-center space-x-2 shadow-sm">
 
-            <div class="space-y-1">
+                <div class="space-y-1">
 
-              <div class="font-bold text-slate-900 text-sm flex items-center space-x-2">
+                  <div class="font-bold text-slate-900 text-sm flex items-center space-x-2">
 
-                <span>${c.name}</span>
+                    <span>${c.name}</span>
 
-                <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono uppercase">
-                  A-Z
-                </span>
+                    <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono uppercase">
+                      A-Z
+                    </span>
+
+                  </div>
+
+                  <div class="text-xs text-slate-500">
+                    📞 ${c.phone || 'Non renseigné'}
+                  </div>
+
+                  ${
+                    c.address
+                    ? `
+                      <div class="text-[11px] text-slate-500">
+                        📍 ${c.address}
+                      </div>
+                    `
+                    : ''
+                  }
+
+                  <div class="text-xs text-emerald-600 font-bold pt-1">
+                    Cagnotte parrainage :
+                    ${c.referral_discount_pct || 0}%
+                  </div>
+
+                </div>
+
+                <div class="flex flex-col items-end space-y-2">
+
+                  <button
+                    onclick="window.addReferral('${c.id}')"
+                    class="px-3 py-1.5 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold rounded-xl hover:bg-blue-100">
+                    +10%
+                  </button>
+
+                  <button
+                    onclick="window.deleteClient('${c.id}')"
+                    class="px-3 py-1 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold rounded-xl hover:bg-rose-100">
+                    Supprimer
+                  </button>
+
+                </div>
 
               </div>
 
-              <div class="text-xs text-slate-500">
-                📞 ${c.phone || 'Non renseigné'}
-              </div>
-
-              ${
-                c.address
-                ? `<div class="text-[11px] text-slate-500">📍 ${c.address}</div>`
-                : ''
-              }
-
-              <div class="text-xs text-emerald-600 font-bold pt-1">
-                Cagnotte parrainage : ${c.referral_discount_pct || 0}%
-              </div>
-
-            </div>
-
-            <div class="flex flex-col items-end space-y-2">
-
-              <button
-                onclick="window.addReferral('${c.id}')"
-                class="px-3 py-1.5 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold rounded-xl hover:bg-blue-100">
-                +10%
-              </button>
-
-              <button
-                onclick="window.deleteClient('${c.id}')"
-                class="px-3 py-1 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold rounded-xl hover:bg-rose-100">
-                Supprimer
-              </button>
-
-            </div>
-
-          </div>
-
-        `).join('');
+            `
+          )
+          .join('');
     }
 
 
@@ -1798,15 +2168,32 @@
        MESSAGES
     ========================================================= */
 
-    function generateMessageText(booking, type) {
+    function generateMessageText(
+      booking,
+      type
+    ) {
 
       const formattedDate =
-        formatDateFR(booking.date);
+        formatDateFR(
+          booking.date
+        );
 
 
-      /*
-       * CONFIRMATION
-       */
+      const address =
+        getBookingAddress(
+          booking
+        );
+
+
+      const subscription =
+        getSubscriptionLabel(
+          booking.sub
+        );
+
+
+      /* =====================================================
+         CONFIRMATION
+      ===================================================== */
 
       if (type === 'confirm') {
 
@@ -1815,46 +2202,45 @@
 Votre rendez-vous chez L’As Du Détail est bien confirmé.
 
 📅 ${formattedDate} à ${booking.time}
-📍 ${booking.lieu}
+📍 ${address}
 🚘 Véhicule : ${booking.category.toUpperCase()}
 🛠️ Prestation : ${booking.service_name}
-🔄 Abonnement : ${booking.sub === 'none' ? 'Ponctuel' : booking.sub}
+🔄 Abonnement : ${subscription}
 💰 Montant à régler le jour du rendez-vous : ${booking.total_price}
 
 Nous vous remercions pour votre confiance et nous nous réjouissons de prendre soin de votre véhicule.
 
 À très bientôt,
 
-Alex — L’As Du Détail
-Plus qu’un nettoyage, une signature.`;
+Alex - L’As du Détail`;
       }
 
 
-      /*
-       * RAPPEL
-       * CONSERVÉ COMME DEMANDÉ
-       */
+      /* =====================================================
+         RAPPEL
+      ===================================================== */
 
       if (type === 'rappel') {
 
         return `Bonjour ${booking.client_name},
 
-Petit rappel pour votre rendez-vous prévu chez L'As Du Détail :
+Petit rappel pour votre rendez-vous chez L’As Du Détail :
 
 📅 Date et heure : ${formattedDate} à ${booking.time}
-📍 Lieu : ${booking.lieu}
+📍 Lieu : ${address}
 🚘 Véhicule : ${booking.category.toUpperCase()}
 🛠️ Prestation : ${booking.service_name}
+🔄 Abonnement : ${subscription}
 
-Hâte d'accueillir votre véhicule à l'atelier. À très vite !
+Hâte d'accueillir votre véhicule. À très bientôt,
 
-Alex — L’As Du Détail`;
+Alex - L’As du Détail`;
       }
 
 
-      /*
-       * AVIS GOOGLE
-       */
+      /* =====================================================
+         AVIS GOOGLE
+      ===================================================== */
 
       if (type === 'avis') {
 
@@ -1869,9 +2255,7 @@ https://g.page/r/CTt-olIItnbIEAE/review
 
 Merci encore pour votre confiance.
 
-À très bientôt,
-
-Alex — L’As Du Détail`;
+Alex - L’As du Détail`;
       }
 
 
@@ -1883,106 +2267,120 @@ Alex — L’As Du Détail`;
        OUVERTURE DIRECTE DE MESSAGES
     ========================================================= */
 
-    window.sendBookingMessage = function(bookingId, type) {
+    window.sendBookingMessage =
+      function(
+        bookingId,
+        type
+      ) {
 
-      const b =
-        window.bookingsData.find(
-          x => x.id === bookingId
-        );
-
-      if (!b) {
-
-        showNotification(
-          "Rendez-vous introuvable."
-        );
-
-        return;
-      }
+        const b =
+          window.bookingsData.find(
+            x =>
+              x.id === bookingId
+          );
 
 
-      const msgText =
-        generateMessageText(b, type);
+        if (!b) {
+
+          showNotification(
+            "Rendez-vous introuvable."
+          );
+
+          return;
+        }
 
 
-      if (!b.client_phone) {
-
-        alert(
-          `Aucun numéro de téléphone n'est enregistré pour ${b.client_name}.`
-        );
-
-        return;
-      }
+        const msgText =
+          generateMessageText(
+            b,
+            type
+          );
 
 
-      const phoneClean =
-        normalizePhone(b.client_phone);
+        if (!b.client_phone) {
+
+          alert(
+            `Aucun numéro de téléphone n'est enregistré pour ${b.client_name}.`
+          );
+
+          return;
+        }
 
 
-      if (!phoneClean) {
-
-        alert(
-          `Le numéro de téléphone de ${b.client_name} est invalide.`
-        );
-
-        return;
-      }
+        const phoneClean =
+          normalizePhone(
+            b.client_phone
+          );
 
 
-      /*
-       * Aperçu conservé dans l'application
-       */
+        if (!phoneClean) {
 
-      const messageBox =
-        document.getElementById('message-output-box');
+          alert(
+            `Le numéro de téléphone de ${b.client_name} est invalide.`
+          );
 
-      const messageText =
-        document.getElementById('message-text');
-
-      if (messageBox && messageText) {
-
-        messageBox.classList.remove('hidden');
-
-        messageText.value =
-          msgText;
-      }
+          return;
+        }
 
 
-      /*
-       * Lien SMS pour le bouton de la zone d'aperçu
-       */
+        /*
+         * Aperçu du message
+         */
 
-      const btnSms =
-        document.getElementById('btn-sms-msg');
+        const messageBox =
+          document.getElementById(
+            'message-output-box'
+          );
 
-      if (btnSms) {
 
-        btnSms.href =
+        const messageText =
+          document.getElementById(
+            'message-text'
+          );
+
+
+        if (
+          messageBox &&
+          messageText
+        ) {
+
+          messageBox.classList.remove(
+            'hidden'
+          );
+
+          messageText.value =
+            msgText;
+        }
+
+
+        /*
+         * Bouton SMS
+         */
+
+        const btnSms =
+          document.getElementById(
+            'btn-sms-msg'
+          );
+
+
+        if (btnSms) {
+
+          btnSms.href =
+            `sms:${phoneClean}&body=${encodeURIComponent(msgText)}`;
+        }
+
+
+        /*
+         * OUVERTURE DIRECTE DE MESSAGES
+         */
+
+        const smsUrl =
           `sms:${phoneClean}&body=${encodeURIComponent(msgText)}`;
-      }
 
 
-      /*
-       * OUVERTURE DIRECTE DE L'APPLICATION MESSAGES
-       *
-       * Sur iPhone :
-       *
-       * Planning
-       * ↓
-       * Confirm.
-       * ↓
-       * Messages
-       * ↓
-       * destinataire + texte déjà rempli
-       * ↓
-       * il reste uniquement à appuyer sur Envoyer
-       */
-
-      const smsUrl =
-        `sms:${phoneClean}&body=${encodeURIComponent(msgText)}`;
-
-      window.location.href =
-        smsUrl;
-    };
+        window.location.href =
+          smsUrl;
+      };
 
 
     /* =========================================================
@@ -1992,9 +2390,14 @@ Alex — L’As Du Détail`;
     function renderBookingsList() {
 
       const list =
-        document.getElementById('bookings-list');
+        document.getElementById(
+          'bookings-list'
+        );
 
-      if (window.bookingsData.length === 0) {
+
+      if (
+        window.bookingsData.length === 0
+      ) {
 
         list.innerHTML =
           '<div class="text-xs text-slate-400 italic p-4 text-center border border-dashed rounded-xl">Aucun rendez-vous.</div>';
@@ -2014,103 +2417,147 @@ Alex — L’As Du Détail`;
 
 
       list.innerHTML =
-        sortedBookings.map(b => `
+        sortedBookings
+          .map(
+            b => {
 
-          <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+              const bookingAddress =
+                getBookingAddress(b);
 
-            <div class="flex justify-between items-start">
+              const subscription =
+                getSubscriptionLabel(
+                  b.sub
+                );
 
-              <div>
 
-                <div class="font-extrabold text-blue-600 text-sm">
-                  📅 ${formatDateFR(b.date)} à ${b.time}
+              const isAtelier =
+                b.lieu &&
+                b.lieu
+                  .toLowerCase()
+                  .includes(
+                    'atelier'
+                  );
+
+
+              return `
+
+                <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+
+                  <div class="flex justify-between items-start">
+
+                    <div>
+
+                      <div class="font-extrabold text-blue-600 text-sm">
+                        📅 ${formatDateFR(b.date)} à ${b.time}
+                      </div>
+
+                      <div class="font-bold text-slate-900 text-base">
+                        ${b.client_name}
+                      </div>
+
+                    </div>
+
+                    <span class="text-xs px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg shadow-sm">
+                      ${b.total_price}
+                    </span>
+
+                  </div>
+
+
+                  <div class="text-xs text-slate-700">
+                    🛠️ ${b.service_name}
+                    (${b.category.toUpperCase()})
+                  </div>
+
+
+                  <!-- LIEU AMÉLIORÉ -->
+
+                  <div class="bg-slate-50 border border-slate-100 rounded-xl p-3">
+
+                    <div class="text-xs text-slate-700 font-semibold">
+
+                      📍 ${
+                        isAtelier
+                          ? 'Atelier'
+                          : 'À domicile'
+                      }
+
+                    </div>
+
+                    <div class="text-[11px] text-slate-500 mt-1 pl-5">
+
+                      ${bookingAddress}
+
+                    </div>
+
+                  </div>
+
+
+                  <!-- ABONNEMENT -->
+
+                  <div class="text-xs text-slate-500">
+
+                    🔄 Abonnement :
+                    <span class="font-semibold text-slate-700">
+                      ${subscription}
+                    </span>
+
+                  </div>
+
+
+                  <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
+
+                    <button
+                      onclick="window.sendBookingMessage('${b.id}', 'confirm')"
+                      class="py-2 bg-blue-50 text-blue-700 text-[11px] font-bold rounded-xl hover:bg-blue-100 active:scale-95 transition-all">
+
+                      Envoyer
+
+                    </button>
+
+
+                    <button
+                      onclick="window.sendBookingMessage('${b.id}', 'rappel')"
+                      class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl hover:bg-slate-100 active:scale-95 transition-all">
+
+                      Rappel
+
+                    </button>
+
+
+                    <button
+                      onclick="window.sendBookingMessage('${b.id}', 'avis')"
+                      class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl hover:bg-slate-100 active:scale-95 transition-all">
+
+                      Avis
+
+                    </button>
+
+                  </div>
+
+
+                  <div class="flex justify-between items-center pt-1">
+
+                    <span class="text-[10px] text-emerald-600 font-semibold">
+                      ● Confirmé
+                    </span>
+
+                    <button
+                      onclick="window.deleteBooking('${b.id}')"
+                      class="text-[11px] text-rose-600 hover:underline font-bold">
+
+                      Supprimer
+
+                    </button>
+
+                  </div>
+
                 </div>
 
-                <div class="font-bold text-slate-900 text-base">
-                  ${b.client_name}
-                </div>
-
-              </div>
-
-              <span class="text-xs px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg shadow-sm">
-                ${b.total_price}
-              </span>
-
-            </div>
-
-
-            <div class="text-xs text-slate-700">
-              🛠️ ${b.service_name} (${b.category.toUpperCase()})
-            </div>
-
-
-            <div class="text-xs text-slate-500">
-              📍 ${b.lieu}
-            </div>
-
-
-            ${
-              b.sub
-              ? `
-                <div class="text-xs text-slate-500">
-                  🔄 Abonnement :
-                  ${b.sub === 'none' ? 'Ponctuel' : b.sub}
-                </div>
-              `
-              : ''
+              `;
             }
-
-
-            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
-
-              <button
-                onclick="window.sendBookingMessage('${b.id}', 'confirm')"
-                class="py-2 bg-blue-50 text-blue-700 text-[11px] font-bold rounded-xl hover:bg-blue-100 active:scale-95 transition-all">
-
-                Envoyer
-
-              </button>
-
-
-              <button
-                onclick="window.sendBookingMessage('${b.id}', 'rappel')"
-                class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl hover:bg-slate-100 active:scale-95 transition-all">
-
-                Rappel
-
-              </button>
-
-
-              <button
-                onclick="window.sendBookingMessage('${b.id}', 'avis')"
-                class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl hover:bg-slate-100 active:scale-95 transition-all">
-
-                Avis
-
-              </button>
-
-            </div>
-
-
-            <div class="flex justify-between items-center pt-1">
-
-              <span class="text-[10px] text-emerald-600 font-semibold">
-                ● Confirmé
-              </span>
-
-              <button
-                onclick="window.deleteBooking('${b.id}')"
-                class="text-[11px] text-rose-600 hover:underline font-bold">
-
-                Supprimer
-
-              </button>
-
-            </div>
-
-          </div>
-
-        `).join('');
+          )
+          .join('');
     }
 
 
@@ -2118,941 +2565,1313 @@ Alex — L’As Du Détail`;
        AJOUT CLIENT
     ========================================================= */
 
-    window.addNewClient = function() {
+    window.addNewClient =
+      function() {
 
-      const name =
-        document.getElementById('new-client-name').value.trim();
-
-      if (!name) {
-
-        alert("Saisissez le nom du client.");
-
-        return;
-      }
+        const name =
+          document.getElementById(
+            'new-client-name'
+          ).value.trim();
 
 
-      const newClient = {
+        if (!name) {
 
-        id: 'c_' + Date.now(),
+          alert(
+            "Saisissez le nom du client."
+          );
 
-        name,
+          return;
+        }
 
-        phone:
-          document.getElementById('new-client-phone')
+
+        const newClient = {
+
+          id:
+            'c_' +
+            Date.now(),
+
+          name,
+
+          phone:
+            document.getElementById(
+              'new-client-phone'
+            )
             .value
             .trim(),
 
-        address:
-          document.getElementById('new-client-address')
+          address:
+            document.getElementById(
+              'new-client-address'
+            )
             .value
             .trim(),
 
-        distance_km:
-          parseFloat(
-            document.getElementById('new-client-distance').value
-          ) || 0,
+          distance_km:
+            parseFloat(
+              document.getElementById(
+                'new-client-distance'
+              ).value
+            ) || 0,
 
-        referral_discount_pct:
-          parseInt(
-            document.getElementById('new-client-discount').value
-          ) || 0
+          referral_discount_pct:
+            parseInt(
+              document.getElementById(
+                'new-client-discount'
+              ).value
+            ) || 0
 
+        };
+
+
+        window.clientsData.push(
+          newClient
+        );
+
+
+        saveLocal();
+
+
+        showNotification(
+          `Client ${name} ajouté !`
+        );
+
+
+        document.getElementById(
+          'new-client-name'
+        ).value =
+          '';
+
+
+        document.getElementById(
+          'new-client-phone'
+        ).value =
+          '';
+
+
+        document.getElementById(
+          'new-client-address'
+        ).value =
+          '';
+
+
+        document.getElementById(
+          'new-client-distance'
+        ).value =
+          '';
+
+
+        document.getElementById(
+          'new-client-discount'
+        ).value =
+          '0';
+
+
+        renderClientsList();
+
+        renderClientsSelect();
       };
-
-
-      window.clientsData.push(newClient);
-
-      saveLocal();
-
-
-      showNotification(
-        `Client ${name} ajouté !`
-      );
-
-
-      document.getElementById('new-client-name').value =
-        '';
-
-      document.getElementById('new-client-phone').value =
-        '';
-
-      document.getElementById('new-client-address').value =
-        '';
-
-      document.getElementById('new-client-distance').value =
-        '';
-
-      document.getElementById('new-client-discount').value =
-        '0';
-
-
-      renderClientsList();
-
-      renderClientsSelect();
-    };
 
 
     /* =========================================================
        SUPPRESSION CLIENT
     ========================================================= */
 
-    window.deleteClient = function(id) {
+    window.deleteClient =
+      function(id) {
 
-      if (!confirm("Supprimer ce client ?")) return;
+        if (
+          !confirm(
+            "Supprimer ce client ?"
+          )
+        ) return;
 
-      window.clientsData =
-        window.clientsData.filter(
-          x => x.id !== id
-        );
 
-      saveLocal();
+        window.clientsData =
+          window.clientsData.filter(
+            x =>
+              x.id !== id
+          );
 
-      renderClientsList();
 
-      renderClientsSelect();
-    };
+        saveLocal();
+
+        renderClientsList();
+
+        renderClientsSelect();
+      };
 
 
     /* =========================================================
        PARRAINAGE
     ========================================================= */
 
-    window.addReferral = function(id) {
+    window.addReferral =
+      function(id) {
 
-      const c =
-        window.clientsData.find(
-          x => x.id === id
+        const c =
+          window.clientsData.find(
+            x =>
+              x.id === id
+          );
+
+
+        if (!c) return;
+
+
+        c.referral_discount_pct =
+          Math.min(
+            100,
+            (c.referral_discount_pct || 0) +
+            10
+          );
+
+
+        saveLocal();
+
+        renderClientsList();
+
+        renderClientsSelect();
+
+
+        showNotification(
+          `+10% attribués à ${c.name}`
         );
-
-      if (!c) return;
-
-      c.referral_discount_pct =
-        Math.min(
-          100,
-          (c.referral_discount_pct || 0) + 10
-        );
-
-      saveLocal();
-
-      renderClientsList();
-
-      renderClientsSelect();
-
-      showNotification(
-        `+10% attribués à ${c.name}`
-      );
-    };
+      };
 
 
     /* =========================================================
        ENREGISTREMENT RDV
     ========================================================= */
 
-    window.saveBooking = function() {
+    window.saveBooking =
+      function() {
 
-      const clientId =
-        document.getElementById('selected-client-id').value ||
-        document.getElementById('client-select').value;
+        const clientId =
+          document.getElementById(
+            'selected-client-id'
+          ).value ||
 
-      const date =
-        document.getElementById('booking-date').value;
-
-      const time =
-        document.getElementById('booking-time').value ||
-        '09:00';
-
-
-      if (!clientId || !date) {
-
-        alert(
-          'Sélectionnez un client et une date.'
-        );
-
-        return;
-      }
+          document.getElementById(
+            'client-select'
+          ).value;
 
 
-      if (window.blockedDaysData.includes(date)) {
-
-        alert(
-          "⚠️ Cette journée est bloquée. Débloquez-la pour planifier un RDV."
-        );
-
-        return;
-      }
+        const date =
+          document.getElementById(
+            'booking-date'
+          ).value;
 
 
-      const c =
-        window.clientsData.find(
-          x => x.id === clientId
-        );
+        const time =
+          document.getElementById(
+            'booking-time'
+          ).value ||
+          '09:00';
 
 
-      const sId =
-        document.getElementById('service-select').value;
+        if (
+          !clientId ||
+          !date
+        ) {
 
-
-      const sObj =
-        SERVICES.find(
-          x => x.id === sId
-        );
-
-
-      const totalVal =
-        document.getElementById('total-price').innerText;
-
-
-      /*
-       * Informations complémentaires
-       */
-
-      let seatLabel = 'Aucun';
-
-      if (window.currentSeats === '1_seat') {
-        seatLabel = '1 siège';
-      }
-
-      if (window.currentSeats === '2_seats') {
-        seatLabel = '2 sièges';
-      }
-
-      if (window.currentSeats === 'all_seats') {
-        seatLabel = 'Tous les sièges';
-      }
-
-
-      let wheelLabel =
-        window.currentWheelProtection === 'ceramic'
-          ? 'Céramique 4 jantes'
-          : 'Aucune';
-
-
-      let glassLabel = 'Aucune';
-
-      if (window.currentGlassProtection === 'windshield') {
-        glassLabel = 'Pare-brise seul';
-      }
-
-      if (window.currentGlassProtection === 'all') {
-        glassLabel = 'Toutes les vitres';
-      }
-
-      if (window.currentGlassProtection === 'wheel_combo') {
-        glassLabel = 'Jantes + toutes les vitres';
-      }
-
-
-      const newBooking = {
-
-        id: 'b_' + Date.now(),
-
-        client_id:
-          clientId,
-
-        client_name:
-          c ? c.name : 'Inconnu',
-
-        client_phone:
-          c ? c.phone : '',
-
-        client_address:
-          c ? c.address : '',
-
-        date,
-
-        time,
-
-        service_name:
-          sObj ? sObj.name : '',
-
-        category:
-          window.currentCategory,
-
-        sub:
-          window.currentSub,
-
-        lieu:
-          window.currentIsAtelier
-            ? "Atelier (Rue de Prâle 139, Waremme)"
-            : "À Domicile",
-
-        distance_km:
-          window.currentIsAtelier
-            ? 0
-            : parseFloat(
-                document.getElementById('distance-km').value
-              ) || 0,
-
-        seats:
-          seatLabel,
-
-        roof:
-          window.currentRoof,
-
-        wheel_protection:
-          wheelLabel,
-
-        glass_protection:
-          glassLabel,
-
-        referral_discount_pct:
-          window.currentDiscountPct,
-
-        total_price:
-          totalVal
-      };
-
-
-      window.bookingsData.push(
-        newBooking
-      );
-
-
-      if (
-        window.currentDiscountPct > 0 &&
-        c
-      ) {
-
-        c.referral_discount_pct =
-          Math.max(
-            0,
-            (c.referral_discount_pct || 0) -
-            window.currentDiscountPct
+          alert(
+            'Sélectionnez un client et une date.'
           );
-      }
+
+          return;
+        }
 
 
-      saveLocal();
+        if (
+          window.blockedDaysData.includes(
+            date
+          )
+        ) {
 
-      renderBookingsList();
+          alert(
+            "⚠️ Cette journée est bloquée. Débloquez-la pour planifier un RDV."
+          );
 
-      renderClientsList();
+          return;
+        }
 
-      window.clearSelectedBookingClient();
+
+        const c =
+          window.clientsData.find(
+            x =>
+              x.id === clientId
+          );
 
 
-      showNotification(
-        "RDV Enregistré !"
-      );
-    };
+        const sId =
+          document.getElementById(
+            'service-select'
+          ).value;
+
+
+        const sObj =
+          SERVICES.find(
+            x =>
+              x.id === sId
+          );
+
+
+        const totalVal =
+          document.getElementById(
+            'total-price'
+          ).innerText;
+
+
+        /* OPTIONS */
+
+        let seatLabel =
+          'Aucun';
+
+
+        if (
+          window.currentSeats ===
+          '1_seat'
+        ) {
+
+          seatLabel =
+            '1 siège';
+        }
+
+
+        if (
+          window.currentSeats ===
+          '2_seats'
+        ) {
+
+          seatLabel =
+            '2 sièges';
+        }
+
+
+        if (
+          window.currentSeats ===
+          'all_seats'
+        ) {
+
+          seatLabel =
+            'Tous les sièges';
+        }
+
+
+        let wheelLabel =
+          window.currentWheelProtection ===
+          'ceramic'
+
+            ? 'Céramique 4 jantes'
+
+            : 'Aucune';
+
+
+        let glassLabel =
+          'Aucune';
+
+
+        if (
+          window.currentGlassProtection ===
+          'windshield'
+        ) {
+
+          glassLabel =
+            'Pare-brise seul';
+        }
+
+
+        if (
+          window.currentGlassProtection ===
+          'all'
+        ) {
+
+          glassLabel =
+            'Toutes les vitres';
+        }
+
+
+        if (
+          window.currentGlassProtection ===
+          'wheel_combo'
+        ) {
+
+          glassLabel =
+            'Jantes + toutes les vitres';
+        }
+
+
+        /*
+         * ON CONSERVE LA STRUCTURE
+         * EXISTANTE DU RENDEZ-VOUS
+         */
+
+        const newBooking = {
+
+          id:
+            'b_' +
+            Date.now(),
+
+          client_id:
+            clientId,
+
+          client_name:
+            c
+              ? c.name
+              : 'Inconnu',
+
+          client_phone:
+            c
+              ? c.phone
+              : '',
+
+          client_address:
+            c
+              ? c.address
+              : '',
+
+          date,
+
+          time,
+
+          service_name:
+            sObj
+              ? sObj.name
+              : '',
+
+          category:
+            window.currentCategory,
+
+          sub:
+            window.currentSub,
+
+          lieu:
+            window.currentIsAtelier
+              ? "Atelier (Rue de Prâle 139, Waremme)"
+              : "À Domicile",
+
+          distance_km:
+            window.currentIsAtelier
+              ? 0
+              : parseFloat(
+                  document.getElementById(
+                    'distance-km'
+                  ).value
+                ) || 0,
+
+          seats:
+            seatLabel,
+
+          roof:
+            window.currentRoof,
+
+          wheel_protection:
+            wheelLabel,
+
+          glass_protection:
+            glassLabel,
+
+          referral_discount_pct:
+            window.currentDiscountPct,
+
+          total_price:
+            totalVal
+        };
+
+
+        window.bookingsData.push(
+          newBooking
+        );
+
+
+        /*
+         * DÉDUCTION PARRAINAGE
+         */
+
+        if (
+          window.currentDiscountPct > 0 &&
+          c
+        ) {
+
+          c.referral_discount_pct =
+            Math.max(
+              0,
+              (c.referral_discount_pct || 0) -
+              window.currentDiscountPct
+            );
+        }
+
+
+        saveLocal();
+
+        renderBookingsList();
+
+        renderClientsList();
+
+        window.clearSelectedBookingClient();
+
+
+        showNotification(
+          "RDV Enregistré !"
+        );
+      };
 
 
     /* =========================================================
        SUPPRESSION RDV
     ========================================================= */
 
-    window.deleteBooking = function(id) {
+    window.deleteBooking =
+      function(id) {
 
-      if (!confirm("Annuler le RDV ?")) return;
+        if (
+          !confirm(
+            "Annuler le RDV ?"
+          )
+        ) return;
 
-      window.bookingsData =
-        window.bookingsData.filter(
-          x => x.id !== id
-        );
 
-      saveLocal();
+        window.bookingsData =
+          window.bookingsData.filter(
+            x =>
+              x.id !== id
+          );
 
-      renderBookingsList();
-    };
+
+        saveLocal();
+
+        renderBookingsList();
+      };
 
 
     /* =========================================================
        SERVICES
     ========================================================= */
 
-    window.renderServicesOptions = function() {
+    window.renderServicesOptions =
+      function() {
 
-      const sel =
-        document.getElementById('service-select');
+        const sel =
+          document.getElementById(
+            'service-select'
+          );
 
-      sel.innerHTML =
-        SERVICES.map(
-          s =>
-            `<option value="${s.id}">
-              ${s.name} — ${s.prices[window.currentCategory].toFixed(2)} €
-            </option>`
-        ).join('');
-    };
+
+        sel.innerHTML =
+          SERVICES
+            .map(
+              s =>
+                `<option value="${s.id}">
+                  ${s.name} — ${s.prices[window.currentCategory].toFixed(2)} €
+                </option>`
+            )
+            .join('');
+      };
 
 
     /* =========================================================
        CATEGORIE
     ========================================================= */
 
-    window.setCategory = function(cat) {
+    window.setCategory =
+      function(cat) {
 
-      window.currentCategory =
-        cat;
-
-      document.querySelectorAll('.cat-btn').forEach(
-        b =>
-          b.className =
-            "cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all"
-      );
+        window.currentCategory =
+          cat;
 
 
-      document.getElementById('cat-' + cat).className =
-        "cat-btn p-3 rounded-xl border text-left bg-blue-50 border-blue-600 text-blue-900 font-bold shadow-sm transition-all";
+        document.querySelectorAll(
+          '.cat-btn'
+        ).forEach(
+          b =>
+            b.className =
+              "cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all"
+        );
 
 
-      window.renderServicesOptions();
+        document.getElementById(
+          'cat-' + cat
+        ).className =
+          "cat-btn p-3 rounded-xl border text-left bg-blue-50 border-blue-600 text-blue-900 font-bold shadow-sm transition-all";
 
-      window.calculateTotal();
-    };
+
+        window.renderServicesOptions();
+
+        window.calculateTotal();
+      };
 
 
     /* =========================================================
        ABONNEMENT
     ========================================================= */
 
-    window.setSub = function(sub) {
+    window.setSub =
+      function(sub) {
 
-      window.currentSub =
-        sub;
-
-      document.querySelectorAll('.sub-btn').forEach(
-        b =>
-          b.className =
-            "sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all"
-      );
+        window.currentSub =
+          sub;
 
 
-      document.getElementById('sub-' + sub).className =
-        "sub-btn p-2.5 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all";
+        document.querySelectorAll(
+          '.sub-btn'
+        ).forEach(
+          b =>
+            b.className =
+              "sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all"
+        );
 
 
-      window.calculateTotal();
-    };
+        document.getElementById(
+          'sub-' + sub
+        ).className =
+          "sub-btn p-2.5 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all";
+
+
+        window.calculateTotal();
+      };
 
 
     /* =========================================================
        SIEGES
     ========================================================= */
 
-    window.setSeats = function(s) {
+    window.setSeats =
+      function(s) {
 
-      window.currentSeats =
-        s;
-
-      document.querySelectorAll('.seat-btn').forEach(
-        b =>
-          b.className =
-            "seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all"
-      );
+        window.currentSeats =
+          s;
 
 
-      document.getElementById('seat-' + s).className =
-        "seat-btn p-2 rounded-lg border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all";
+        document.querySelectorAll(
+          '.seat-btn'
+        ).forEach(
+          b =>
+            b.className =
+              "seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all"
+        );
 
 
-      window.calculateTotal();
-    };
+        document.getElementById(
+          'seat-' + s
+        ).className =
+          "seat-btn p-2 rounded-lg border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all";
+
+
+        window.calculateTotal();
+      };
 
 
     /* =========================================================
        CIEL DE TOIT
     ========================================================= */
 
-    window.toggleRoof = function() {
+    window.toggleRoof =
+      function() {
 
-      window.currentRoof =
-        !window.currentRoof;
-
-
-      document.getElementById('roof-btn').className =
-        window.currentRoof
-
-          ? "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-blue-50 border-blue-600 text-blue-900 font-bold mt-2 transition-all"
-
-          : "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-slate-50 border-slate-200 text-slate-600 mt-2 transition-all";
+        window.currentRoof =
+          !window.currentRoof;
 
 
-      window.calculateTotal();
-    };
+        document.getElementById(
+          'roof-btn'
+        ).className =
+          window.currentRoof
+
+            ? "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-blue-50 border-blue-600 text-blue-900 font-bold mt-2 transition-all"
+
+            : "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-slate-50 border-slate-200 text-slate-600 mt-2 transition-all";
+
+
+        window.calculateTotal();
+      };
 
 
     /* =========================================================
        JANTES
     ========================================================= */
 
-    window.setWheelProtection = function(type) {
+    window.setWheelProtection =
+      function(type) {
 
-      window.currentWheelProtection =
-        type;
-
-
-      document.querySelectorAll('.wheel-btn').forEach(
-        b =>
-          b.className =
-            "wheel-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
-      );
+        window.currentWheelProtection =
+          type;
 
 
-      const active =
-        document.getElementById(
-          type === 'none'
-            ? 'wheel-none'
-            : 'wheel-ceramic'
+        document.querySelectorAll(
+          '.wheel-btn'
+        ).forEach(
+          b =>
+            b.className =
+              "wheel-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
         );
 
 
-      active.className =
-        "wheel-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center";
+        const active =
+          document.getElementById(
+            type === 'none'
+              ? 'wheel-none'
+              : 'wheel-ceramic'
+          );
 
 
-      if (
-        type === 'ceramic' &&
-        window.currentGlassProtection === 'wheel_combo'
-      ) {
-
-        window.currentGlassProtection =
-          'none';
-
-        window.updateGlassButtons();
-      }
+        active.className =
+          "wheel-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center";
 
 
-      window.calculateTotal();
-    };
+        if (
+          type === 'ceramic' &&
+          window.currentGlassProtection ===
+            'wheel_combo'
+        ) {
+
+          window.currentGlassProtection =
+            'none';
+
+          window.updateGlassButtons();
+        }
+
+
+        window.calculateTotal();
+      };
 
 
     /* =========================================================
        VITRES
     ========================================================= */
 
-    window.setGlassProtection = function(type) {
+    window.setGlassProtection =
+      function(type) {
 
-      window.currentGlassProtection =
-        type;
-
-
-      if (type === 'wheel_combo') {
-
-        window.currentWheelProtection =
-          'none';
-      }
+        window.currentGlassProtection =
+          type;
 
 
-      window.updateGlassButtons();
+        if (
+          type === 'wheel_combo'
+        ) {
 
-      window.updateWheelButtons();
-
-      window.calculateTotal();
-    };
-
-
-    window.updateGlassButtons = function() {
-
-      document.querySelectorAll('.glass-btn').forEach(
-        b =>
-          b.className =
-            "glass-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
-      );
+          window.currentWheelProtection =
+            'none';
+        }
 
 
-      let activeId =
-        'glass-none';
+        window.updateGlassButtons();
+
+        window.updateWheelButtons();
+
+        window.calculateTotal();
+      };
 
 
-      if (
-        window.currentGlassProtection ===
-        'windshield'
-      ) {
+    window.updateGlassButtons =
+      function() {
 
-        activeId =
-          'glass-windshield';
-      }
-
-
-      if (
-        window.currentGlassProtection ===
-        'all'
-      ) {
-
-        activeId =
-          'glass-all';
-      }
+        document.querySelectorAll(
+          '.glass-btn'
+        ).forEach(
+          b =>
+            b.className =
+              "glass-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
+        );
 
 
-      if (
-        window.currentGlassProtection ===
-        'wheel_combo'
-      ) {
-
-        activeId =
-          'glass-wheel-combo';
-      }
+        let activeId =
+          'glass-none';
 
 
-      document.getElementById(activeId).className =
-        "glass-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center";
-    };
+        if (
+          window.currentGlassProtection ===
+          'windshield'
+        ) {
+
+          activeId =
+            'glass-windshield';
+        }
 
 
-    window.updateWheelButtons = function() {
+        if (
+          window.currentGlassProtection ===
+          'all'
+        ) {
 
-      document.querySelectorAll('.wheel-btn').forEach(
-        b =>
-          b.className =
-            "wheel-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
-      );
-
-
-      const activeId =
-        window.currentWheelProtection ===
-        'ceramic'
-
-          ? 'wheel-ceramic'
-          : 'wheel-none';
+          activeId =
+            'glass-all';
+        }
 
 
-      document.getElementById(activeId).className =
-        "wheel-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center";
-    };
+        if (
+          window.currentGlassProtection ===
+          'wheel_combo'
+        ) {
+
+          activeId =
+            'glass-wheel-combo';
+        }
+
+
+        document.getElementById(
+          activeId
+        ).className =
+          "glass-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center";
+      };
+
+
+    window.updateWheelButtons =
+      function() {
+
+        document.querySelectorAll(
+          '.wheel-btn'
+        ).forEach(
+          b =>
+            b.className =
+              "wheel-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
+        );
+
+
+        const activeId =
+          window.currentWheelProtection ===
+          'ceramic'
+
+            ? 'wheel-ceramic'
+
+            : 'wheel-none';
+
+
+        document.getElementById(
+          activeId
+        ).className =
+          "wheel-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center";
+      };
 
 
     /* =========================================================
        LIEU
     ========================================================= */
 
-    window.setAtelier = function(isAtelier) {
+    window.setAtelier =
+      function(isAtelier) {
 
-      window.currentIsAtelier =
-        isAtelier;
-
-
-      document.getElementById('loc-atelier').className =
-        isAtelier
-
-          ? "flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all"
-
-          : "flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all";
+        window.currentIsAtelier =
+          isAtelier;
 
 
-      document.getElementById('loc-travel').className =
-        !isAtelier
+        document.getElementById(
+          'loc-atelier'
+        ).className =
+          isAtelier
 
-          ? "flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all"
+            ? "flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all"
 
-          : "flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all";
+            : "flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all";
 
 
-      document.getElementById('travel-input')
+        document.getElementById(
+          'loc-travel'
+        ).className =
+          !isAtelier
+
+            ? "flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all"
+
+            : "flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all";
+
+
+        document.getElementById(
+          'travel-input'
+        )
         .classList.toggle(
           'hidden',
           isAtelier
         );
 
 
-      window.calculateTotal();
-    };
+        window.calculateTotal();
+      };
 
 
     /* =========================================================
        CLIENT CHANGE
     ========================================================= */
 
-    window.onClientChange = function() {
+    window.onClientChange =
+      function() {
 
-      const id =
-        document.getElementById('selected-client-id').value ||
-        document.getElementById('client-select').value;
+        const id =
+          document.getElementById(
+            'selected-client-id'
+          ).value ||
 
-
-      const c =
-        window.clientsData.find(
-          x => x.id === id
-        );
-
-
-      const badge =
-        document.getElementById('parrainage-badge');
-
-      const box =
-        document.getElementById('parrainage-slider-box');
-
-      const slider =
-        document.getElementById('discount-range');
+          document.getElementById(
+            'client-select'
+          ).value;
 
 
-      if (
-        c &&
-        (c.referral_discount_pct || 0) > 0
-      ) {
-
-        document.getElementById('parrainage-val').innerText =
-          c.referral_discount_pct + '%';
-
-        badge.classList.remove('hidden');
-
-        box.classList.remove('hidden');
-
-        slider.max =
-          c.referral_discount_pct;
-
-        slider.value =
-          c.referral_discount_pct;
-
-      } else {
-
-        badge.classList.add('hidden');
-
-        box.classList.add('hidden');
-
-        slider.value =
-          0;
-      }
+        const c =
+          window.clientsData.find(
+            x =>
+              x.id === id
+          );
 
 
-      window.onSliderChange();
-    };
+        const badge =
+          document.getElementById(
+            'parrainage-badge'
+          );
+
+
+        const box =
+          document.getElementById(
+            'parrainage-slider-box'
+          );
+
+
+        const slider =
+          document.getElementById(
+            'discount-range'
+          );
+
+
+        if (
+          c &&
+          (c.referral_discount_pct || 0) >
+            0
+        ) {
+
+          document.getElementById(
+            'parrainage-val'
+          ).innerText =
+            c.referral_discount_pct +
+            '%';
+
+
+          badge.classList.remove(
+            'hidden'
+          );
+
+
+          box.classList.remove(
+            'hidden'
+          );
+
+
+          slider.max =
+            c.referral_discount_pct;
+
+
+          slider.value =
+            c.referral_discount_pct;
+
+        } else {
+
+          badge.classList.add(
+            'hidden'
+          );
+
+
+          box.classList.add(
+            'hidden'
+          );
+
+
+          slider.value =
+            0;
+        }
+
+
+        window.onSliderChange();
+      };
 
 
     /* =========================================================
        SLIDER
     ========================================================= */
 
-    window.onSliderChange = function() {
+    window.onSliderChange =
+      function() {
 
-      window.currentDiscountPct =
-        parseInt(
-          document.getElementById('discount-range').value
-        ) || 0;
+        window.currentDiscountPct =
+          parseInt(
+            document.getElementById(
+              'discount-range'
+            ).value
+          ) || 0;
 
 
-      document.getElementById('discount-val-label').innerText =
-        '-' + window.currentDiscountPct + '%';
+        document.getElementById(
+          'discount-val-label'
+        ).innerText =
+          '-' +
+          window.currentDiscountPct +
+          '%';
 
 
-      window.calculateTotal();
-    };
+        window.calculateTotal();
+      };
 
 
     /* =========================================================
        CALCUL TOTAL
     ========================================================= */
 
-    window.calculateTotal = function() {
+    window.calculateTotal =
+      function() {
 
-      const sId =
-        document.getElementById('service-select').value ||
-        SERVICES[0].id;
+        const sId =
+          document.getElementById(
+            'service-select'
+          ).value ||
 
+          SERVICES[0].id;
 
-      const sObj =
-        SERVICES.find(
-          x => x.id === sId
-        );
 
+        const sObj =
+          SERVICES.find(
+            x =>
+              x.id === sId
+          );
 
-      const basePrice =
-        sObj
-          ? sObj.prices[window.currentCategory]
-          : 0;
 
+        const basePrice =
+          sObj
+            ? sObj.prices[
+                window.currentCategory
+              ]
+            : 0;
 
-      let subPct = 0;
 
-      if (window.currentSub === '1x') subPct = 5;
-      if (window.currentSub === '2x') subPct = 10;
-      if (window.currentSub === '4x') subPct = 15;
+        let subPct =
+          0;
 
 
-      const subDiscount =
-        (basePrice * subPct) / 100;
+        if (
+          window.currentSub ===
+          '1x'
+        ) {
 
+          subPct =
+            5;
+        }
 
-      const priceAfterSub =
-        basePrice - subDiscount;
 
+        if (
+          window.currentSub ===
+          '2x'
+        ) {
 
-      let supps = 0;
+          subPct =
+            10;
+        }
 
 
-      if (window.currentSeats === '1_seat') {
-        supps += 30;
-      }
+        if (
+          window.currentSub ===
+          '4x'
+        ) {
 
-      if (window.currentSeats === '2_seats') {
-        supps += 50;
-      }
+          subPct =
+            15;
+        }
 
-      if (window.currentSeats === 'all_seats') {
-        supps += 90;
-      }
 
+        const subDiscount =
+          (
+            basePrice *
+            subPct
+          ) / 100;
 
-      if (window.currentRoof) {
-        supps += 30;
-      }
 
+        const priceAfterSub =
+          basePrice -
+          subDiscount;
 
-      if (
-        window.currentWheelProtection === 'ceramic' &&
-        window.currentGlassProtection !== 'wheel_combo'
-      ) {
 
-        supps += 299.99;
-      }
+        let supps =
+          0;
 
 
-      if (
-        window.currentGlassProtection === 'windshield'
-      ) {
+        if (
+          window.currentSeats ===
+          '1_seat'
+        ) {
 
-        supps += 59.99;
-      }
+          supps +=
+            30;
+        }
 
 
-      if (
-        window.currentGlassProtection === 'all'
-      ) {
+        if (
+          window.currentSeats ===
+          '2_seats'
+        ) {
 
-        supps += 99.99;
-      }
+          supps +=
+            50;
+        }
 
 
-      if (
-        window.currentGlassProtection === 'wheel_combo'
-      ) {
+        if (
+          window.currentSeats ===
+          'all_seats'
+        ) {
 
-        supps += 399.99;
-      }
+          supps +=
+            90;
+        }
 
 
-      let travel = 0;
+        if (
+          window.currentRoof
+        ) {
 
+          supps +=
+            30;
+        }
 
-      if (!window.currentIsAtelier) {
 
-        const km =
-          parseFloat(
-            document.getElementById('distance-km').value
-          ) || 0;
+        if (
+          window.currentWheelProtection ===
+            'ceramic' &&
 
-        travel =
-          10 + (km * 0.70);
-      }
+          window.currentGlassProtection !==
+            'wheel_combo'
+        ) {
 
+          supps +=
+            299.99;
+        }
 
-      const subtotal =
-        priceAfterSub +
-        supps +
-        travel;
 
+        if (
+          window.currentGlassProtection ===
+          'windshield'
+        ) {
 
-      const refDiscount =
-        (subtotal * window.currentDiscountPct) / 100;
+          supps +=
+            59.99;
+        }
 
 
-      const total =
-        Math.max(
-          0,
-          subtotal - refDiscount
-        );
+        if (
+          window.currentGlassProtection ===
+          'all'
+        ) {
 
+          supps +=
+            99.99;
+        }
 
-      document.getElementById('recap-service').innerText =
-        basePrice.toFixed(2) + ' €';
 
+        if (
+          window.currentGlassProtection ===
+          'wheel_combo'
+        ) {
 
-      const recapSubRow =
-        document.getElementById('recap-sub-row');
+          supps +=
+            399.99;
+        }
 
 
-      if (subDiscount > 0) {
+        /*
+         * DÉPLACEMENT
+         *
+         * NE PAS MODIFIER :
+         * 10 € fixe + 0,70 € / km
+         */
 
-        document.getElementById('recap-sub-discount').innerText =
-          '-' + subDiscount.toFixed(2) + ' €';
+        let travel =
+          0;
 
-        recapSubRow.classList.remove('hidden');
 
-      } else {
+        if (
+          !window.currentIsAtelier
+        ) {
 
-        recapSubRow.classList.add('hidden');
-      }
+          const km =
+            parseFloat(
+              document.getElementById(
+                'distance-km'
+              ).value
+            ) || 0;
 
 
-      document.getElementById('recap-supplements').innerText =
-        supps.toFixed(2) + ' €';
+          travel =
+            10 +
+            (km * 0.70);
+        }
 
 
-      document.getElementById('recap-travel').innerText =
-        travel.toFixed(2) + ' €';
+        const subtotal =
+          priceAfterSub +
+          supps +
+          travel;
 
 
-      const recapDiscRow =
-        document.getElementById('recap-discount-row');
+        const refDiscount =
+          (
+            subtotal *
+            window.currentDiscountPct
+          ) / 100;
 
 
-      if (refDiscount > 0) {
+        const total =
+          Math.max(
+            0,
+            subtotal -
+            refDiscount
+          );
 
-        document.getElementById('recap-discount').innerText =
-          '-' + refDiscount.toFixed(2) + ' €';
 
-        recapDiscRow.classList.remove('hidden');
+        document.getElementById(
+          'recap-service'
+        ).innerText =
+          basePrice.toFixed(2) +
+          ' €';
 
-      } else {
 
-        recapDiscRow.classList.add('hidden');
-      }
+        const recapSubRow =
+          document.getElementById(
+            'recap-sub-row'
+          );
 
 
-      document.getElementById('total-price').innerText =
-        total.toFixed(2) + ' €';
-    };
+        if (
+          subDiscount > 0
+        ) {
+
+          document.getElementById(
+            'recap-sub-discount'
+          ).innerText =
+            '-' +
+            subDiscount.toFixed(2) +
+            ' €';
+
+
+          recapSubRow.classList.remove(
+            'hidden'
+          );
+
+        } else {
+
+          recapSubRow.classList.add(
+            'hidden'
+          );
+        }
+
+
+        document.getElementById(
+          'recap-supplements'
+        ).innerText =
+          supps.toFixed(2) +
+          ' €';
+
+
+        document.getElementById(
+          'recap-travel'
+        ).innerText =
+          travel.toFixed(2) +
+          ' €';
+
+
+        const recapDiscRow =
+          document.getElementById(
+            'recap-discount-row'
+          );
+
+
+        if (
+          refDiscount > 0
+        ) {
+
+          document.getElementById(
+            'recap-discount'
+          ).innerText =
+            '-' +
+            refDiscount.toFixed(2) +
+            ' €';
+
+
+          recapDiscRow.classList.remove(
+            'hidden'
+          );
+
+        } else {
+
+          recapDiscRow.classList.add(
+            'hidden'
+          );
+        }
+
+
+        document.getElementById(
+          'total-price'
+        ).innerText =
+          total.toFixed(2) +
+          ' €';
+      };
 
 
     /* =========================================================
        NAVIGATION
     ========================================================= */
 
-    window.switchTab = function(tab) {
+    window.switchTab =
+      function(tab) {
 
-      document.getElementById('tab-booking')
+        document.getElementById(
+          'tab-booking'
+        )
         .classList.toggle(
           'hidden',
           tab !== 'booking'
         );
 
 
-      document.getElementById('tab-clients')
+        document.getElementById(
+          'tab-clients'
+        )
         .classList.toggle(
           'hidden',
           tab !== 'clients'
         );
 
 
-      document.getElementById('tab-rdv')
+        document.getElementById(
+          'tab-rdv'
+        )
         .classList.toggle(
           'hidden',
           tab !== 'rdv'
         );
 
 
-      document.getElementById('nav-booking').className =
-        tab === 'booking'
+        document.getElementById(
+          'nav-booking'
+        ).className =
+          tab === 'booking'
 
-          ? "font-bold text-blue-600 flex flex-col items-center space-y-1"
+            ? "font-bold text-blue-600 flex flex-col items-center space-y-1"
 
-          : "font-medium text-slate-400 flex flex-col items-center space-y-1";
-
-
-      document.getElementById('nav-clients').className =
-        tab === 'clients'
-
-          ? "font-bold text-blue-600 flex flex-col items-center space-y-1"
-
-          : "font-medium text-slate-400 flex flex-col items-center space-y-1";
+            : "font-medium text-slate-400 flex flex-col items-center space-y-1";
 
 
-      document.getElementById('nav-rdv').className =
-        tab === 'rdv'
+        document.getElementById(
+          'nav-clients'
+        ).className =
+          tab === 'clients'
 
-          ? "font-bold text-blue-600 flex flex-col items-center space-y-1"
+            ? "font-bold text-blue-600 flex flex-col items-center space-y-1"
 
-          : "font-medium text-slate-400 flex flex-col items-center space-y-1";
-    };
+            : "font-medium text-slate-400 flex flex-col items-center space-y-1";
+
+
+        document.getElementById(
+          'nav-rdv'
+        ).className =
+          tab === 'rdv'
+
+            ? "font-bold text-blue-600 flex flex-col items-center space-y-1"
+
+            : "font-medium text-slate-400 flex flex-col items-center space-y-1";
+      };
 
 
     /* =========================================================
@@ -3084,7 +3903,8 @@ Alex — L’As Du Détail`;
         document.getElementById(
           'booking-date'
         ).onchange =
-          () => window.renderCalendar();
+          () =>
+            window.renderCalendar();
 
 
         /* CATEGORIES */
@@ -3092,25 +3912,37 @@ Alex — L’As Du Détail`;
         document.getElementById(
           'cat-petite'
         ).onclick =
-          () => window.setCategory('petite');
+          () =>
+            window.setCategory(
+              'petite'
+            );
 
 
         document.getElementById(
           'cat-moyenne'
         ).onclick =
-          () => window.setCategory('moyenne');
+          () =>
+            window.setCategory(
+              'moyenne'
+            );
 
 
         document.getElementById(
           'cat-grande'
         ).onclick =
-          () => window.setCategory('grande');
+          () =>
+            window.setCategory(
+              'grande'
+            );
 
 
         document.getElementById(
           'cat-camionnette'
         ).onclick =
-          () => window.setCategory('camionnette');
+          () =>
+            window.setCategory(
+              'camionnette'
+            );
 
 
         /* ABONNEMENTS */
@@ -3118,25 +3950,37 @@ Alex — L’As Du Détail`;
         document.getElementById(
           'sub-none'
         ).onclick =
-          () => window.setSub('none');
+          () =>
+            window.setSub(
+              'none'
+            );
 
 
         document.getElementById(
           'sub-1x'
         ).onclick =
-          () => window.setSub('1x');
+          () =>
+            window.setSub(
+              '1x'
+            );
 
 
         document.getElementById(
           'sub-2x'
         ).onclick =
-          () => window.setSub('2x');
+          () =>
+            window.setSub(
+              '2x'
+            );
 
 
         document.getElementById(
           'sub-4x'
         ).onclick =
-          () => window.setSub('4x');
+          () =>
+            window.setSub(
+              '4x'
+            );
 
 
         /* SIEGES */
@@ -3144,25 +3988,37 @@ Alex — L’As Du Détail`;
         document.getElementById(
           'seat-none'
         ).onclick =
-          () => window.setSeats('none');
+          () =>
+            window.setSeats(
+              'none'
+            );
 
 
         document.getElementById(
           'seat-1_seat'
         ).onclick =
-          () => window.setSeats('1_seat');
+          () =>
+            window.setSeats(
+              '1_seat'
+            );
 
 
         document.getElementById(
           'seat-2_seats'
         ).onclick =
-          () => window.setSeats('2_seats');
+          () =>
+            window.setSeats(
+              '2_seats'
+            );
 
 
         document.getElementById(
           'seat-all_seats'
         ).onclick =
-          () => window.setSeats('all_seats');
+          () =>
+            window.setSeats(
+              'all_seats'
+            );
 
 
         /* TOIT */
@@ -3178,13 +4034,19 @@ Alex — L’As Du Détail`;
         document.getElementById(
           'wheel-none'
         ).onclick =
-          () => window.setWheelProtection('none');
+          () =>
+            window.setWheelProtection(
+              'none'
+            );
 
 
         document.getElementById(
           'wheel-ceramic'
         ).onclick =
-          () => window.setWheelProtection('ceramic');
+          () =>
+            window.setWheelProtection(
+              'ceramic'
+            );
 
 
         /* VITRES */
@@ -3192,25 +4054,37 @@ Alex — L’As Du Détail`;
         document.getElementById(
           'glass-none'
         ).onclick =
-          () => window.setGlassProtection('none');
+          () =>
+            window.setGlassProtection(
+              'none'
+            );
 
 
         document.getElementById(
           'glass-windshield'
         ).onclick =
-          () => window.setGlassProtection('windshield');
+          () =>
+            window.setGlassProtection(
+              'windshield'
+            );
 
 
         document.getElementById(
           'glass-all'
         ).onclick =
-          () => window.setGlassProtection('all');
+          () =>
+            window.setGlassProtection(
+              'all'
+            );
 
 
         document.getElementById(
           'glass-wheel-combo'
         ).onclick =
-          () => window.setGlassProtection('wheel_combo');
+          () =>
+            window.setGlassProtection(
+              'wheel_combo'
+            );
 
 
         /* LIEU */
@@ -3218,13 +4092,19 @@ Alex — L’As Du Détail`;
         document.getElementById(
           'loc-atelier'
         ).onclick =
-          () => window.setAtelier(true);
+          () =>
+            window.setAtelier(
+              true
+            );
 
 
         document.getElementById(
           'loc-travel'
         ).onclick =
-          () => window.setAtelier(false);
+          () =>
+            window.setAtelier(
+              false
+            );
 
 
         /* ENREGISTREMENT */
@@ -3255,11 +4135,13 @@ Alex — L’As Du Détail`;
                 'message-text'
               ).value;
 
+
             try {
 
               await navigator.clipboard.writeText(
                 text
               );
+
 
               showNotification(
                 "Message copié !"
@@ -3272,11 +4154,14 @@ Alex — L’As Du Détail`;
                   'message-text'
                 );
 
+
               textarea.select();
+
 
               document.execCommand(
                 'copy'
               );
+
 
               showNotification(
                 "Message copié !"
@@ -3290,19 +4175,28 @@ Alex — L’As Du Détail`;
         document.getElementById(
           'nav-booking'
         ).onclick =
-          () => window.switchTab('booking');
+          () =>
+            window.switchTab(
+              'booking'
+            );
 
 
         document.getElementById(
           'nav-clients'
         ).onclick =
-          () => window.switchTab('clients');
+          () =>
+            window.switchTab(
+              'clients'
+            );
 
 
         document.getElementById(
           'nav-rdv'
         ).onclick =
-          () => window.switchTab('rdv');
+          () =>
+            window.switchTab(
+              'rdv'
+            );
 
 
         /* DATE DU JOUR */
