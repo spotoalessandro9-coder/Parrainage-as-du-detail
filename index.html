@@ -745,15 +745,15 @@
       const formattedDate = formatDateFR(booking.date);
 
       if (type === 'confirm') {
-        return `Bonjour ${booking.client_name},\n\nVotre rendez-vous est bien confirmé chez L'As Du Détail :\n\n📅 Date : ${formattedDate} à ${booking.time}\n📍 Lieu : ${booking.lieu}\n🛠️ Prestation : ${booking.service_name}\n💰 Prix total : ${booking.total_price}\n\nMerci et à très bientôt !\nAlex — L’As Du Détail`;
+        return `Bonjour ${booking.client_name},\n\nVotre rendez-vous est bien confirmé chez L'As Du Détail :\n\n📅 Date et heure : ${formattedDate} à ${booking.time}\n📍 Lieu : ${booking.lieu}\n🚘 Véhicule : ${booking.category.toUpperCase()}\n🛠️ Prestation : ${booking.service_name}\n🔄 Abonnement : ${booking.sub === 'none' ? 'Ponctuel' : booking.sub}\n💰 Prix à payer le jour du rendez-vous : ${booking.total_price}\n\nMerci pour votre confiance et à très bientôt !\n\nAlex — L’As Du Détail`;
       }
 
       if (type === 'rappel') {
-        return `Bonjour ${booking.client_name},\n\nRappel pour votre RDV chez L'As Du Détail :\n📅 Date : ${formattedDate} à ${booking.time}\n📍 Lieu : ${booking.lieu}\n\nÀ très bientôt !\nAlex — L’As Du Détail`;
+        return `Bonjour ${booking.client_name},\n\nPetit rappel pour votre rendez-vous prévu chez L'As Du Détail :\n\n📅 Date et heure : ${formattedDate} à ${booking.time}\n📍 Lieu : ${booking.lieu}\n🚘 Véhicule : ${booking.category.toUpperCase()}\n🛠️ Prestation : ${booking.service_name}\n\nHâte d'accueillir votre véhicule à l'atelier. À très vite !\n\nAlex — L’As Du Détail`;
       }
 
       if (type === 'avis') {
-        return `Bonjour ${booking.client_name},\n\nMerci pour votre passage ! Pourriez-vous me laisser un avis Google ?\n🔗 https://g.page/r/CTt-olIItnbIEAE/review\n\nMerci !\nAlex — L’As Du Détail`;
+        return `Bonjour ${booking.client_name},\n\nVotre véhicule brille tellement qu'il va falloir sortir les lunettes de soleil ! 😎✨\n\nSi le résultat vous plaît, pourriez-vous prendre 30 secondes pour me laisser un avis Google ? Ça m'aide énormément à faire tourner l'atelier.\n\n🔗 https://g.page/r/CTt-olIItnbIEAE/review\n\nMerci pour votre confiance et à très bientôt !\n\nAlex — L’As Du Détail`;
       }
 
       return '';
