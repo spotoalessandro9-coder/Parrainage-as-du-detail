@@ -455,7 +455,6 @@
     window.currentDiscountPct = 0;
     window.currentSub = 'none';
 
-    // NOUVEAUX SUPPLÉMENTS
     window.currentWheelProtection = 'none';
     window.currentGlassProtection = 'none';
 
@@ -759,6 +758,7 @@
       return '';
     }
 
+    // FONCTION CORRIGÉE : Ouvre directement l'application SMS avec le message préparé
     window.sendBookingMessage = function(bookingId, type) {
       const b = window.bookingsData.find(x => x.id === bookingId);
       if (!b) return;
@@ -770,8 +770,8 @@
 
       const phoneClean = b.client_phone ? b.client_phone.replace(/\D/g, '') : '';
 
-      const btnSms = document.getElementById('btn-sms-msg');
-      btnSms.href = `sms:${phoneClean}?body=${encodeURIComponent(msgText)}`;
+      // Déclenche l'ouverture instantanée de l'application SMS sur le téléphone
+      window.location.href = `sms:${phoneClean}?body=${encodeURIComponent(msgText)}`;
     };
 
     function renderBookingsList() {
@@ -817,15 +817,15 @@
           </div>
 
           <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
-            <button onclick="window.sendBookingMessage('${b.id}', 'confirm')" class="py-2 bg-blue-50 text-blue-700 text-[11px] font-bold rounded-xl">
+            <button onclick="window.sendBookingMessage('${b.id}', 'confirm')" class="py-2 bg-blue-50 text-blue-700 text-[11px] font-bold rounded-xl active:scale-95 transition-transform">
               Confirm.
             </button>
 
-            <button onclick="window.sendBookingMessage('${b.id}', 'rappel')" class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl">
+            <button onclick="window.sendBookingMessage('${b.id}', 'rappel')" class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl active:scale-95 transition-transform">
               Rappel
             </button>
 
-            <button onclick="window.sendBookingMessage('${b.id}', 'avis')" class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl">
+            <button onclick="window.sendBookingMessage('${b.id}', 'avis')" class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl active:scale-95 transition-transform">
               Avis
             </button>
           </div>
@@ -1030,10 +1030,6 @@
       window.calculateTotal();
     };
 
-    /*
-     * NOUVEAU :
-     * Protection céramique des jantes.
-     */
     window.setWheelProtection = function(type) {
       window.currentWheelProtection = type;
 
@@ -1049,11 +1045,6 @@
       active.className =
         "wheel-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center";
 
-      /*
-       * Si on choisit les jantes seules alors que
-       * le forfait combiné est actif, on repasse
-       * les vitres à aucune.
-       */
       if (type === 'ceramic' && window.currentGlassProtection === 'wheel_combo') {
         window.currentGlassProtection = 'none';
         window.updateGlassButtons();
@@ -1062,31 +1053,11 @@
       window.calculateTotal();
     };
 
-    /*
-     * NOUVEAU :
-     * Protection des vitres.
-     */
     window.setGlassProtection = function(type) {
       window.currentGlassProtection = type;
 
-      /*
-       * Le forfait combiné remplace les deux options séparées.
-       */
       if (type === 'wheel_combo') {
         window.currentWheelProtection = 'none';
-      }
-
-      /*
-       * Si on choisit une protection vitres seule,
-       * on supprime le forfait combiné.
-       */
-      if (
-        type === 'windshield' ||
-        type === 'all'
-      ) {
-        if (window.currentWheelProtection === 'none') {
-          // Rien à faire
-        }
       }
 
       window.updateGlassButtons();
@@ -1213,22 +1184,14 @@
       const subDiscount = (basePrice * subPct) / 100;
       const priceAfterSub = basePrice - subDiscount;
 
-      /*
-       * SUPPLÉMENTS
-       */
       let supps = 0;
 
-      // Sièges
       if (window.currentSeats === '1_seat') supps += 30;
       if (window.currentSeats === '2_seats') supps += 50;
       if (window.currentSeats === 'all_seats') supps += 90;
 
-      // Ciel de toit
       if (window.currentRoof) supps += 30;
 
-      /*
-       * Céramique jantes
-       */
       if (
         window.currentWheelProtection === 'ceramic' &&
         window.currentGlassProtection !== 'wheel_combo'
@@ -1236,9 +1199,6 @@
         supps += 299.99;
       }
 
-      /*
-       * Vitres
-       */
       if (window.currentGlassProtection === 'windshield') {
         supps += 59.99;
       }
@@ -1247,16 +1207,10 @@
         supps += 99.99;
       }
 
-      /*
-       * Forfait Jantes + Vitres
-       */
       if (window.currentGlassProtection === 'wheel_combo') {
         supps += 399.99;
       }
 
-      /*
-       * Déplacement
-       */
       let travel = 0;
 
       if (!window.currentIsAtelier) {
@@ -1277,9 +1231,6 @@
       const total =
         Math.max(0, subtotal - refDiscount);
 
-      /*
-       * Récapitulatif
-       */
       document.getElementById('recap-service').innerText =
         basePrice.toFixed(2) + ' €';
 
@@ -1358,9 +1309,6 @@
       document.getElementById('booking-date').onchange =
         () => window.renderCalendar();
 
-      /*
-       * Catégories
-       */
       document.getElementById('cat-petite').onclick =
         () => window.setCategory('petite');
 
@@ -1373,9 +1321,6 @@
       document.getElementById('cat-camionnette').onclick =
         () => window.setCategory('camionnette');
 
-      /*
-       * Abonnement
-       */
       document.getElementById('sub-none').onclick =
         () => window.setSub('none');
 
@@ -1388,9 +1333,6 @@
       document.getElementById('sub-4x').onclick =
         () => window.setSub('4x');
 
-      /*
-       * Sièges
-       */
       document.getElementById('seat-none').onclick =
         () => window.setSeats('none');
 
@@ -1403,24 +1345,15 @@
       document.getElementById('seat-all_seats').onclick =
         () => window.setSeats('all_seats');
 
-      /*
-       * Ciel de toit
-       */
       document.getElementById('roof-btn').onclick =
         window.toggleRoof;
 
-      /*
-       * NOUVEAU : Jantes
-       */
       document.getElementById('wheel-none').onclick =
         () => window.setWheelProtection('none');
 
       document.getElementById('wheel-ceramic').onclick =
         () => window.setWheelProtection('ceramic');
 
-      /*
-       * NOUVEAU : Vitres
-       */
       document.getElementById('glass-none').onclick =
         () => window.setGlassProtection('none');
 
@@ -1433,18 +1366,12 @@
       document.getElementById('glass-wheel-combo').onclick =
         () => window.setGlassProtection('wheel_combo');
 
-      /*
-       * Lieu
-       */
       document.getElementById('loc-atelier').onclick =
         () => window.setAtelier(true);
 
       document.getElementById('loc-travel').onclick =
         () => window.setAtelier(false);
 
-      /*
-       * Boutons principaux
-       */
       document.getElementById('btn-save-booking').onclick =
         window.saveBooking;
 
@@ -1459,9 +1386,6 @@
         showNotification("Copié !");
       };
 
-      /*
-       * Navigation
-       */
       document.getElementById('nav-booking').onclick =
         () => window.switchTab('booking');
 
@@ -1471,15 +1395,9 @@
       document.getElementById('nav-rdv').onclick =
         () => window.switchTab('rdv');
 
-      /*
-       * Date du jour
-       */
       document.getElementById('booking-date').value =
         new Date().toISOString().split('T')[0];
 
-      /*
-       * Initialisation
-       */
       renderClientsSelect();
       renderClientsList();
       renderBookingsList();
