@@ -6,448 +6,1190 @@
   <title>L'As Du Détail - Cockpit V2</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-slate-100 text-slate-800 font-sans pb-28 selection:bg-blue-600 selection:text-white">
 
-  <!-- En-tête de l'application -->
+  <!-- EN-TÊTE -->
   <header class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md">
     <div class="max-w-xl mx-auto flex items-center justify-between">
+
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-black text-white text-xl shadow-lg shadow-blue-500/30">A</div>
+        <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-black text-white text-xl shadow-lg shadow-blue-500/30">
+          A
+        </div>
+
         <div>
-          <h1 class="font-extrabold text-lg leading-none tracking-wide text-white">L'As Du Détail</h1>
-          <p class="text-xs text-slate-400 mt-0.5">Cockpit Gestion & RDV</p>
+          <h1 class="font-extrabold text-lg leading-none tracking-wide text-white">
+            L'As Du Détail
+          </h1>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Cockpit Gestion & RDV
+          </p>
         </div>
       </div>
+
       <div class="text-right">
-        <span class="text-[10px] px-2.5 py-1 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-full font-bold uppercase tracking-wider block">Waremme</span>
-        <span id="sync-status" class="text-[10px] text-emerald-400 font-medium mt-1 block">● V2 Active</span>
+        <span class="text-[10px] px-2.5 py-1 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-full font-bold uppercase tracking-wider block">
+          Waremme
+        </span>
+
+        <span id="sync-status" class="text-[10px] text-emerald-400 font-medium mt-1 block">
+          ● V2 Active
+        </span>
       </div>
+
     </div>
   </header>
 
-  <!-- Banner de notification -->
-  <div id="notification" class="hidden max-w-xl mx-auto m-4 p-4 bg-blue-600 text-white font-bold rounded-2xl shadow-xl text-sm transform transition-all duration-300 text-center"></div>
+  <!-- NOTIFICATION -->
+  <div id="notification"
+       class="hidden max-w-xl mx-auto m-4 p-4 bg-blue-600 text-white font-bold rounded-2xl shadow-xl text-sm transform transition-all duration-300 text-center">
+  </div>
 
-  <!-- Conteneur Principal -->
+  <!-- CONTENEUR -->
   <main class="max-w-xl mx-auto p-4 space-y-6">
 
-    <!-- DASHBOARD STATS -->
+    <!-- DASHBOARD -->
     <div id="dashboard-summary" class="grid grid-cols-3 gap-3">
+
       <div class="bg-white border border-slate-200 rounded-2xl p-3 text-center shadow-sm">
-        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Clients</div>
-        <div id="stat-total-clients" class="text-xl font-black text-blue-600 mt-1">0</div>
+        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+          Clients
+        </div>
+        <div id="stat-total-clients" class="text-xl font-black text-blue-600 mt-1">
+          0
+        </div>
       </div>
+
       <div class="bg-white border border-slate-200 rounded-2xl p-3 text-center shadow-sm">
-        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">RDV Total</div>
-        <div id="stat-total-rdv" class="text-xl font-black text-blue-600 mt-1">0</div>
+        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+          RDV Total
+        </div>
+        <div id="stat-total-rdv" class="text-xl font-black text-blue-600 mt-1">
+          0
+        </div>
       </div>
+
       <div class="bg-white border border-slate-200 rounded-2xl p-3 text-center shadow-sm">
-        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">CA Estimé</div>
-        <div id="stat-total-ca" class="text-xl font-black text-emerald-600 mt-1">0 €</div>
+        <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+          CA Estimé
+        </div>
+        <div id="stat-total-ca" class="text-xl font-black text-emerald-600 mt-1">
+          0 €
+        </div>
       </div>
+
     </div>
 
-    <!-- TAB 1: DEVIS & RESERVATION -->
+    <!-- ========================================================= -->
+    <!-- TAB 1 : DEVIS & RESERVATION -->
+    <!-- ========================================================= -->
+
     <div id="tab-booking" class="space-y-5">
-      
-      <!-- 1. Client -->
+
+      <!-- CLIENT -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 relative shadow-sm">
+
         <div class="flex justify-between items-center">
-          <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">1. Client & Parrainage</label>
-          <button type="button" onclick="window.switchTab('clients')" class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold transition-all">+ Nouveau Client</button>
+          <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">
+            1. Client & Parrainage
+          </label>
+
+          <button type="button"
+                  onclick="window.switchTab('clients')"
+                  class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold transition-all">
+            + Nouveau Client
+          </button>
         </div>
 
         <div class="relative">
+
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <span class="text-slate-400 text-sm">🔍</span>
           </div>
-          <input type="text" id="booking-client-search" oninput="window.searchBookingClient()" placeholder="Rechercher un client (nom, tél)..." class="w-full pl-9 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
-          <div id="booking-client-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl max-h-48 overflow-y-auto z-30 shadow-2xl space-y-1 p-1"></div>
+
+          <input
+            type="text"
+            id="booking-client-search"
+            oninput="window.searchBookingClient()"
+            placeholder="Rechercher un client (nom, tél)..."
+            class="w-full pl-9 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"
+          />
+
+          <div id="booking-client-results"
+               class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl max-h-48 overflow-y-auto z-30 shadow-2xl space-y-1 p-1">
+          </div>
+
         </div>
 
-        <input type="hidden" id="selected-client-id" value="" />
+        <input type="hidden" id="selected-client-id" value="">
 
-        <div id="selected-client-display" class="hidden bg-blue-50 border border-blue-200 p-3 rounded-xl flex justify-between items-center">
+        <div id="selected-client-display"
+             class="hidden bg-blue-50 border border-blue-200 p-3 rounded-xl flex justify-between items-center">
+
           <div>
-            <span class="text-xs font-bold text-blue-900 block" id="selected-client-name">Nom du client</span>
-            <span class="text-[10px] text-blue-700 block" id="selected-client-info">Détails client</span>
+            <span class="text-xs font-bold text-blue-900 block" id="selected-client-name">
+              Nom du client
+            </span>
+
+            <span class="text-[10px] text-blue-700 block" id="selected-client-info">
+              Détails client
+            </span>
           </div>
-          <button type="button" onclick="window.clearSelectedBookingClient()" class="text-slate-400 hover:text-slate-600 text-xs font-bold px-2 py-1">✕ Changer</button>
+
+          <button
+            type="button"
+            onclick="window.clearSelectedBookingClient()"
+            class="text-slate-400 hover:text-slate-600 text-xs font-bold px-2 py-1">
+            ✕ Changer
+          </button>
+
         </div>
 
         <select id="client-select" class="hidden"></select>
-        
-        <div id="parrainage-badge" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex justify-between items-center">
+
+        <div id="parrainage-badge"
+             class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex justify-between items-center">
+
           <div>
-            <span class="text-xs text-emerald-900 block font-medium">Cagnotte parrainage disponible</span>
-            <span class="text-[10px] text-emerald-700">Déductible sur ce devis</span>
+            <span class="text-xs text-emerald-900 block font-medium">
+              Cagnotte parrainage disponible
+            </span>
+
+            <span class="text-[10px] text-emerald-700">
+              Déductible sur ce devis
+            </span>
           </div>
-          <span id="parrainage-val" class="font-black text-emerald-600 text-lg">0%</span>
+
+          <span id="parrainage-val"
+                class="font-black text-emerald-600 text-lg">
+            0%
+          </span>
+
         </div>
+
       </div>
 
-      <!-- 2. Catégorie Véhicule -->
+      <!-- CATEGORIE -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
-        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">2. Catégorie du véhicule</label>
+
+        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">
+          2. Catégorie du véhicule
+        </label>
+
         <div class="grid grid-cols-2 gap-2.5">
-          <button type="button" id="cat-petite" class="cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
-            <div class="font-bold text-sm text-slate-900">Petite</div>
-            <div class="text-[10px] text-slate-500 mt-0.5">Citadine (ex: Polo, Yaris)</div>
+
+          <button type="button"
+                  id="cat-petite"
+                  class="cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
+
+            <div class="font-bold text-sm text-slate-900">
+              Petite
+            </div>
+
+            <div class="text-[10px] text-slate-500 mt-0.5">
+              Citadine (ex: Polo, Yaris)
+            </div>
+
           </button>
 
-          <button type="button" id="cat-moyenne" class="cat-btn p-3 rounded-xl border text-left bg-blue-50 border-blue-600 text-blue-900 font-bold shadow-sm transition-all">
-            <div class="font-bold text-sm text-blue-900">Moyenne</div>
-            <div class="text-[10px] text-blue-700 mt-0.5">Berline / Compacte (ex: Golf)</div>
+          <button type="button"
+                  id="cat-moyenne"
+                  class="cat-btn p-3 rounded-xl border text-left bg-blue-50 border-blue-600 text-blue-900 font-bold shadow-sm transition-all">
+
+            <div class="font-bold text-sm text-blue-900">
+              Moyenne
+            </div>
+
+            <div class="text-[10px] text-blue-700 mt-0.5">
+              Berline / Compacte (ex: Golf)
+            </div>
+
           </button>
 
-          <button type="button" id="cat-grande" class="cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
-            <div class="font-bold text-sm text-slate-900">Grande</div>
-            <div class="text-[10px] text-slate-500 mt-0.5">SUV / Break (ex: X5, Q7)</div>
+          <button type="button"
+                  id="cat-grande"
+                  class="cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
+
+            <div class="font-bold text-sm text-slate-900">
+              Grande
+            </div>
+
+            <div class="text-[10px] text-slate-500 mt-0.5">
+              SUV / Break (ex: X5, Q7)
+            </div>
+
           </button>
 
-          <button type="button" id="cat-camionnette" class="cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
-            <div class="font-bold text-sm text-slate-900">Camionnette</div>
-            <div class="text-[10px] text-slate-500 mt-0.5">Utilitaire / Van</div>
+          <button type="button"
+                  id="cat-camionnette"
+                  class="cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all">
+
+            <div class="font-bold text-sm text-slate-900">
+              Camionnette
+            </div>
+
+            <div class="text-[10px] text-slate-500 mt-0.5">
+              Utilitaire / Van
+            </div>
+
           </button>
+
         </div>
       </div>
 
-      <!-- 3. Prestation -->
+      <!-- PRESTATION -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
-        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">3. Prestation principale</label>
-        <select id="service-select" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"></select>
+
+        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">
+          3. Prestation principale
+        </label>
+
+        <select id="service-select"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all">
+        </select>
+
       </div>
 
-      <!-- 4. Abonnement -->
+      <!-- ABONNEMENT -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
-        <label class="text-xs uppercase tracking-wider text-blue-600 font-bold block">4. Formule Abonnement</label>
+
+        <label class="text-xs uppercase tracking-wider text-blue-600 font-bold block">
+          4. Formule Abonnement
+        </label>
+
         <div class="grid grid-cols-2 gap-2 text-xs">
-          <button type="button" id="sub-none" class="sub-btn p-2.5 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all">Ponctuel (Sans Abo)</button>
-          <button type="button" id="sub-1x" class="sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all">1x / mois (-5%)</button>
-          <button type="button" id="sub-2x" class="sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all">2x / mois (-10%)</button>
-          <button type="button" id="sub-4x" class="sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all">4x / mois (-15%)</button>
+
+          <button type="button"
+                  id="sub-none"
+                  class="sub-btn p-2.5 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all">
+            Ponctuel (Sans Abo)
+          </button>
+
+          <button type="button"
+                  id="sub-1x"
+                  class="sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all">
+            1x / mois (-5%)
+          </button>
+
+          <button type="button"
+                  id="sub-2x"
+                  class="sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all">
+            2x / mois (-10%)
+          </button>
+
+          <button type="button"
+                  id="sub-4x"
+                  class="sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all">
+            4x / mois (-15%)
+          </button>
+
         </div>
       </div>
 
-      <!-- 5. Options -->
+      <!-- OPTIONS -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-4 shadow-sm">
-        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">5. Options & Suppléments</label>
 
-        <!-- Shampooing sièges -->
+        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">
+          5. Options & Suppléments
+        </label>
+
         <div class="space-y-2">
-          <span class="text-xs text-slate-700 block font-medium">Shampooing Sièges (Injection / Extraction) :</span>
+
+          <span class="text-xs text-slate-700 block font-medium">
+            Shampooing Sièges (Injection / Extraction) :
+          </span>
 
           <div class="grid grid-cols-2 gap-2 text-xs">
-            <button type="button" id="seat-none" class="seat-btn p-2 rounded-lg border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all">Aucun (0€)</button>
 
-            <button type="button" id="seat-1_seat" class="seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all">
+            <button type="button"
+                    id="seat-none"
+                    class="seat-btn p-2 rounded-lg border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all">
+              Aucun (0€)
+            </button>
+
+            <button type="button"
+                    id="seat-1_seat"
+                    class="seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all">
               1 Siège (30€)
             </button>
 
-            <button type="button" id="seat-2_seats" class="seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all">
+            <button type="button"
+                    id="seat-2_seats"
+                    class="seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all">
               2 Sièges (50€)
             </button>
 
-            <button type="button" id="seat-all_seats" class="seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all">
+            <button type="button"
+                    id="seat-all_seats"
+                    class="seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all">
               Tous les sièges (90€)
             </button>
+
           </div>
         </div>
 
-        <!-- Ciel de toit -->
-        <button type="button" id="roof-btn" class="w-full p-3 rounded-xl border flex items-center justify-between text-xs transition-all bg-slate-50 border-slate-200 text-slate-600">
+        <button type="button"
+                id="roof-btn"
+                class="w-full p-3 rounded-xl border flex items-center justify-between text-xs transition-all bg-slate-50 border-slate-200 text-slate-600">
+
           <span>Nettoyage Ciel de toit</span>
-          <span class="font-bold">+ 30,00 €</span>
+
+          <span class="font-bold">
+            + 30,00 €
+          </span>
+
         </button>
 
-        <!-- Protection des jantes -->
+        <!-- JANTES -->
         <div class="pt-2 border-t border-slate-100">
-          <span class="text-xs text-slate-700 block font-medium mb-2">Protection Céramique des Jantes :</span>
+
+          <span class="text-xs text-slate-700 block font-medium mb-2">
+            Protection Céramique des Jantes :
+          </span>
 
           <div class="grid grid-cols-1 gap-2 text-xs">
-            <button type="button" id="wheel-none" class="wheel-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center">
+
+            <button type="button"
+                    id="wheel-none"
+                    class="wheel-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center">
+
               <span>Aucune</span>
               <span>0,00 €</span>
+
             </button>
 
-            <button type="button" id="wheel-ceramic" class="wheel-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center">
+            <button type="button"
+                    id="wheel-ceramic"
+                    class="wheel-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center">
+
               <span>
-                <span class="font-bold block">Céramique 4 jantes démontées</span>
-                <span class="text-[10px] text-slate-500">Dépose, nettoyage, préparation et pose</span>
+                <span class="font-bold block">
+                  Céramique 4 jantes démontées
+                </span>
+
+                <span class="text-[10px] text-slate-500">
+                  Dépose, nettoyage, préparation et pose
+                </span>
               </span>
-              <span class="font-bold whitespace-nowrap">+ 299,99 €</span>
+
+              <span class="font-bold whitespace-nowrap">
+                + 299,99 €
+              </span>
+
             </button>
+
           </div>
         </div>
 
-        <!-- Protection des vitres -->
+        <!-- VITRES -->
         <div class="pt-2 border-t border-slate-100">
-          <span class="text-xs text-slate-700 block font-medium mb-2">Protection Hydrophobe / Céramique des Vitres :</span>
+
+          <span class="text-xs text-slate-700 block font-medium mb-2">
+            Protection Hydrophobe / Céramique des Vitres :
+          </span>
 
           <div class="grid grid-cols-1 gap-2 text-xs">
-            <button type="button" id="glass-none" class="glass-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center">
+
+            <button type="button"
+                    id="glass-none"
+                    class="glass-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center">
+
               <span>Aucune</span>
               <span>0,00 €</span>
+
             </button>
 
-            <button type="button" id="glass-windshield" class="glass-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center">
+            <button type="button"
+                    id="glass-windshield"
+                    class="glass-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center">
+
               <span>
-                <span class="font-bold block">Pare-brise seul</span>
-                <span class="text-[10px] text-slate-500">Traitement hydrophobe</span>
+                <span class="font-bold block">
+                  Pare-brise seul
+                </span>
+
+                <span class="text-[10px] text-slate-500">
+                  Traitement hydrophobe
+                </span>
               </span>
-              <span class="font-bold whitespace-nowrap">+ 59,99 €</span>
+
+              <span class="font-bold whitespace-nowrap">
+                + 59,99 €
+              </span>
+
             </button>
 
-            <button type="button" id="glass-all" class="glass-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center">
+            <button type="button"
+                    id="glass-all"
+                    class="glass-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center">
+
               <span>
-                <span class="font-bold block">Toutes les vitres</span>
-                <span class="text-[10px] text-slate-500">Traitement hydrophobe / céramique</span>
+                <span class="font-bold block">
+                  Toutes les vitres
+                </span>
+
+                <span class="text-[10px] text-slate-500">
+                  Traitement hydrophobe / céramique
+                </span>
               </span>
-              <span class="font-bold whitespace-nowrap">+ 99,99 €</span>
+
+              <span class="font-bold whitespace-nowrap">
+                + 99,99 €
+              </span>
+
             </button>
 
-            <button type="button" id="glass-wheel-combo" class="glass-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center">
+            <button type="button"
+                    id="glass-wheel-combo"
+                    class="glass-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center">
+
               <span>
-                <span class="font-bold block">Jantes + toutes les vitres</span>
-                <span class="text-[10px] text-slate-500">Forfait combiné</span>
+                <span class="font-bold block">
+                  Jantes + toutes les vitres
+                </span>
+
+                <span class="text-[10px] text-slate-500">
+                  Forfait combiné
+                </span>
               </span>
-              <span class="font-bold whitespace-nowrap">+ 399,99 €</span>
+
+              <span class="font-bold whitespace-nowrap">
+                + 399,99 €
+              </span>
+
             </button>
+
           </div>
 
           <p class="text-[10px] text-slate-400 mt-2">
             Le forfait « Jantes + toutes les vitres » remplace les options séparées.
           </p>
+
         </div>
+
       </div>
 
-      <!-- 6. Lieu -->
+      <!-- LIEU -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
-        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">6. Lieu de prestation</label>
+
+        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">
+          6. Lieu de prestation
+        </label>
 
         <div class="flex rounded-xl bg-slate-100 p-1 border border-slate-200">
-          <button type="button" id="loc-atelier" class="flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all">Atelier (Waremme)</button>
-          <button type="button" id="loc-travel" class="flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all">À Domicile</button>
+
+          <button type="button"
+                  id="loc-atelier"
+                  class="flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all">
+            Atelier (Waremme)
+          </button>
+
+          <button type="button"
+                  id="loc-travel"
+                  class="flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all">
+            À Domicile
+          </button>
+
         </div>
 
         <div id="travel-input" class="hidden space-y-2 pt-2">
-          <input type="number" id="distance-km" placeholder="Distance km (aller simple)" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
-          <p class="text-[11px] text-slate-500">Forfait : 10,00 € fixe + 0,70 € / km</p>
+
+          <input
+            type="number"
+            id="distance-km"
+            placeholder="Distance km (aller simple)"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"
+          />
+
+          <p class="text-[11px] text-slate-500">
+            Forfait : 10,00 € fixe + 0,70 € / km
+          </p>
+
         </div>
+
       </div>
 
-      <!-- 7. Réduction Parrainage -->
-      <div id="parrainage-slider-box" class="hidden bg-white border border-blue-200 rounded-2xl p-4 space-y-3 shadow-sm">
-        <label class="text-xs uppercase tracking-wider text-blue-600 font-bold block">Moduler la Réduction Parrainage (%)</label>
+      <!-- PARRAINAGE -->
+      <div id="parrainage-slider-box"
+           class="hidden bg-white border border-blue-200 rounded-2xl p-4 space-y-3 shadow-sm">
+
+        <label class="text-xs uppercase tracking-wider text-blue-600 font-bold block">
+          Moduler la Réduction Parrainage (%)
+        </label>
 
         <div class="flex items-center space-x-3">
-          <input type="range" id="discount-range" min="0" max="100" step="10" value="0" class="w-full accent-blue-600 cursor-pointer" />
-          <span id="discount-val-label" class="font-black text-blue-600 text-xl w-14 text-right">-0%</span>
+
+          <input
+            type="range"
+            id="discount-range"
+            min="0"
+            max="100"
+            step="10"
+            value="0"
+            class="w-full accent-blue-600 cursor-pointer"
+          />
+
+          <span id="discount-val-label"
+                class="font-black text-blue-600 text-xl w-14 text-right">
+            -0%
+          </span>
+
         </div>
       </div>
 
-      <!-- 8. Calendrier -->
+      <!-- CALENDRIER -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-4 shadow-sm">
-        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">7. Planification du Rendez-vous</label>
+
+        <label class="text-xs uppercase tracking-wider text-slate-500 font-bold block">
+          7. Planification du Rendez-vous
+        </label>
 
         <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-3">
+
           <div class="flex justify-between items-center px-1">
-            <button type="button" onclick="window.changeCalendarMonth(-1)" class="p-1 text-slate-500 hover:text-blue-600 transition-all font-bold text-base">&lt;</button>
-            <span id="calendar-month-title" class="text-xs font-bold uppercase tracking-wider text-blue-600"></span>
-            <button type="button" onclick="window.changeCalendarMonth(1)" class="p-1 text-slate-500 hover:text-blue-600 transition-all font-bold text-base">&gt;</button>
+
+            <button type="button"
+                    onclick="window.changeCalendarMonth(-1)"
+                    class="p-1 text-slate-500 hover:text-blue-600 transition-all font-bold text-base">
+              &lt;
+            </button>
+
+            <span id="calendar-month-title"
+                  class="text-xs font-bold uppercase tracking-wider text-blue-600">
+            </span>
+
+            <button type="button"
+                    onclick="window.changeCalendarMonth(1)"
+                    class="p-1 text-slate-500 hover:text-blue-600 transition-all font-bold text-base">
+              &gt;
+            </button>
+
           </div>
 
           <div class="grid grid-cols-7 text-center text-[10px] font-bold text-slate-400 border-b border-slate-200 pb-2">
-            <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+            <span>Lun</span>
+            <span>Mar</span>
+            <span>Mer</span>
+            <span>Jeu</span>
+            <span>Ven</span>
+            <span>Sam</span>
+            <span>Dim</span>
           </div>
 
-          <div id="calendar-days-grid" class="grid grid-cols-7 gap-1"></div>
+          <div id="calendar-days-grid"
+               class="grid grid-cols-7 gap-1">
+          </div>
 
           <div class="grid grid-cols-2 gap-y-1.5 pt-2 border-t border-slate-200 text-[10px] text-slate-500 px-1">
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-white border border-slate-300"></span><span>Libre (Mar-Ven)</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-slate-300"></span><span>Fermé (Dimanche)</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-rose-600"></span><span>Occupé (RDV)</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2 h-2 rounded-full bg-slate-200 border border-slate-300"></span><span>Journée Bloquée</span></span>
+
+            <span class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-white border border-slate-300"></span>
+              <span>Libre (Mar-Ven)</span>
+            </span>
+
+            <span class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+              <span>Fermé (Dimanche)</span>
+            </span>
+
+            <span class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+              <span>Occupé (RDV)</span>
+            </span>
+
+            <span class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-slate-200 border border-slate-300"></span>
+              <span>Journée Bloquée</span>
+            </span>
+
           </div>
+
         </div>
 
-        <button type="button" id="btn-toggle-block-day" onclick="window.toggleBlockDay()" class="w-full py-2.5 px-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2">
+        <button
+          type="button"
+          id="btn-toggle-block-day"
+          onclick="window.toggleBlockDay()"
+          class="w-full py-2.5 px-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2">
+
           <span id="block-day-icon">🔒</span>
-          <span id="block-day-label">Bloquer / Débloquer la journée sélectionnée</span>
+          <span id="block-day-label">
+            Bloquer / Débloquer la journée sélectionnée
+          </span>
+
         </button>
 
         <div class="grid grid-cols-2 gap-2">
+
           <div>
-            <label class="text-[10px] text-slate-500 block mb-1">Date choisie</label>
-            <input type="date" id="booking-date" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
+            <label class="text-[10px] text-slate-500 block mb-1">
+              Date choisie
+            </label>
+
+            <input
+              type="date"
+              id="booking-date"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"
+            />
           </div>
 
           <div>
-            <label class="text-[10px] text-slate-500 block mb-1">Heure du RDV</label>
-            <input type="time" id="booking-time" value="09:00" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
+            <label class="text-[10px] text-slate-500 block mb-1">
+              Heure du RDV
+            </label>
+
+            <input
+              type="time"
+              id="booking-time"
+              value="09:00"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"
+            />
           </div>
+
         </div>
+
       </div>
 
-      <!-- 9. Devis Fin -->
+      <!-- RECAP -->
       <div class="bg-white border border-blue-200 rounded-2xl p-5 space-y-4 shadow-xl">
-        <h3 class="text-xs uppercase tracking-wider text-blue-600 font-bold border-b border-slate-100 pb-2">Récapitulatif du Devis</h3>
-        
+
+        <h3 class="text-xs uppercase tracking-wider text-blue-600 font-bold border-b border-slate-100 pb-2">
+          Récapitulatif du Devis
+        </h3>
+
         <div class="space-y-1.5 text-xs text-slate-600">
+
           <div class="flex justify-between">
             <span>Tarif Prestation :</span>
-            <span id="recap-service" class="font-medium text-slate-900">0,00 €</span>
+            <span id="recap-service" class="font-medium text-slate-900">
+              0,00 €
+            </span>
           </div>
 
-          <div id="recap-sub-row" class="hidden flex justify-between text-blue-600 font-medium">
+          <div id="recap-sub-row"
+               class="hidden flex justify-between text-blue-600 font-medium">
+
             <span>Remise Abonnement :</span>
-            <span id="recap-sub-discount">-0,00 €</span>
+            <span id="recap-sub-discount">
+              -0,00 €
+            </span>
+
           </div>
 
           <div class="flex justify-between">
+
             <span>Suppléments / Options :</span>
-            <span id="recap-supplements" class="font-medium text-slate-900">0,00 €</span>
+
+            <span id="recap-supplements"
+                  class="font-medium text-slate-900">
+              0,00 €
+            </span>
+
           </div>
 
           <div class="flex justify-between">
+
             <span>Déplacement :</span>
-            <span id="recap-travel" class="font-medium text-slate-900">0,00 €</span>
+
+            <span id="recap-travel"
+                  class="font-medium text-slate-900">
+              0,00 €
+            </span>
+
           </div>
 
-          <div id="recap-discount-row" class="hidden flex justify-between text-blue-600 font-medium">
+          <div id="recap-discount-row"
+               class="hidden flex justify-between text-blue-600 font-medium">
+
             <span>Remise Parrainage :</span>
-            <span id="recap-discount">-0,00 €</span>
+
+            <span id="recap-discount">
+              -0,00 €
+            </span>
+
           </div>
+
         </div>
 
         <div class="border-t border-slate-100 pt-3 flex justify-between items-center">
-          <span class="font-bold text-sm text-slate-900 uppercase tracking-wider">TOTAL NET :</span>
-          <span id="total-price" class="font-black text-3xl text-blue-600">0,00 €</span>
+
+          <span class="font-bold text-sm text-slate-900 uppercase tracking-wider">
+            TOTAL NET :
+          </span>
+
+          <span id="total-price"
+                class="font-black text-3xl text-blue-600">
+            0,00 €
+          </span>
+
         </div>
 
-        <button type="button" id="btn-save-booking" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl transition-all text-sm uppercase tracking-wider shadow-lg shadow-blue-500/25 active:scale-95">
+        <button
+          type="button"
+          id="btn-save-booking"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl transition-all text-sm uppercase tracking-wider shadow-lg shadow-blue-500/25 active:scale-95">
+
           Valider & Enregistrer le RDV
+
         </button>
+
       </div>
 
-      <div id="message-output-box" class="hidden bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-md">
+      <!-- APERCU MESSAGE -->
+      <div id="message-output-box"
+           class="hidden bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-md">
+
         <div class="flex justify-between items-center">
-          <span class="text-xs uppercase tracking-wider text-blue-600 font-bold">Message généré</span>
+
+          <span class="text-xs uppercase tracking-wider text-blue-600 font-bold">
+            Message généré
+          </span>
 
           <div class="flex space-x-2">
-            <button type="button" id="btn-copy-msg" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition-all border border-slate-200">Copier</button>
-            <a id="btn-sms-msg" href="#" class="px-3 py-1 bg-blue-600 text-white font-bold rounded-lg text-xs hover:bg-blue-700 transition-all flex items-center space-x-1 shadow-sm">💬 SMS</a>
+
+            <button
+              type="button"
+              id="btn-copy-msg"
+              class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition-all border border-slate-200">
+              Copier
+            </button>
+
+            <a
+              id="btn-sms-msg"
+              href="#"
+              class="px-3 py-1 bg-blue-600 text-white font-bold rounded-lg text-xs hover:bg-blue-700 transition-all flex items-center space-x-1 shadow-sm">
+              💬 SMS
+            </a>
+
           </div>
+
         </div>
 
-        <textarea id="message-text" rows="10" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 font-mono focus:outline-none focus:border-blue-600" readonly></textarea>
+        <textarea
+          id="message-text"
+          rows="10"
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 font-mono focus:outline-none focus:border-blue-600"
+          readonly>
+        </textarea>
+
       </div>
+
     </div>
 
-    <!-- TAB 2: CLIENTS A-Z -->
+    <!-- ========================================================= -->
+    <!-- TAB 2 : CLIENTS -->
+    <!-- ========================================================= -->
+
     <div id="tab-clients" class="hidden space-y-5">
+
       <div class="bg-white border border-blue-200 rounded-2xl p-4 space-y-3 shadow-md">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-blue-600">Ajouter un client</h3>
+
+        <h3 class="text-xs font-bold uppercase tracking-wider text-blue-600">
+          Ajouter un client
+        </h3>
 
         <div class="space-y-2">
-          <input type="text" id="new-client-name" placeholder="Nom & Prénom *" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
 
-          <input type="tel" id="new-client-phone" placeholder="Téléphone (ex: 0470...)" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
+          <input
+            type="text"
+            id="new-client-name"
+            placeholder="Nom & Prénom *"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"
+          />
 
-          <input type="text" id="new-client-address" placeholder="Adresse complète" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
+          <input
+            type="tel"
+            id="new-client-phone"
+            placeholder="Téléphone (ex: 0470...)"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"
+          />
+
+          <input
+            type="text"
+            id="new-client-address"
+            placeholder="Adresse complète"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"
+          />
 
           <div class="grid grid-cols-2 gap-2">
-            <input type="number" id="new-client-distance" placeholder="Distance km" step="0.1" class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
 
-            <input type="number" id="new-client-discount" placeholder="Parrainage %" value="0" step="10" min="0" max="100" class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all" />
+            <input
+              type="number"
+              id="new-client-distance"
+              placeholder="Distance km"
+              step="0.1"
+              class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"
+            />
+
+            <input
+              type="number"
+              id="new-client-discount"
+              placeholder="Parrainage %"
+              value="0"
+              step="10"
+              min="0"
+              max="100"
+              class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"
+            />
+
           </div>
+
         </div>
 
-        <button type="button" id="btn-add-client" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all text-xs uppercase tracking-wider shadow-md shadow-blue-500/20">
+        <button
+          type="button"
+          id="btn-add-client"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all text-xs uppercase tracking-wider shadow-md shadow-blue-500/20">
+
           + Enregistrer Client
+
         </button>
+
       </div>
 
       <div class="space-y-3">
-        <div class="flex justify-between items-center">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Répertoire Fichier Clients (A-Z)</h2>
 
-          <input type="text" id="search-client" oninput="window.filterClients()" placeholder="Rechercher..." class="bg-white border border-slate-200 rounded-lg px-3 py-1 text-xs text-slate-800 focus:outline-none focus:border-blue-600 w-36 shadow-sm" />
+        <div class="flex justify-between items-center">
+
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">
+            Répertoire Fichier Clients (A-Z)
+          </h2>
+
+          <input
+            type="text"
+            id="search-client"
+            oninput="window.filterClients()"
+            placeholder="Rechercher..."
+            class="bg-white border border-slate-200 rounded-lg px-3 py-1 text-xs text-slate-800 focus:outline-none focus:border-blue-600 w-36 shadow-sm"
+          />
+
         </div>
 
         <div id="clients-list" class="space-y-3"></div>
+
       </div>
+
     </div>
 
-    <!-- TAB 3: PLANNING -->
+    <!-- ========================================================= -->
+    <!-- TAB 3 : PLANNING -->
+    <!-- ========================================================= -->
+
     <div id="tab-rdv" class="hidden space-y-4">
+
       <div class="flex justify-between items-center">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Planning Chronologique RDV</h2>
-        <span id="rdv-count-badge" class="text-[10px] bg-blue-50 border border-blue-200 text-blue-700 font-bold px-2 py-0.5 rounded-full">0 RDV</span>
+
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">
+          Planning Chronologique RDV
+        </h2>
+
+        <span
+          id="rdv-count-badge"
+          class="text-[10px] bg-blue-50 border border-blue-200 text-blue-700 font-bold px-2 py-0.5 rounded-full">
+          0 RDV
+        </span>
+
       </div>
 
       <div id="bookings-list" class="space-y-3"></div>
+
     </div>
 
   </main>
 
-  <!-- Navigation Bas de Page -->
+  <!-- NAVIGATION -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 py-3 px-4 z-50 shadow-lg">
+
     <div class="max-w-xl mx-auto flex justify-around items-center text-xs">
 
-      <button id="nav-booking" class="font-bold text-blue-600 flex flex-col items-center space-y-1">
-        <span>📝</span><span>Devis / RDV</span>
+      <button
+        id="nav-booking"
+        class="font-bold text-blue-600 flex flex-col items-center space-y-1">
+
+        <span>📝</span>
+        <span>Devis / RDV</span>
+
       </button>
 
-      <button id="nav-clients" class="font-medium text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-1">
-        <span>👥</span><span>Clients (A-Z)</span>
+      <button
+        id="nav-clients"
+        class="font-medium text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-1">
+
+        <span>👥</span>
+        <span>Clients (A-Z)</span>
+
       </button>
 
-      <button id="nav-rdv" class="font-medium text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-1">
-        <span>📅</span><span>Planning</span>
+      <button
+        id="nav-rdv"
+        class="font-medium text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-1">
+
+        <span>📅</span>
+        <span>Planning</span>
+
       </button>
 
     </div>
+
   </nav>
 
   <script>
 
+    /* =========================================================
+       OUTILS
+    ========================================================= */
+
     function formatDateFR(dateStr) {
+
       if (!dateStr) return '';
+
       const parts = dateStr.split('-');
-      return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : dateStr;
+
+      return parts.length === 3
+        ? `${parts[2]}/${parts[1]}/${parts[0]}`
+        : dateStr;
     }
 
+
+    /*
+     * Nettoyage du numéro de téléphone.
+     *
+     * Exemple :
+     * 0470 12 34 56
+     * devient :
+     * +32470123456
+     *
+     * +32470123456
+     * reste :
+     * +32470123456
+     */
+
+    function normalizePhone(phone) {
+
+      if (!phone) return '';
+
+      let value = String(phone).trim();
+
+      value = value.replace(/[^\d+]/g, '');
+
+      if (value.startsWith('00')) {
+        value = '+' + value.substring(2);
+      }
+
+      if (value.startsWith('0')) {
+        value = '+32' + value.substring(1);
+      }
+
+      if (value.startsWith('32') && !value.startsWith('+32')) {
+        value = '+' + value;
+      }
+
+      return value;
+    }
+
+
+    /* =========================================================
+       SERVICES
+    ========================================================= */
+
     const SERVICES = [
-      { id: 'w_ess', name: 'WashDetail - Essential', prices: { petite: 19.99, moyenne: 24.99, grande: 29.99, camionnette: 34.99 } },
-      { id: 'w_sig', name: 'WashDetail - Signature', prices: { petite: 49.99, moyenne: 54.99, grande: 59.99, camionnette: 64.99 } },
 
-      { id: 'i_ess', name: 'InteriorDetail - Essential', prices: { petite: 59.99, moyenne: 69.99, grande: 79.99, camionnette: 64.99 } },
-      { id: 'i_pre', name: 'InteriorDetail - Prestige', prices: { petite: 109.99, moyenne: 119.99, grande: 129.99, camionnette: 109.99 } },
-      { id: 'i_sig', name: 'InteriorDetail - Signature', prices: { petite: 209.99, moyenne: 219.99, grande: 229.99, camionnette: 169.99 } },
+      {
+        id: 'w_ess',
+        name: 'WashDetail - Essential',
+        prices: {
+          petite: 19.99,
+          moyenne: 24.99,
+          grande: 29.99,
+          camionnette: 34.99
+        }
+      },
 
-      { id: 'p_ess', name: 'PackDetail - Essential', prices: { petite: 79.99, moyenne: 89.99, grande: 94.99, camionnette: 99.99 } },
-      { id: 'p_pre', name: 'PackDetail - Prestige', prices: { petite: 149.99, moyenne: 159.99, grande: 169.99, camionnette: 169.99 } },
-      { id: 'p_sig', name: 'PackDetail - Signature', prices: { petite: 239.99, moyenne: 249.99, grande: 259.99, camionnette: 229.99 } },
+      {
+        id: 'w_sig',
+        name: 'WashDetail - Signature',
+        prices: {
+          petite: 49.99,
+          moyenne: 54.99,
+          grande: 59.99,
+          camionnette: 64.99
+        }
+      },
 
-      { id: 'pol_1', name: 'Polissage One Step Essential', prices: { petite: 249.99, moyenne: 279.99, grande: 309.99, camionnette: 349.99 } },
-      { id: 'pol_2', name: 'Polissage 2 Step Correction', prices: { petite: 399.99, moyenne: 449.99, grande: 499.99, camionnette: 549.99 } },
+      {
+        id: 'i_ess',
+        name: 'InteriorDetail - Essential',
+        prices: {
+          petite: 59.99,
+          moyenne: 69.99,
+          grande: 79.99,
+          camionnette: 64.99
+        }
+      },
 
-      { id: 'c_12', name: 'Protection Céramique 12-24 mois', prices: { petite: 249.99, moyenne: 279.99, grande: 309.99, camionnette: 349.99 } },
-      { id: 'c_48', name: 'Protection Céramique 48-60 mois', prices: { petite: 549.99, moyenne: 649.99, grande: 749.99, camionnette: 899.99 } },
+      {
+        id: 'i_pre',
+        name: 'InteriorDetail - Prestige',
+        prices: {
+          petite: 109.99,
+          moyenne: 119.99,
+          grande: 129.99,
+          camionnette: 109.99
+        }
+      },
 
-      { id: 'pack_1s_c12', name: '⭐ One-Step + Céramique 12–24 mois', prices: { petite: 499.99, moyenne: 549.99, grande: 599.99, camionnette: 699.99 } },
-      { id: 'pack_1s_c48', name: '👑 One-Step + Céramique 48–60 mois', prices: { petite: 799.99, moyenne: 899.99, grande: 999.99, camionnette: 1199.99 } },
+      {
+        id: 'i_sig',
+        name: 'InteriorDetail - Signature',
+        prices: {
+          petite: 209.99,
+          moyenne: 219.99,
+          grande: 229.99,
+          camionnette: 169.99
+        }
+      },
 
-      { id: 'pack_2s_c12', name: '🔥 Two-Step + Céramique 12–24 mois', prices: { petite: 699.99, moyenne: 749.99, grande: 849.99, camionnette: 949.99 } },
-      { id: 'pack_2s_c48', name: '💎 Two-Step + Céramique 48–60 mois', prices: { petite: 999.99, moyenne: 1099.99, grande: 1199.99, camionnette: 1399.99 } }
+      {
+        id: 'p_ess',
+        name: 'PackDetail - Essential',
+        prices: {
+          petite: 79.99,
+          moyenne: 89.99,
+          grande: 94.99,
+          camionnette: 99.99
+        }
+      },
+
+      {
+        id: 'p_pre',
+        name: 'PackDetail - Prestige',
+        prices: {
+          petite: 149.99,
+          moyenne: 159.99,
+          grande: 169.99,
+          camionnette: 169.99
+        }
+      },
+
+      {
+        id: 'p_sig',
+        name: 'PackDetail - Signature',
+        prices: {
+          petite: 239.99,
+          moyenne: 249.99,
+          grande: 259.99,
+          camionnette: 229.99
+        }
+      },
+
+      {
+        id: 'pol_1',
+        name: 'Polissage One Step Essential',
+        prices: {
+          petite: 249.99,
+          moyenne: 279.99,
+          grande: 309.99,
+          camionnette: 349.99
+        }
+      },
+
+      {
+        id: 'pol_2',
+        name: 'Polissage 2 Step Correction',
+        prices: {
+          petite: 399.99,
+          moyenne: 449.99,
+          grande: 499.99,
+          camionnette: 549.99
+        }
+      },
+
+      {
+        id: 'c_12',
+        name: 'Protection Céramique 12-24 mois',
+        prices: {
+          petite: 249.99,
+          moyenne: 279.99,
+          grande: 309.99,
+          camionnette: 349.99
+        }
+      },
+
+      {
+        id: 'c_48',
+        name: 'Protection Céramique 48-60 mois',
+        prices: {
+          petite: 549.99,
+          moyenne: 649.99,
+          grande: 749.99,
+          camionnette: 899.99
+        }
+      },
+
+      {
+        id: 'pack_1s_c12',
+        name: '⭐ One-Step + Céramique 12–24 mois',
+        prices: {
+          petite: 499.99,
+          moyenne: 549.99,
+          grande: 599.99,
+          camionnette: 699.99
+        }
+      },
+
+      {
+        id: 'pack_1s_c48',
+        name: '👑 One-Step + Céramique 48–60 mois',
+        prices: {
+          petite: 799.99,
+          moyenne: 899.99,
+          grande: 999.99,
+          camionnette: 1199.99
+        }
+      },
+
+      {
+        id: 'pack_2s_c12',
+        name: '🔥 Two-Step + Céramique 12–24 mois',
+        prices: {
+          petite: 699.99,
+          moyenne: 749.99,
+          grande: 849.99,
+          camionnette: 949.99
+        }
+      },
+
+      {
+        id: 'pack_2s_c48',
+        name: '💎 Two-Step + Céramique 48–60 mois',
+        prices: {
+          petite: 999.99,
+          moyenne: 1099.99,
+          grande: 1199.99,
+          camionnette: 1399.99
+        }
+      }
+
     ];
 
-    window.clientsData = JSON.parse(localStorage.getItem('ldd_clients') || '[]');
-    window.bookingsData = JSON.parse(localStorage.getItem('ldd_bookings') || '[]');
-    window.blockedDaysData = JSON.parse(localStorage.getItem('ldd_blocked_days') || '[]');
+
+    /* =========================================================
+       DONNEES
+    ========================================================= */
+
+    window.clientsData =
+      JSON.parse(localStorage.getItem('ldd_clients') || '[]');
+
+    window.bookingsData =
+      JSON.parse(localStorage.getItem('ldd_bookings') || '[]');
+
+    window.blockedDaysData =
+      JSON.parse(localStorage.getItem('ldd_blocked_days') || '[]');
+
 
     window.calendarCurrentDate = new Date();
+
     window.currentCategory = 'moyenne';
     window.currentSeats = 'none';
     window.currentRoof = false;
@@ -455,184 +1197,404 @@
     window.currentDiscountPct = 0;
     window.currentSub = 'none';
 
-    // NOUVEAUX SUPPLÉMENTS
     window.currentWheelProtection = 'none';
     window.currentGlassProtection = 'none';
 
+
+    /* =========================================================
+       SAUVEGARDE
+    ========================================================= */
+
     function saveLocal() {
-      localStorage.setItem('ldd_clients', JSON.stringify(window.clientsData));
-      localStorage.setItem('ldd_bookings', JSON.stringify(window.bookingsData));
-      localStorage.setItem('ldd_blocked_days', JSON.stringify(window.blockedDaysData));
+
+      localStorage.setItem(
+        'ldd_clients',
+        JSON.stringify(window.clientsData)
+      );
+
+      localStorage.setItem(
+        'ldd_bookings',
+        JSON.stringify(window.bookingsData)
+      );
+
+      localStorage.setItem(
+        'ldd_blocked_days',
+        JSON.stringify(window.blockedDaysData)
+      );
 
       window.updateDashboardStats();
       window.renderCalendar();
     }
 
+
+    /* =========================================================
+       NOTIFICATION
+    ========================================================= */
+
     function showNotification(msg) {
+
       const el = document.getElementById('notification');
+
       el.innerText = msg;
+
       el.classList.remove('hidden');
 
-      setTimeout(() => el.classList.add('hidden'), 3500);
+      setTimeout(() => {
+        el.classList.add('hidden');
+      }, 3500);
     }
 
+
+    /* =========================================================
+       DASHBOARD
+    ========================================================= */
+
     window.updateDashboardStats = function() {
-      document.getElementById('stat-total-clients').innerText = window.clientsData.length;
-      document.getElementById('stat-total-rdv').innerText = window.bookingsData.length;
 
-      const totalCA = window.bookingsData.reduce((acc, b) => {
-        const val = parseFloat((b.total_price || '0').replace('€', '').replace(',', '.').trim());
-        return acc + (isNaN(val) ? 0 : val);
-      }, 0);
+      document.getElementById('stat-total-clients').innerText =
+        window.clientsData.length;
 
-      document.getElementById('stat-total-ca').innerText = totalCA.toFixed(0) + ' €';
-      document.getElementById('rdv-count-badge').innerText = window.bookingsData.length + ' RDV';
+      document.getElementById('stat-total-rdv').innerText =
+        window.bookingsData.length;
+
+      const totalCA =
+        window.bookingsData.reduce((acc, b) => {
+
+          const val =
+            parseFloat(
+              String(b.total_price || '0')
+                .replace('€', '')
+                .replace(',', '.')
+                .trim()
+            );
+
+          return acc + (isNaN(val) ? 0 : val);
+
+        }, 0);
+
+      document.getElementById('stat-total-ca').innerText =
+        totalCA.toFixed(0) + ' €';
+
+      document.getElementById('rdv-count-badge').innerText =
+        window.bookingsData.length + ' RDV';
     };
 
+
+    /* =========================================================
+       RECHERCHE CLIENT
+    ========================================================= */
+
     window.searchBookingClient = function() {
-      const q = (document.getElementById('booking-client-search').value || '').toLowerCase().trim();
-      const resultsBox = document.getElementById('booking-client-results');
+
+      const q =
+        (document.getElementById('booking-client-search').value || '')
+          .toLowerCase()
+          .trim();
+
+      const resultsBox =
+        document.getElementById('booking-client-results');
 
       if (!q) {
+
         resultsBox.classList.add('hidden');
+
         return;
       }
 
-      const matches = window.clientsData
-        .filter(c => c.name.toLowerCase().includes(q) || (c.phone && c.phone.includes(q)))
-        .sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
+      const matches =
+        window.clientsData
+          .filter(c =>
+            c.name.toLowerCase().includes(q) ||
+            (c.phone && c.phone.includes(q))
+          )
+          .sort((a, b) =>
+            a.name.localeCompare(
+              b.name,
+              'fr',
+              { sensitivity: 'base' }
+            )
+          );
 
       if (matches.length === 0) {
-        resultsBox.innerHTML = '<div class="p-2 text-xs text-slate-400 italic">Aucun client trouvé</div>';
+
+        resultsBox.innerHTML =
+          '<div class="p-2 text-xs text-slate-400 italic">Aucun client trouvé</div>';
+
       } else {
-        resultsBox.innerHTML = matches.map(c => `
-          <div onclick="window.selectBookingClient('${c.id}')" class="p-2.5 rounded-lg hover:bg-blue-50 cursor-pointer flex justify-between items-center border border-transparent hover:border-blue-100">
-            <div>
-              <div class="text-xs font-bold text-slate-800">${c.name}</div>
-              <div class="text-[10px] text-slate-500">📞 ${c.phone || 'Sans tel'}</div>
+
+        resultsBox.innerHTML =
+          matches.map(c => `
+
+            <div
+              onclick="window.selectBookingClient('${c.id}')"
+              class="p-2.5 rounded-lg hover:bg-blue-50 cursor-pointer flex justify-between items-center border border-transparent hover:border-blue-100">
+
+              <div>
+
+                <div class="text-xs font-bold text-slate-800">
+                  ${c.name}
+                </div>
+
+                <div class="text-[10px] text-slate-500">
+                  📞 ${c.phone || 'Sans tel'}
+                </div>
+
+              </div>
+
+              ${
+                (c.referral_discount_pct || 0) > 0
+                ? `
+                  <span class="text-[10px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                    ${c.referral_discount_pct}%
+                  </span>
+                `
+                : ''
+              }
+
             </div>
 
-            ${(c.referral_discount_pct || 0) > 0 ? `<span class="text-[10px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">${c.referral_discount_pct}%</span>` : ''}
-          </div>
-        `).join('');
+          `).join('');
       }
 
       resultsBox.classList.remove('hidden');
     };
 
+
+    /* =========================================================
+       SELECTION CLIENT
+    ========================================================= */
+
     window.selectBookingClient = function(clientId) {
-      const c = window.clientsData.find(x => x.id === clientId);
+
+      const c =
+        window.clientsData.find(x => x.id === clientId);
+
       if (!c) return;
 
-      document.getElementById('selected-client-id').value = c.id;
-      document.getElementById('client-select').value = c.id;
-      document.getElementById('booking-client-search').value = '';
-      document.getElementById('booking-client-results').classList.add('hidden');
+      document.getElementById('selected-client-id').value =
+        c.id;
 
-      document.getElementById('selected-client-name').innerText = c.name;
+      document.getElementById('client-select').value =
+        c.id;
+
+      document.getElementById('booking-client-search').value =
+        '';
+
+      document.getElementById('booking-client-results')
+        .classList.add('hidden');
+
+      document.getElementById('selected-client-name').innerText =
+        c.name;
 
       document.getElementById('selected-client-info').innerText =
-        `📞 ${c.phone || 'Non renseigné'} ${c.address ? '• 📍 ' + c.address : ''}`;
+        `📞 ${c.phone || 'Non renseigné'} ${
+          c.address ? '• 📍 ' + c.address : ''
+        }`;
 
-      document.getElementById('selected-client-display').classList.remove('hidden');
+      document.getElementById('selected-client-display')
+        .classList.remove('hidden');
 
       if (c.distance_km && c.distance_km > 0) {
-        document.getElementById('distance-km').value = c.distance_km;
+
+        document.getElementById('distance-km').value =
+          c.distance_km;
       }
 
       window.onClientChange();
     };
 
+
     window.clearSelectedBookingClient = function() {
-      document.getElementById('selected-client-id').value = '';
-      document.getElementById('client-select').value = '';
-      document.getElementById('selected-client-display').classList.add('hidden');
-      document.getElementById('booking-client-search').value = '';
+
+      document.getElementById('selected-client-id').value =
+        '';
+
+      document.getElementById('client-select').value =
+        '';
+
+      document.getElementById('selected-client-display')
+        .classList.add('hidden');
+
+      document.getElementById('booking-client-search').value =
+        '';
+
       window.onClientChange();
     };
 
+
+    /* =========================================================
+       JOURS BLOQUES
+    ========================================================= */
+
     window.toggleBlockDay = function() {
-      const selectedDate = document.getElementById('booking-date').value;
+
+      const selectedDate =
+        document.getElementById('booking-date').value;
 
       if (!selectedDate) {
+
         alert('Veuillez sélectionner une date.');
+
         return;
       }
 
-      const idx = window.blockedDaysData.indexOf(selectedDate);
+      const idx =
+        window.blockedDaysData.indexOf(selectedDate);
 
       if (idx > -1) {
+
         window.blockedDaysData.splice(idx, 1);
-        showNotification(`Journée du ${formatDateFR(selectedDate)} débloquée !`);
+
+        showNotification(
+          `Journée du ${formatDateFR(selectedDate)} débloquée !`
+        );
+
       } else {
+
         window.blockedDaysData.push(selectedDate);
-        showNotification(`Journée du ${formatDateFR(selectedDate)} bloquée`);
+
+        showNotification(
+          `Journée du ${formatDateFR(selectedDate)} bloquée`
+        );
       }
 
       saveLocal();
     };
 
+
+    /* =========================================================
+       CALENDRIER
+    ========================================================= */
+
     window.changeCalendarMonth = function(delta) {
-      window.calendarCurrentDate.setMonth(window.calendarCurrentDate.getMonth() + delta);
+
+      window.calendarCurrentDate.setMonth(
+        window.calendarCurrentDate.getMonth() + delta
+      );
+
       window.renderCalendar();
     };
+
 
     window.selectCalendarDate = function(dateStr) {
-      document.getElementById('booking-date').value = dateStr;
+
+      document.getElementById('booking-date').value =
+        dateStr;
+
       window.renderCalendar();
     };
 
+
     window.renderCalendar = function() {
-      const year = window.calendarCurrentDate.getFullYear();
-      const month = window.calendarCurrentDate.getMonth();
+
+      const year =
+        window.calendarCurrentDate.getFullYear();
+
+      const month =
+        window.calendarCurrentDate.getMonth();
 
       const monthNames = [
-        "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-        "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        "Janvier",
+        "Février",
+        "Mars",
+        "Avril",
+        "Mai",
+        "Juin",
+        "Juillet",
+        "Août",
+        "Septembre",
+        "Octobre",
+        "Novembre",
+        "Décembre"
       ];
 
-      document.getElementById('calendar-month-title').innerText = `${monthNames[month]} ${year}`;
+      document.getElementById('calendar-month-title').innerText =
+        `${monthNames[month]} ${year}`;
 
-      const grid = document.getElementById('calendar-days-grid');
+      const grid =
+        document.getElementById('calendar-days-grid');
+
       grid.innerHTML = '';
 
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
+      const firstDay =
+        new Date(year, month, 1);
 
-      let startDay = firstDay.getDay() - 1;
-      if (startDay === -1) startDay = 6;
+      const lastDay =
+        new Date(year, month + 1, 0);
 
-      const totalDays = lastDay.getDate();
-      const selectedDateVal = document.getElementById('booking-date').value;
+      let startDay =
+        firstDay.getDay() - 1;
 
-      const isBlocked = window.blockedDaysData.includes(selectedDateVal);
-      const btnBlock = document.getElementById('btn-toggle-block-day');
-      const labelBlock = document.getElementById('block-day-label');
+      if (startDay === -1) {
+        startDay = 6;
+      }
+
+      const totalDays =
+        lastDay.getDate();
+
+      const selectedDateVal =
+        document.getElementById('booking-date').value;
+
+      const isBlocked =
+        window.blockedDaysData.includes(selectedDateVal);
+
+      const btnBlock =
+        document.getElementById('btn-toggle-block-day');
+
+      const labelBlock =
+        document.getElementById('block-day-label');
 
       if (isBlocked) {
-        btnBlock.className = "w-full py-2.5 px-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2 shadow-md";
-        labelBlock.innerText = `Débloquer la journée du ${formatDateFR(selectedDateVal)}`;
+
+        btnBlock.className =
+          "w-full py-2.5 px-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2 shadow-md";
+
+        labelBlock.innerText =
+          `Débloquer la journée du ${formatDateFR(selectedDateVal)}`;
+
       } else {
-        btnBlock.className = "w-full py-2.5 px-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2";
-        labelBlock.innerText = `Bloquer la journée du ${formatDateFR(selectedDateVal)}`;
+
+        btnBlock.className =
+          "w-full py-2.5 px-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center space-x-2";
+
+        labelBlock.innerText =
+          `Bloquer la journée du ${formatDateFR(selectedDateVal)}`;
       }
+
 
       for (let i = 0; i < startDay; i++) {
-        grid.appendChild(document.createElement('div'));
+
+        grid.appendChild(
+          document.createElement('div')
+        );
       }
 
+
       for (let day = 1; day <= totalDays; day++) {
-        const currentDateObj = new Date(year, month, day);
-        const dayOfWeek = currentDateObj.getDay();
+
+        const currentDateObj =
+          new Date(year, month, day);
+
+        const dayOfWeek =
+          currentDateObj.getDay();
 
         const dateStr =
           `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-        const hasBooking = window.bookingsData.some(b => b.date === dateStr);
-        const dayIsBlocked = window.blockedDaysData.includes(dateStr);
-        const cantonSelected = selectedDateVal === dateStr;
+        const hasBooking =
+          window.bookingsData.some(
+            b => b.date === dateStr
+          );
 
-        const cell = document.createElement('button');
+        const dayIsBlocked =
+          window.blockedDaysData.includes(dateStr);
+
+        const cantonSelected =
+          selectedDateVal === dateStr;
+
+        const cell =
+          document.createElement('button');
+
         cell.type = 'button';
 
         let isClickable = true;
@@ -640,558 +1602,1235 @@
         let dotShapeClass = 'w-2 h-2 rounded-full';
 
         if (dayIsBlocked) {
+
           dotColor = 'bg-slate-300';
+
         } else if (hasBooking) {
+
           dotColor = 'bg-rose-600';
+
         } else if (dayOfWeek >= 2 && dayOfWeek <= 5) {
+
           dotColor = 'bg-white border border-slate-300';
+
         } else if (dayOfWeek === 1 || dayOfWeek === 6) {
+
           dotColor = 'bg-emerald-500';
+
         } else if (dayOfWeek === 0) {
+
           dotColor = 'bg-slate-300';
+
           isClickable = false;
         }
 
-        let baseClasses = "h-11 rounded-xl border flex flex-col items-center justify-between py-1.5 text-xs transition-all ";
+        let baseClasses =
+          "h-11 rounded-xl border flex flex-col items-center justify-between py-1.5 text-xs transition-all ";
 
         if (dayIsBlocked) {
-          baseClasses += "bg-slate-200 border-slate-300 text-slate-400 font-semibold cursor-not-allowed";
+
+          baseClasses +=
+            "bg-slate-200 border-slate-300 text-slate-400 font-semibold cursor-not-allowed";
+
         } else if (!isClickable) {
-          baseClasses += "bg-slate-100 border-slate-200 text-slate-300 cursor-not-allowed";
+
+          baseClasses +=
+            "bg-slate-100 border-slate-200 text-slate-300 cursor-not-allowed";
+
         } else if (cantonSelected) {
-          baseClasses += "bg-blue-50 border-blue-600 text-blue-900 font-bold ring-1 ring-blue-600";
+
+          baseClasses +=
+            "bg-blue-50 border-blue-600 text-blue-900 font-bold ring-1 ring-blue-600";
+
         } else {
-          baseClasses += "bg-white border-slate-200 text-slate-700 hover:border-slate-300";
+
+          baseClasses +=
+            "bg-white border-slate-200 text-slate-700 hover:border-slate-300";
         }
 
         cell.className = baseClasses;
-        cell.innerHTML = `<span>${day}</span>${dotColor ? `<span class="${dotShapeClass} ${dotColor}"></span>` : ''}`;
+
+        cell.innerHTML =
+          `<span>${day}</span>${
+            dotColor
+            ? `<span class="${dotShapeClass} ${dotColor}"></span>`
+            : ''
+          }`;
 
         if (isClickable) {
-          cell.onclick = () => window.selectCalendarDate(dateStr);
+
+          cell.onclick =
+            () => window.selectCalendarDate(dateStr);
         }
 
         grid.appendChild(cell);
       }
     };
 
-    function renderClientsSelect() {
-      const sel = document.getElementById('client-select');
 
-      const sorted = [...window.clientsData].sort(
-        (a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' })
-      );
+    /* =========================================================
+       SELECT CLIENTS
+    ========================================================= */
+
+    function renderClientsSelect() {
+
+      const sel =
+        document.getElementById('client-select');
+
+      const sorted =
+        [...window.clientsData].sort(
+          (a, b) =>
+            a.name.localeCompare(
+              b.name,
+              'fr',
+              { sensitivity: 'base' }
+            )
+        );
 
       sel.innerHTML =
         '<option value="">-- Client --</option>' +
-        sorted.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        sorted.map(c =>
+          `<option value="${c.id}">${c.name}</option>`
+        ).join('');
     }
 
+
+    /* =========================================================
+       LISTE CLIENTS
+    ========================================================= */
+
     window.filterClients = function() {
-      const q = (document.getElementById('search-client').value || '').toLowerCase();
+
+      const q =
+        (document.getElementById('search-client').value || '')
+          .toLowerCase();
+
       renderClientsList(q);
     };
 
+
     function renderClientsList(filterQuery = '') {
-      const list = document.getElementById('clients-list');
 
-      const sorted = [...window.clientsData].sort(
-        (a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' })
-      );
+      const list =
+        document.getElementById('clients-list');
 
-      const filtered = sorted.filter(
-        c => c.name.toLowerCase().includes(filterQuery) ||
-        (c.phone && c.phone.includes(filterQuery))
-      );
+      const sorted =
+        [...window.clientsData].sort(
+          (a, b) =>
+            a.name.localeCompare(
+              b.name,
+              'fr',
+              { sensitivity: 'base' }
+            )
+        );
+
+      const filtered =
+        sorted.filter(
+          c =>
+            c.name.toLowerCase().includes(filterQuery) ||
+            (c.phone && c.phone.includes(filterQuery))
+        );
 
       if (filtered.length === 0) {
+
         list.innerHTML =
           '<div class="text-xs text-slate-400 italic p-3 text-center border border-dashed rounded-xl">Aucun client.</div>';
+
         return;
       }
 
-      list.innerHTML = filtered.map(c => `
-        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex justify-between items-center space-x-2 shadow-sm">
+      list.innerHTML =
+        filtered.map(c => `
 
-          <div class="space-y-1">
-            <div class="font-bold text-slate-900 text-sm flex items-center space-x-2">
-              <span>${c.name}</span>
-              <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono uppercase">A-Z</span>
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex justify-between items-center space-x-2 shadow-sm">
+
+            <div class="space-y-1">
+
+              <div class="font-bold text-slate-900 text-sm flex items-center space-x-2">
+
+                <span>${c.name}</span>
+
+                <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono uppercase">
+                  A-Z
+                </span>
+
+              </div>
+
+              <div class="text-xs text-slate-500">
+                📞 ${c.phone || 'Non renseigné'}
+              </div>
+
+              ${
+                c.address
+                ? `<div class="text-[11px] text-slate-500">📍 ${c.address}</div>`
+                : ''
+              }
+
+              <div class="text-xs text-emerald-600 font-bold pt-1">
+                Cagnotte parrainage : ${c.referral_discount_pct || 0}%
+              </div>
+
             </div>
 
-            <div class="text-xs text-slate-500">📞 ${c.phone || 'Non renseigné'}</div>
+            <div class="flex flex-col items-end space-y-2">
 
-            ${c.address ? `<div class="text-[11px] text-slate-500">📍 ${c.address}</div>` : ''}
+              <button
+                onclick="window.addReferral('${c.id}')"
+                class="px-3 py-1.5 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold rounded-xl hover:bg-blue-100">
+                +10%
+              </button>
 
-            <div class="text-xs text-emerald-600 font-bold pt-1">
-              Cagnotte parrainage : ${c.referral_discount_pct || 0}%
+              <button
+                onclick="window.deleteClient('${c.id}')"
+                class="px-3 py-1 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold rounded-xl hover:bg-rose-100">
+                Supprimer
+              </button>
+
             </div>
+
           </div>
 
-          <div class="flex flex-col items-end space-y-2">
-            <button onclick="window.addReferral('${c.id}')" class="px-3 py-1.5 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold rounded-xl hover:bg-blue-100">
-              +10%
-            </button>
-
-            <button onclick="window.deleteClient('${c.id}')" class="px-3 py-1 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold rounded-xl hover:bg-rose-100">
-              Supprimer
-            </button>
-          </div>
-        </div>
-      `).join('');
+        `).join('');
     }
 
+
+    /* =========================================================
+       MESSAGES
+    ========================================================= */
+
     function generateMessageText(booking, type) {
-      const formattedDate = formatDateFR(booking.date);
+
+      const formattedDate =
+        formatDateFR(booking.date);
+
+
+      /*
+       * CONFIRMATION
+       */
 
       if (type === 'confirm') {
-        return `Bonjour ${booking.client_name},\n\nVotre rendez-vous est bien confirmé chez L'As Du Détail :\n\n📅 Date et heure : ${formattedDate} à ${booking.time}\n📍 Lieu : ${booking.lieu}\n🚘 Véhicule : ${booking.category.toUpperCase()}\n🛠️ Prestation : ${booking.service_name}\n🔄 Abonnement : ${booking.sub === 'none' ? 'Ponctuel' : booking.sub}\n💰 Prix à payer le jour du rendez-vous : ${booking.total_price}\n\nMerci pour votre confiance et à très bientôt !\n\nAlex — L’As Du Détail`;
+
+        return `Bonjour ${booking.client_name},
+
+Votre rendez-vous chez L’As Du Détail est bien confirmé.
+
+📅 ${formattedDate} à ${booking.time}
+📍 ${booking.lieu}
+🚘 Véhicule : ${booking.category.toUpperCase()}
+🛠️ Prestation : ${booking.service_name}
+🔄 Abonnement : ${booking.sub === 'none' ? 'Ponctuel' : booking.sub}
+💰 Montant à régler le jour du rendez-vous : ${booking.total_price}
+
+Nous vous remercions pour votre confiance et nous nous réjouissons de prendre soin de votre véhicule.
+
+À très bientôt,
+
+Alex — L’As Du Détail
+Plus qu’un nettoyage, une signature.`;
       }
+
+
+      /*
+       * RAPPEL
+       * CONSERVÉ COMME DEMANDÉ
+       */
 
       if (type === 'rappel') {
-        return `Bonjour ${booking.client_name},\n\nPetit rappel pour votre rendez-vous prévu chez L'As Du Détail :\n\n📅 Date et heure : ${formattedDate} à ${booking.time}\n📍 Lieu : ${booking.lieu}\n🚘 Véhicule : ${booking.category.toUpperCase()}\n🛠️ Prestation : ${booking.service_name}\n\nHâte d'accueillir votre véhicule à l'atelier. À très vite !\n\nAlex — L’As Du Détail`;
+
+        return `Bonjour ${booking.client_name},
+
+Petit rappel pour votre rendez-vous prévu chez L'As Du Détail :
+
+📅 Date et heure : ${formattedDate} à ${booking.time}
+📍 Lieu : ${booking.lieu}
+🚘 Véhicule : ${booking.category.toUpperCase()}
+🛠️ Prestation : ${booking.service_name}
+
+Hâte d'accueillir votre véhicule à l'atelier. À très vite !
+
+Alex — L’As Du Détail`;
       }
 
+
+      /*
+       * AVIS GOOGLE
+       */
+
       if (type === 'avis') {
-        return `Bonjour ${booking.client_name},\n\nVotre véhicule brille tellement qu'il va falloir sortir les lunettes de soleil ! 😎✨\n\nSi le résultat vous plaît, pourriez-vous prendre 30 secondes pour me laisser un avis Google ? Ça m'aide énormément à faire tourner l'atelier.\n\n🔗 https://g.page/r/CTt-olIItnbIEAE/review\n\nMerci pour votre confiance et à très bientôt !\n\nAlex — L’As Du Détail`;
+
+        return `Bonjour ${booking.client_name},
+
+Nous espérons que vous êtes pleinement satisfait du résultat obtenu sur votre véhicule. ✨
+
+Si vous avez apprécié votre expérience chez L’As Du Détail, nous vous remercions d’avance pour le temps accordé à partager votre expérience avec nous.
+
+⭐ Votre avis nous aide énormément à faire connaître l’atelier :
+https://g.page/r/CTt-olIItnbIEAE/review
+
+Merci encore pour votre confiance.
+
+À très bientôt,
+
+Alex — L’As Du Détail`;
       }
+
 
       return '';
     }
 
+
+    /* =========================================================
+       OUVERTURE DIRECTE DE MESSAGES
+    ========================================================= */
+
     window.sendBookingMessage = function(bookingId, type) {
-      const b = window.bookingsData.find(x => x.id === bookingId);
-      if (!b) return;
 
-      const msgText = generateMessageText(b, type);
+      const b =
+        window.bookingsData.find(
+          x => x.id === bookingId
+        );
 
-      document.getElementById('message-output-box').classList.remove('hidden');
-      document.getElementById('message-text').value = msgText;
+      if (!b) {
 
-      const phoneClean = b.client_phone ? b.client_phone.replace(/\D/g, '') : '';
+        showNotification(
+          "Rendez-vous introuvable."
+        );
 
-      const btnSms = document.getElementById('btn-sms-msg');
-      btnSms.href = `sms:${phoneClean}?body=${encodeURIComponent(msgText)}`;
+        return;
+      }
+
+
+      const msgText =
+        generateMessageText(b, type);
+
+
+      if (!b.client_phone) {
+
+        alert(
+          `Aucun numéro de téléphone n'est enregistré pour ${b.client_name}.`
+        );
+
+        return;
+      }
+
+
+      const phoneClean =
+        normalizePhone(b.client_phone);
+
+
+      if (!phoneClean) {
+
+        alert(
+          `Le numéro de téléphone de ${b.client_name} est invalide.`
+        );
+
+        return;
+      }
+
+
+      /*
+       * Aperçu conservé dans l'application
+       */
+
+      const messageBox =
+        document.getElementById('message-output-box');
+
+      const messageText =
+        document.getElementById('message-text');
+
+      if (messageBox && messageText) {
+
+        messageBox.classList.remove('hidden');
+
+        messageText.value =
+          msgText;
+      }
+
+
+      /*
+       * Lien SMS pour le bouton de la zone d'aperçu
+       */
+
+      const btnSms =
+        document.getElementById('btn-sms-msg');
+
+      if (btnSms) {
+
+        btnSms.href =
+          `sms:${phoneClean}&body=${encodeURIComponent(msgText)}`;
+      }
+
+
+      /*
+       * OUVERTURE DIRECTE DE L'APPLICATION MESSAGES
+       *
+       * Sur iPhone :
+       *
+       * Planning
+       * ↓
+       * Confirm.
+       * ↓
+       * Messages
+       * ↓
+       * destinataire + texte déjà rempli
+       * ↓
+       * il reste uniquement à appuyer sur Envoyer
+       */
+
+      const smsUrl =
+        `sms:${phoneClean}&body=${encodeURIComponent(msgText)}`;
+
+      window.location.href =
+        smsUrl;
     };
 
+
+    /* =========================================================
+       PLANNING
+    ========================================================= */
+
     function renderBookingsList() {
-      const list = document.getElementById('bookings-list');
+
+      const list =
+        document.getElementById('bookings-list');
 
       if (window.bookingsData.length === 0) {
+
         list.innerHTML =
           '<div class="text-xs text-slate-400 italic p-4 text-center border border-dashed rounded-xl">Aucun rendez-vous.</div>';
+
         return;
       }
 
-      const sortedBookings = [...window.bookingsData].sort(
-        (a, b) =>
-          `${a.date}T${a.time || '00:00'}`
-            .localeCompare(`${b.date}T${b.time || '00:00'}`)
-      );
 
-      list.innerHTML = sortedBookings.map(b => `
-        <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+      const sortedBookings =
+        [...window.bookingsData].sort(
+          (a, b) =>
+            `${a.date}T${a.time || '00:00'}`
+              .localeCompare(
+                `${b.date}T${b.time || '00:00'}`
+              )
+        );
 
-          <div class="flex justify-between items-start">
-            <div>
-              <div class="font-extrabold text-blue-600 text-sm">
-                📅 ${formatDateFR(b.date)} à ${b.time}
+
+      list.innerHTML =
+        sortedBookings.map(b => `
+
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+
+            <div class="flex justify-between items-start">
+
+              <div>
+
+                <div class="font-extrabold text-blue-600 text-sm">
+                  📅 ${formatDateFR(b.date)} à ${b.time}
+                </div>
+
+                <div class="font-bold text-slate-900 text-base">
+                  ${b.client_name}
+                </div>
+
               </div>
 
-              <div class="font-bold text-slate-900 text-base">
-                ${b.client_name}
-              </div>
+              <span class="text-xs px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg shadow-sm">
+                ${b.total_price}
+              </span>
+
             </div>
 
-            <span class="text-xs px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg shadow-sm">
-              ${b.total_price}
-            </span>
+
+            <div class="text-xs text-slate-700">
+              🛠️ ${b.service_name} (${b.category.toUpperCase()})
+            </div>
+
+
+            <div class="text-xs text-slate-500">
+              📍 ${b.lieu}
+            </div>
+
+
+            ${
+              b.sub
+              ? `
+                <div class="text-xs text-slate-500">
+                  🔄 Abonnement :
+                  ${b.sub === 'none' ? 'Ponctuel' : b.sub}
+                </div>
+              `
+              : ''
+            }
+
+
+            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
+
+              <button
+                onclick="window.sendBookingMessage('${b.id}', 'confirm')"
+                class="py-2 bg-blue-50 text-blue-700 text-[11px] font-bold rounded-xl hover:bg-blue-100 active:scale-95 transition-all">
+
+                Envoyer
+
+              </button>
+
+
+              <button
+                onclick="window.sendBookingMessage('${b.id}', 'rappel')"
+                class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl hover:bg-slate-100 active:scale-95 transition-all">
+
+                Rappel
+
+              </button>
+
+
+              <button
+                onclick="window.sendBookingMessage('${b.id}', 'avis')"
+                class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl hover:bg-slate-100 active:scale-95 transition-all">
+
+                Avis
+
+              </button>
+
+            </div>
+
+
+            <div class="flex justify-between items-center pt-1">
+
+              <span class="text-[10px] text-emerald-600 font-semibold">
+                ● Confirmé
+              </span>
+
+              <button
+                onclick="window.deleteBooking('${b.id}')"
+                class="text-[11px] text-rose-600 hover:underline font-bold">
+
+                Supprimer
+
+              </button>
+
+            </div>
+
           </div>
 
-          <div class="text-xs text-slate-700">
-            🛠️ ${b.service_name} (${b.category.toUpperCase()})
-          </div>
-
-          <div class="text-xs text-slate-500">
-            📍 ${b.lieu}
-          </div>
-
-          <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
-            <button onclick="window.sendBookingMessage('${b.id}', 'confirm')" class="py-2 bg-blue-50 text-blue-700 text-[11px] font-bold rounded-xl">
-              Confirm.
-            </button>
-
-            <button onclick="window.sendBookingMessage('${b.id}', 'rappel')" class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl">
-              Rappel
-            </button>
-
-            <button onclick="window.sendBookingMessage('${b.id}', 'avis')" class="py-2 bg-slate-50 text-slate-700 text-[11px] font-bold rounded-xl">
-              Avis
-            </button>
-          </div>
-
-          <div class="flex justify-between items-center pt-1">
-            <span class="text-[10px] text-emerald-600 font-semibold">● Confirmé</span>
-
-            <button onclick="window.deleteBooking('${b.id}')" class="text-[11px] text-rose-600 hover:underline font-bold">
-              Supprimer
-            </button>
-          </div>
-        </div>
-      `).join('');
+        `).join('');
     }
 
+
+    /* =========================================================
+       AJOUT CLIENT
+    ========================================================= */
+
     window.addNewClient = function() {
-      const name = document.getElementById('new-client-name').value.trim();
+
+      const name =
+        document.getElementById('new-client-name').value.trim();
 
       if (!name) {
+
         alert("Saisissez le nom du client.");
+
         return;
       }
 
+
       const newClient = {
+
         id: 'c_' + Date.now(),
+
         name,
-        phone: document.getElementById('new-client-phone').value.trim(),
-        address: document.getElementById('new-client-address').value.trim(),
-        distance_km: parseFloat(document.getElementById('new-client-distance').value) || 0,
-        referral_discount_pct: parseInt(document.getElementById('new-client-discount').value) || 0
+
+        phone:
+          document.getElementById('new-client-phone')
+            .value
+            .trim(),
+
+        address:
+          document.getElementById('new-client-address')
+            .value
+            .trim(),
+
+        distance_km:
+          parseFloat(
+            document.getElementById('new-client-distance').value
+          ) || 0,
+
+        referral_discount_pct:
+          parseInt(
+            document.getElementById('new-client-discount').value
+          ) || 0
+
       };
+
 
       window.clientsData.push(newClient);
 
       saveLocal();
 
-      showNotification(`Client ${name} ajouté !`);
 
-      document.getElementById('new-client-name').value = '';
-      document.getElementById('new-client-phone').value = '';
-      document.getElementById('new-client-address').value = '';
-      document.getElementById('new-client-distance').value = '';
-      document.getElementById('new-client-discount').value = '0';
-
-      renderClientsList();
-      renderClientsSelect();
-    };
-
-    window.deleteClient = function(id) {
-      if (!confirm("Supprimer ce client ?")) return;
-
-      window.clientsData = window.clientsData.filter(x => x.id !== id);
-
-      saveLocal();
-
-      renderClientsList();
-      renderClientsSelect();
-    };
-
-    window.addReferral = function(id) {
-      const c = window.clientsData.find(x => x.id === id);
-      if (!c) return;
-
-      c.referral_discount_pct = Math.min(
-        100,
-        (c.referral_discount_pct || 0) + 10
+      showNotification(
+        `Client ${name} ajouté !`
       );
 
+
+      document.getElementById('new-client-name').value =
+        '';
+
+      document.getElementById('new-client-phone').value =
+        '';
+
+      document.getElementById('new-client-address').value =
+        '';
+
+      document.getElementById('new-client-distance').value =
+        '';
+
+      document.getElementById('new-client-discount').value =
+        '0';
+
+
+      renderClientsList();
+
+      renderClientsSelect();
+    };
+
+
+    /* =========================================================
+       SUPPRESSION CLIENT
+    ========================================================= */
+
+    window.deleteClient = function(id) {
+
+      if (!confirm("Supprimer ce client ?")) return;
+
+      window.clientsData =
+        window.clientsData.filter(
+          x => x.id !== id
+        );
+
       saveLocal();
 
       renderClientsList();
-      renderClientsSelect();
 
-      showNotification(`+10% attribués à ${c.name}`);
+      renderClientsSelect();
     };
 
+
+    /* =========================================================
+       PARRAINAGE
+    ========================================================= */
+
+    window.addReferral = function(id) {
+
+      const c =
+        window.clientsData.find(
+          x => x.id === id
+        );
+
+      if (!c) return;
+
+      c.referral_discount_pct =
+        Math.min(
+          100,
+          (c.referral_discount_pct || 0) + 10
+        );
+
+      saveLocal();
+
+      renderClientsList();
+
+      renderClientsSelect();
+
+      showNotification(
+        `+10% attribués à ${c.name}`
+      );
+    };
+
+
+    /* =========================================================
+       ENREGISTREMENT RDV
+    ========================================================= */
+
     window.saveBooking = function() {
+
       const clientId =
         document.getElementById('selected-client-id').value ||
         document.getElementById('client-select').value;
 
-      const date = document.getElementById('booking-date').value;
-      const time = document.getElementById('booking-time').value || '09:00';
+      const date =
+        document.getElementById('booking-date').value;
+
+      const time =
+        document.getElementById('booking-time').value ||
+        '09:00';
+
 
       if (!clientId || !date) {
-        alert('Sélectionnez un client et une date.');
+
+        alert(
+          'Sélectionnez un client et une date.'
+        );
+
         return;
       }
+
 
       if (window.blockedDaysData.includes(date)) {
-        alert("⚠️ Cette journée est bloquée. Débloquez-la pour planifier un RDV.");
+
+        alert(
+          "⚠️ Cette journée est bloquée. Débloquez-la pour planifier un RDV."
+        );
+
         return;
       }
 
-      const c = window.clientsData.find(x => x.id === clientId);
-      const sId = document.getElementById('service-select').value;
-      const sObj = SERVICES.find(x => x.id === sId);
-      const totalVal = document.getElementById('total-price').innerText;
 
-      const newBooking = {
-        id: 'b_' + Date.now(),
-        client_id: clientId,
-        client_name: c ? c.name : 'Inconnu',
-        client_phone: c ? c.phone : '',
-        date,
-        time,
-        service_name: sObj ? sObj.name : '',
-        category: window.currentCategory,
-        sub: window.currentSub,
-        lieu: window.currentIsAtelier
-          ? "Atelier (Rue de Prâle 139, Waremme)"
-          : "À Domicile",
-        total_price: totalVal
-      };
-
-      window.bookingsData.push(newBooking);
-
-      if (window.currentDiscountPct > 0 && c) {
-        c.referral_discount_pct = Math.max(
-          0,
-          (c.referral_discount_pct || 0) - window.currentDiscountPct
+      const c =
+        window.clientsData.find(
+          x => x.id === clientId
         );
+
+
+      const sId =
+        document.getElementById('service-select').value;
+
+
+      const sObj =
+        SERVICES.find(
+          x => x.id === sId
+        );
+
+
+      const totalVal =
+        document.getElementById('total-price').innerText;
+
+
+      /*
+       * Informations complémentaires
+       */
+
+      let seatLabel = 'Aucun';
+
+      if (window.currentSeats === '1_seat') {
+        seatLabel = '1 siège';
       }
 
+      if (window.currentSeats === '2_seats') {
+        seatLabel = '2 sièges';
+      }
+
+      if (window.currentSeats === 'all_seats') {
+        seatLabel = 'Tous les sièges';
+      }
+
+
+      let wheelLabel =
+        window.currentWheelProtection === 'ceramic'
+          ? 'Céramique 4 jantes'
+          : 'Aucune';
+
+
+      let glassLabel = 'Aucune';
+
+      if (window.currentGlassProtection === 'windshield') {
+        glassLabel = 'Pare-brise seul';
+      }
+
+      if (window.currentGlassProtection === 'all') {
+        glassLabel = 'Toutes les vitres';
+      }
+
+      if (window.currentGlassProtection === 'wheel_combo') {
+        glassLabel = 'Jantes + toutes les vitres';
+      }
+
+
+      const newBooking = {
+
+        id: 'b_' + Date.now(),
+
+        client_id:
+          clientId,
+
+        client_name:
+          c ? c.name : 'Inconnu',
+
+        client_phone:
+          c ? c.phone : '',
+
+        client_address:
+          c ? c.address : '',
+
+        date,
+
+        time,
+
+        service_name:
+          sObj ? sObj.name : '',
+
+        category:
+          window.currentCategory,
+
+        sub:
+          window.currentSub,
+
+        lieu:
+          window.currentIsAtelier
+            ? "Atelier (Rue de Prâle 139, Waremme)"
+            : "À Domicile",
+
+        distance_km:
+          window.currentIsAtelier
+            ? 0
+            : parseFloat(
+                document.getElementById('distance-km').value
+              ) || 0,
+
+        seats:
+          seatLabel,
+
+        roof:
+          window.currentRoof,
+
+        wheel_protection:
+          wheelLabel,
+
+        glass_protection:
+          glassLabel,
+
+        referral_discount_pct:
+          window.currentDiscountPct,
+
+        total_price:
+          totalVal
+      };
+
+
+      window.bookingsData.push(
+        newBooking
+      );
+
+
+      if (
+        window.currentDiscountPct > 0 &&
+        c
+      ) {
+
+        c.referral_discount_pct =
+          Math.max(
+            0,
+            (c.referral_discount_pct || 0) -
+            window.currentDiscountPct
+          );
+      }
+
+
       saveLocal();
+
       renderBookingsList();
+
       renderClientsList();
 
       window.clearSelectedBookingClient();
 
-      showNotification("RDV Enregistré !");
+
+      showNotification(
+        "RDV Enregistré !"
+      );
     };
 
+
+    /* =========================================================
+       SUPPRESSION RDV
+    ========================================================= */
+
     window.deleteBooking = function(id) {
+
       if (!confirm("Annuler le RDV ?")) return;
 
-      window.bookingsData = window.bookingsData.filter(x => x.id !== id);
+      window.bookingsData =
+        window.bookingsData.filter(
+          x => x.id !== id
+        );
 
       saveLocal();
+
       renderBookingsList();
     };
 
-    window.renderServicesOptions = function() {
-      const sel = document.getElementById('service-select');
 
-      sel.innerHTML = SERVICES.map(
-        s => `<option value="${s.id}">${s.name} — ${s.prices[window.currentCategory].toFixed(2)} €</option>`
-      ).join('');
+    /* =========================================================
+       SERVICES
+    ========================================================= */
+
+    window.renderServicesOptions = function() {
+
+      const sel =
+        document.getElementById('service-select');
+
+      sel.innerHTML =
+        SERVICES.map(
+          s =>
+            `<option value="${s.id}">
+              ${s.name} — ${s.prices[window.currentCategory].toFixed(2)} €
+            </option>`
+        ).join('');
     };
 
+
+    /* =========================================================
+       CATEGORIE
+    ========================================================= */
+
     window.setCategory = function(cat) {
-      window.currentCategory = cat;
+
+      window.currentCategory =
+        cat;
 
       document.querySelectorAll('.cat-btn').forEach(
-        b => b.className =
-          "cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all"
+        b =>
+          b.className =
+            "cat-btn p-3 rounded-xl border text-left bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 transition-all"
       );
+
 
       document.getElementById('cat-' + cat).className =
         "cat-btn p-3 rounded-xl border text-left bg-blue-50 border-blue-600 text-blue-900 font-bold shadow-sm transition-all";
 
+
       window.renderServicesOptions();
+
       window.calculateTotal();
     };
 
+
+    /* =========================================================
+       ABONNEMENT
+    ========================================================= */
+
     window.setSub = function(sub) {
-      window.currentSub = sub;
+
+      window.currentSub =
+        sub;
 
       document.querySelectorAll('.sub-btn').forEach(
-        b => b.className =
-          "sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all"
+        b =>
+          b.className =
+            "sub-btn p-2.5 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 font-medium hover:bg-slate-100 transition-all"
       );
+
 
       document.getElementById('sub-' + sub).className =
         "sub-btn p-2.5 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all";
 
+
       window.calculateTotal();
     };
 
+
+    /* =========================================================
+       SIEGES
+    ========================================================= */
+
     window.setSeats = function(s) {
-      window.currentSeats = s;
+
+      window.currentSeats =
+        s;
 
       document.querySelectorAll('.seat-btn').forEach(
-        b => b.className =
-          "seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all"
+        b =>
+          b.className =
+            "seat-btn p-2 rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition-all"
       );
+
 
       document.getElementById('seat-' + s).className =
         "seat-btn p-2 rounded-lg border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all";
 
+
       window.calculateTotal();
     };
 
+
+    /* =========================================================
+       CIEL DE TOIT
+    ========================================================= */
+
     window.toggleRoof = function() {
-      window.currentRoof = !window.currentRoof;
+
+      window.currentRoof =
+        !window.currentRoof;
+
 
       document.getElementById('roof-btn').className =
         window.currentRoof
+
           ? "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-blue-50 border-blue-600 text-blue-900 font-bold mt-2 transition-all"
+
           : "w-full p-3 rounded-xl border flex items-center justify-between text-xs bg-slate-50 border-slate-200 text-slate-600 mt-2 transition-all";
+
 
       window.calculateTotal();
     };
 
-    /*
-     * NOUVEAU :
-     * Protection céramique des jantes.
-     */
+
+    /* =========================================================
+       JANTES
+    ========================================================= */
+
     window.setWheelProtection = function(type) {
-      window.currentWheelProtection = type;
+
+      window.currentWheelProtection =
+        type;
+
 
       document.querySelectorAll('.wheel-btn').forEach(
-        b => b.className =
-          "wheel-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
+        b =>
+          b.className =
+            "wheel-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
       );
 
-      const active = document.getElementById(
-        type === 'none' ? 'wheel-none' : 'wheel-ceramic'
-      );
+
+      const active =
+        document.getElementById(
+          type === 'none'
+            ? 'wheel-none'
+            : 'wheel-ceramic'
+        );
+
 
       active.className =
         "wheel-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center";
 
-      /*
-       * Si on choisit les jantes seules alors que
-       * le forfait combiné est actif, on repasse
-       * les vitres à aucune.
-       */
-      if (type === 'ceramic' && window.currentGlassProtection === 'wheel_combo') {
-        window.currentGlassProtection = 'none';
+
+      if (
+        type === 'ceramic' &&
+        window.currentGlassProtection === 'wheel_combo'
+      ) {
+
+        window.currentGlassProtection =
+          'none';
+
         window.updateGlassButtons();
       }
 
+
       window.calculateTotal();
     };
 
-    /*
-     * NOUVEAU :
-     * Protection des vitres.
-     */
+
+    /* =========================================================
+       VITRES
+    ========================================================= */
+
     window.setGlassProtection = function(type) {
-      window.currentGlassProtection = type;
 
-      /*
-       * Le forfait combiné remplace les deux options séparées.
-       */
+      window.currentGlassProtection =
+        type;
+
+
       if (type === 'wheel_combo') {
-        window.currentWheelProtection = 'none';
+
+        window.currentWheelProtection =
+          'none';
       }
 
-      /*
-       * Si on choisit une protection vitres seule,
-       * on supprime le forfait combiné.
-       */
-      if (
-        type === 'windshield' ||
-        type === 'all'
-      ) {
-        if (window.currentWheelProtection === 'none') {
-          // Rien à faire
-        }
-      }
 
       window.updateGlassButtons();
+
       window.updateWheelButtons();
+
       window.calculateTotal();
     };
 
+
     window.updateGlassButtons = function() {
+
       document.querySelectorAll('.glass-btn').forEach(
-        b => b.className =
-          "glass-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
+        b =>
+          b.className =
+            "glass-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
       );
 
-      let activeId = 'glass-none';
 
-      if (window.currentGlassProtection === 'windshield') {
-        activeId = 'glass-windshield';
+      let activeId =
+        'glass-none';
+
+
+      if (
+        window.currentGlassProtection ===
+        'windshield'
+      ) {
+
+        activeId =
+          'glass-windshield';
       }
 
-      if (window.currentGlassProtection === 'all') {
-        activeId = 'glass-all';
+
+      if (
+        window.currentGlassProtection ===
+        'all'
+      ) {
+
+        activeId =
+          'glass-all';
       }
 
-      if (window.currentGlassProtection === 'wheel_combo') {
-        activeId = 'glass-wheel-combo';
+
+      if (
+        window.currentGlassProtection ===
+        'wheel_combo'
+      ) {
+
+        activeId =
+          'glass-wheel-combo';
       }
+
 
       document.getElementById(activeId).className =
         "glass-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center";
     };
 
+
     window.updateWheelButtons = function() {
+
       document.querySelectorAll('.wheel-btn').forEach(
-        b => b.className =
-          "wheel-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
+        b =>
+          b.className =
+            "wheel-btn p-3 rounded-xl border bg-slate-50 border-slate-200 text-slate-600 transition-all text-left flex justify-between items-center"
       );
 
+
       const activeId =
-        window.currentWheelProtection === 'ceramic'
+        window.currentWheelProtection ===
+        'ceramic'
+
           ? 'wheel-ceramic'
           : 'wheel-none';
+
 
       document.getElementById(activeId).className =
         "wheel-btn p-3 rounded-xl border bg-blue-50 border-blue-600 text-blue-900 font-bold transition-all text-left flex justify-between items-center";
     };
 
+
+    /* =========================================================
+       LIEU
+    ========================================================= */
+
     window.setAtelier = function(isAtelier) {
-      window.currentIsAtelier = isAtelier;
+
+      window.currentIsAtelier =
+        isAtelier;
+
 
       document.getElementById('loc-atelier').className =
         isAtelier
+
           ? "flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all"
+
           : "flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all";
+
 
       document.getElementById('loc-travel').className =
         !isAtelier
+
           ? "flex-1 py-2 text-xs rounded-lg font-bold bg-blue-600 text-white shadow-sm transition-all"
+
           : "flex-1 py-2 text-xs rounded-lg font-medium text-slate-600 transition-all";
 
-      document.getElementById('travel-input').classList.toggle(
-        'hidden',
-        isAtelier
-      );
+
+      document.getElementById('travel-input')
+        .classList.toggle(
+          'hidden',
+          isAtelier
+        );
+
 
       window.calculateTotal();
     };
 
+
+    /* =========================================================
+       CLIENT CHANGE
+    ========================================================= */
+
     window.onClientChange = function() {
+
       const id =
         document.getElementById('selected-client-id').value ||
         document.getElementById('client-select').value;
 
-      const c = window.clientsData.find(x => x.id === id);
 
-      const badge = document.getElementById('parrainage-badge');
-      const box = document.getElementById('parrainage-slider-box');
-      const slider = document.getElementById('discount-range');
+      const c =
+        window.clientsData.find(
+          x => x.id === id
+        );
 
-      if (c && (c.referral_discount_pct || 0) > 0) {
+
+      const badge =
+        document.getElementById('parrainage-badge');
+
+      const box =
+        document.getElementById('parrainage-slider-box');
+
+      const slider =
+        document.getElementById('discount-range');
+
+
+      if (
+        c &&
+        (c.referral_discount_pct || 0) > 0
+      ) {
+
         document.getElementById('parrainage-val').innerText =
           c.referral_discount_pct + '%';
 
         badge.classList.remove('hidden');
+
         box.classList.remove('hidden');
 
-        slider.max = c.referral_discount_pct;
-        slider.value = c.referral_discount_pct;
+        slider.max =
+          c.referral_discount_pct;
+
+        slider.value =
+          c.referral_discount_pct;
+
       } else {
+
         badge.classList.add('hidden');
+
         box.classList.add('hidden');
-        slider.value = 0;
+
+        slider.value =
+          0;
       }
+
 
       window.onSliderChange();
     };
 
+
+    /* =========================================================
+       SLIDER
+    ========================================================= */
+
     window.onSliderChange = function() {
+
       window.currentDiscountPct =
-        parseInt(document.getElementById('discount-range').value) || 0;
+        parseInt(
+          document.getElementById('discount-range').value
+        ) || 0;
+
 
       document.getElementById('discount-val-label').innerText =
         '-' + window.currentDiscountPct + '%';
 
+
       window.calculateTotal();
     };
+
+
+    /* =========================================================
+       CALCUL TOTAL
+    ========================================================= */
 
     window.calculateTotal = function() {
 
@@ -1199,10 +2838,18 @@
         document.getElementById('service-select').value ||
         SERVICES[0].id;
 
-      const sObj = SERVICES.find(x => x.id === sId);
+
+      const sObj =
+        SERVICES.find(
+          x => x.id === sId
+        );
+
 
       const basePrice =
-        sObj ? sObj.prices[window.currentCategory] : 0;
+        sObj
+          ? sObj.prices[window.currentCategory]
+          : 0;
+
 
       let subPct = 0;
 
@@ -1210,289 +2857,488 @@
       if (window.currentSub === '2x') subPct = 10;
       if (window.currentSub === '4x') subPct = 15;
 
-      const subDiscount = (basePrice * subPct) / 100;
-      const priceAfterSub = basePrice - subDiscount;
 
-      /*
-       * SUPPLÉMENTS
-       */
+      const subDiscount =
+        (basePrice * subPct) / 100;
+
+
+      const priceAfterSub =
+        basePrice - subDiscount;
+
+
       let supps = 0;
 
-      // Sièges
-      if (window.currentSeats === '1_seat') supps += 30;
-      if (window.currentSeats === '2_seats') supps += 50;
-      if (window.currentSeats === 'all_seats') supps += 90;
 
-      // Ciel de toit
-      if (window.currentRoof) supps += 30;
+      if (window.currentSeats === '1_seat') {
+        supps += 30;
+      }
 
-      /*
-       * Céramique jantes
-       */
+      if (window.currentSeats === '2_seats') {
+        supps += 50;
+      }
+
+      if (window.currentSeats === 'all_seats') {
+        supps += 90;
+      }
+
+
+      if (window.currentRoof) {
+        supps += 30;
+      }
+
+
       if (
         window.currentWheelProtection === 'ceramic' &&
         window.currentGlassProtection !== 'wheel_combo'
       ) {
+
         supps += 299.99;
       }
 
-      /*
-       * Vitres
-       */
-      if (window.currentGlassProtection === 'windshield') {
+
+      if (
+        window.currentGlassProtection === 'windshield'
+      ) {
+
         supps += 59.99;
       }
 
-      if (window.currentGlassProtection === 'all') {
+
+      if (
+        window.currentGlassProtection === 'all'
+      ) {
+
         supps += 99.99;
       }
 
-      /*
-       * Forfait Jantes + Vitres
-       */
-      if (window.currentGlassProtection === 'wheel_combo') {
+
+      if (
+        window.currentGlassProtection === 'wheel_combo'
+      ) {
+
         supps += 399.99;
       }
 
-      /*
-       * Déplacement
-       */
+
       let travel = 0;
 
-      if (!window.currentIsAtelier) {
-        const km =
-          parseFloat(document.getElementById('distance-km').value) || 0;
 
-        travel = 10 + (km * 0.70);
+      if (!window.currentIsAtelier) {
+
+        const km =
+          parseFloat(
+            document.getElementById('distance-km').value
+          ) || 0;
+
+        travel =
+          10 + (km * 0.70);
       }
+
 
       const subtotal =
         priceAfterSub +
         supps +
         travel;
 
+
       const refDiscount =
         (subtotal * window.currentDiscountPct) / 100;
 
-      const total =
-        Math.max(0, subtotal - refDiscount);
 
-      /*
-       * Récapitulatif
-       */
+      const total =
+        Math.max(
+          0,
+          subtotal - refDiscount
+        );
+
+
       document.getElementById('recap-service').innerText =
         basePrice.toFixed(2) + ' €';
+
 
       const recapSubRow =
         document.getElementById('recap-sub-row');
 
+
       if (subDiscount > 0) {
+
         document.getElementById('recap-sub-discount').innerText =
           '-' + subDiscount.toFixed(2) + ' €';
 
         recapSubRow.classList.remove('hidden');
+
       } else {
+
         recapSubRow.classList.add('hidden');
       }
+
 
       document.getElementById('recap-supplements').innerText =
         supps.toFixed(2) + ' €';
 
+
       document.getElementById('recap-travel').innerText =
         travel.toFixed(2) + ' €';
+
 
       const recapDiscRow =
         document.getElementById('recap-discount-row');
 
+
       if (refDiscount > 0) {
+
         document.getElementById('recap-discount').innerText =
           '-' + refDiscount.toFixed(2) + ' €';
 
         recapDiscRow.classList.remove('hidden');
+
       } else {
+
         recapDiscRow.classList.add('hidden');
       }
+
 
       document.getElementById('total-price').innerText =
         total.toFixed(2) + ' €';
     };
 
+
+    /* =========================================================
+       NAVIGATION
+    ========================================================= */
+
     window.switchTab = function(tab) {
 
       document.getElementById('tab-booking')
-        .classList.toggle('hidden', tab !== 'booking');
+        .classList.toggle(
+          'hidden',
+          tab !== 'booking'
+        );
+
 
       document.getElementById('tab-clients')
-        .classList.toggle('hidden', tab !== 'clients');
+        .classList.toggle(
+          'hidden',
+          tab !== 'clients'
+        );
+
 
       document.getElementById('tab-rdv')
-        .classList.toggle('hidden', tab !== 'rdv');
+        .classList.toggle(
+          'hidden',
+          tab !== 'rdv'
+        );
+
 
       document.getElementById('nav-booking').className =
         tab === 'booking'
+
           ? "font-bold text-blue-600 flex flex-col items-center space-y-1"
+
           : "font-medium text-slate-400 flex flex-col items-center space-y-1";
+
 
       document.getElementById('nav-clients').className =
         tab === 'clients'
+
           ? "font-bold text-blue-600 flex flex-col items-center space-y-1"
+
           : "font-medium text-slate-400 flex flex-col items-center space-y-1";
+
 
       document.getElementById('nav-rdv').className =
         tab === 'rdv'
+
           ? "font-bold text-blue-600 flex flex-col items-center space-y-1"
+
           : "font-medium text-slate-400 flex flex-col items-center space-y-1";
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
 
-      document.getElementById('service-select').onchange =
-        window.calculateTotal;
+    /* =========================================================
+       INITIALISATION
+    ========================================================= */
 
-      document.getElementById('distance-km').oninput =
-        window.calculateTotal;
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
 
-      document.getElementById('discount-range').oninput =
-        window.onSliderChange;
+        document.getElementById(
+          'service-select'
+        ).onchange =
+          window.calculateTotal;
 
-      document.getElementById('booking-date').onchange =
-        () => window.renderCalendar();
 
-      /*
-       * Catégories
-       */
-      document.getElementById('cat-petite').onclick =
-        () => window.setCategory('petite');
+        document.getElementById(
+          'distance-km'
+        ).oninput =
+          window.calculateTotal;
 
-      document.getElementById('cat-moyenne').onclick =
-        () => window.setCategory('moyenne');
 
-      document.getElementById('cat-grande').onclick =
-        () => window.setCategory('grande');
+        document.getElementById(
+          'discount-range'
+        ).oninput =
+          window.onSliderChange;
 
-      document.getElementById('cat-camionnette').onclick =
-        () => window.setCategory('camionnette');
 
-      /*
-       * Abonnement
-       */
-      document.getElementById('sub-none').onclick =
-        () => window.setSub('none');
+        document.getElementById(
+          'booking-date'
+        ).onchange =
+          () => window.renderCalendar();
 
-      document.getElementById('sub-1x').onclick =
-        () => window.setSub('1x');
 
-      document.getElementById('sub-2x').onclick =
-        () => window.setSub('2x');
+        /* CATEGORIES */
 
-      document.getElementById('sub-4x').onclick =
-        () => window.setSub('4x');
+        document.getElementById(
+          'cat-petite'
+        ).onclick =
+          () => window.setCategory('petite');
 
-      /*
-       * Sièges
-       */
-      document.getElementById('seat-none').onclick =
-        () => window.setSeats('none');
 
-      document.getElementById('seat-1_seat').onclick =
-        () => window.setSeats('1_seat');
+        document.getElementById(
+          'cat-moyenne'
+        ).onclick =
+          () => window.setCategory('moyenne');
 
-      document.getElementById('seat-2_seats').onclick =
-        () => window.setSeats('2_seats');
 
-      document.getElementById('seat-all_seats').onclick =
-        () => window.setSeats('all_seats');
+        document.getElementById(
+          'cat-grande'
+        ).onclick =
+          () => window.setCategory('grande');
 
-      /*
-       * Ciel de toit
-       */
-      document.getElementById('roof-btn').onclick =
-        window.toggleRoof;
 
-      /*
-       * NOUVEAU : Jantes
-       */
-      document.getElementById('wheel-none').onclick =
-        () => window.setWheelProtection('none');
+        document.getElementById(
+          'cat-camionnette'
+        ).onclick =
+          () => window.setCategory('camionnette');
 
-      document.getElementById('wheel-ceramic').onclick =
-        () => window.setWheelProtection('ceramic');
 
-      /*
-       * NOUVEAU : Vitres
-       */
-      document.getElementById('glass-none').onclick =
-        () => window.setGlassProtection('none');
+        /* ABONNEMENTS */
 
-      document.getElementById('glass-windshield').onclick =
-        () => window.setGlassProtection('windshield');
+        document.getElementById(
+          'sub-none'
+        ).onclick =
+          () => window.setSub('none');
 
-      document.getElementById('glass-all').onclick =
-        () => window.setGlassProtection('all');
 
-      document.getElementById('glass-wheel-combo').onclick =
-        () => window.setGlassProtection('wheel_combo');
+        document.getElementById(
+          'sub-1x'
+        ).onclick =
+          () => window.setSub('1x');
 
-      /*
-       * Lieu
-       */
-      document.getElementById('loc-atelier').onclick =
-        () => window.setAtelier(true);
 
-      document.getElementById('loc-travel').onclick =
-        () => window.setAtelier(false);
+        document.getElementById(
+          'sub-2x'
+        ).onclick =
+          () => window.setSub('2x');
 
-      /*
-       * Boutons principaux
-       */
-      document.getElementById('btn-save-booking').onclick =
-        window.saveBooking;
 
-      document.getElementById('btn-add-client').onclick =
-        window.addNewClient;
+        document.getElementById(
+          'sub-4x'
+        ).onclick =
+          () => window.setSub('4x');
 
-      document.getElementById('btn-copy-msg').onclick = () => {
-        navigator.clipboard.writeText(
-          document.getElementById('message-text').value
-        );
 
-        showNotification("Copié !");
-      };
+        /* SIEGES */
 
-      /*
-       * Navigation
-       */
-      document.getElementById('nav-booking').onclick =
-        () => window.switchTab('booking');
+        document.getElementById(
+          'seat-none'
+        ).onclick =
+          () => window.setSeats('none');
 
-      document.getElementById('nav-clients').onclick =
-        () => window.switchTab('clients');
 
-      document.getElementById('nav-rdv').onclick =
-        () => window.switchTab('rdv');
+        document.getElementById(
+          'seat-1_seat'
+        ).onclick =
+          () => window.setSeats('1_seat');
 
-      /*
-       * Date du jour
-       */
-      document.getElementById('booking-date').value =
-        new Date().toISOString().split('T')[0];
 
-      /*
-       * Initialisation
-       */
-      renderClientsSelect();
-      renderClientsList();
-      renderBookingsList();
+        document.getElementById(
+          'seat-2_seats'
+        ).onclick =
+          () => window.setSeats('2_seats');
 
-      window.renderServicesOptions();
-      window.calculateTotal();
-      window.updateDashboardStats();
-      window.renderCalendar();
 
-      window.updateGlassButtons();
-      window.updateWheelButtons();
-    });
+        document.getElementById(
+          'seat-all_seats'
+        ).onclick =
+          () => window.setSeats('all_seats');
+
+
+        /* TOIT */
+
+        document.getElementById(
+          'roof-btn'
+        ).onclick =
+          window.toggleRoof;
+
+
+        /* JANTES */
+
+        document.getElementById(
+          'wheel-none'
+        ).onclick =
+          () => window.setWheelProtection('none');
+
+
+        document.getElementById(
+          'wheel-ceramic'
+        ).onclick =
+          () => window.setWheelProtection('ceramic');
+
+
+        /* VITRES */
+
+        document.getElementById(
+          'glass-none'
+        ).onclick =
+          () => window.setGlassProtection('none');
+
+
+        document.getElementById(
+          'glass-windshield'
+        ).onclick =
+          () => window.setGlassProtection('windshield');
+
+
+        document.getElementById(
+          'glass-all'
+        ).onclick =
+          () => window.setGlassProtection('all');
+
+
+        document.getElementById(
+          'glass-wheel-combo'
+        ).onclick =
+          () => window.setGlassProtection('wheel_combo');
+
+
+        /* LIEU */
+
+        document.getElementById(
+          'loc-atelier'
+        ).onclick =
+          () => window.setAtelier(true);
+
+
+        document.getElementById(
+          'loc-travel'
+        ).onclick =
+          () => window.setAtelier(false);
+
+
+        /* ENREGISTREMENT */
+
+        document.getElementById(
+          'btn-save-booking'
+        ).onclick =
+          window.saveBooking;
+
+
+        /* AJOUT CLIENT */
+
+        document.getElementById(
+          'btn-add-client'
+        ).onclick =
+          window.addNewClient;
+
+
+        /* COPIE MESSAGE */
+
+        document.getElementById(
+          'btn-copy-msg'
+        ).onclick =
+          async () => {
+
+            const text =
+              document.getElementById(
+                'message-text'
+              ).value;
+
+            try {
+
+              await navigator.clipboard.writeText(
+                text
+              );
+
+              showNotification(
+                "Message copié !"
+              );
+
+            } catch (error) {
+
+              const textarea =
+                document.getElementById(
+                  'message-text'
+                );
+
+              textarea.select();
+
+              document.execCommand(
+                'copy'
+              );
+
+              showNotification(
+                "Message copié !"
+              );
+            }
+          };
+
+
+        /* NAVIGATION */
+
+        document.getElementById(
+          'nav-booking'
+        ).onclick =
+          () => window.switchTab('booking');
+
+
+        document.getElementById(
+          'nav-clients'
+        ).onclick =
+          () => window.switchTab('clients');
+
+
+        document.getElementById(
+          'nav-rdv'
+        ).onclick =
+          () => window.switchTab('rdv');
+
+
+        /* DATE DU JOUR */
+
+        document.getElementById(
+          'booking-date'
+        ).value =
+          new Date()
+            .toISOString()
+            .split('T')[0];
+
+
+        /* INITIALISATION */
+
+        renderClientsSelect();
+
+        renderClientsList();
+
+        renderBookingsList();
+
+        window.renderServicesOptions();
+
+        window.calculateTotal();
+
+        window.updateDashboardStats();
+
+        window.renderCalendar();
+
+        window.updateGlassButtons();
+
+        window.updateWheelButtons();
+
+      }
+    );
 
   </script>
+
 </body>
 </html>
